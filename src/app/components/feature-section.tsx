@@ -91,8 +91,8 @@ export default function FeatureSection() {
         }
       `}</style>
 
-      <section className="bg-gray-100 py-16 dark:bg-gray-900">
-        <div className="container mx-auto px-4">
+      <section className="pb-16">
+        <div className="container mx-auto">
           <div className="mb-12 text-center">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
               Everything You Need to Track <br /> Your Job Applications
