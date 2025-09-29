@@ -14,6 +14,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ModeToggle } from "../mode-toggle";
+
 
 const Navbar = () => {
   const menus = ["AI System", "Guide", "Explore", "Contact Us", "Discover"];
@@ -49,6 +51,8 @@ const Navbar = () => {
         <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
           {/* Desktop buttons */}
           <div className="hidden lg:flex items-center gap-4 xl:gap-5">
+            {/* Add ModeToggle here */}
+            <ModeToggle />
             <Link
               href="#"
               className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
@@ -67,6 +71,8 @@ const Navbar = () => {
 
           {/* Tablet buttons (hidden on mobile, shown on tablet) */}
           <div className="hidden md:flex lg:hidden items-center gap-3">
+            {/* Add ModeToggle here */}
+            <ModeToggle />
             <Link
               href="#"
               className="text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
@@ -84,7 +90,11 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu */}
-          <div className="lg:hidden">
+          <div className="lg:hidden flex items-center gap-2">
+            {/* Add ModeToggle for mobile/tablet */}
+            <div className="md:hidden">
+              <ModeToggle />
+            </div>
             <Sheet>
               <SheetTrigger asChild>
                 <button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
@@ -114,6 +124,10 @@ const Navbar = () => {
                     </Link>
                   ))}
                   <hr className="my-2 w-full border-gray-200 dark:border-gray-800" />
+                  {/* Add ModeToggle in mobile menu if you want it there too */}
+                  <div className="w-full flex justify-center">
+                    <ModeToggle />
+                  </div>
                   <Link
                     href="#"
                     className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition w-full text-center py-2"
