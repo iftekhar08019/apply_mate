@@ -29,7 +29,7 @@ const Navbar = () => {
             alt="Guide Logo"
             width={150}
             height={50}
-            className="w-32 sm:w-36 lg:w-40 dark:invert dark:brightness-90"
+            className="w-32 sm:w-36 lg:w-40"
           />
         </Link>
 
