@@ -41,7 +41,7 @@ export default function DemoSection() {
           viewport={{ once: true }}
         >
           {/* Left Side - Text Content */}
-          <div className="space-y-8">
+          <div className="space-y-8 text-center lg:text-left">
             <div>
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 Experience the{" "}
@@ -62,9 +62,9 @@ export default function DemoSection() {
             </div>
 
             {/* Feature Points */}
-            <div className="space-y-4">
+            <div className="space-y-4 flex flex-col items-center lg:items-start">
               <motion.div 
-                className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50"
+                className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 w-full max-w-sm lg:max-w-none"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
@@ -80,7 +80,7 @@ export default function DemoSection() {
               </motion.div>
 
               <motion.div 
-                className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50"
+                className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 w-full max-w-sm lg:max-w-none"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
@@ -96,7 +96,7 @@ export default function DemoSection() {
               </motion.div>
 
               <motion.div 
-                className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50"
+                className="flex items-center gap-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 w-full max-w-sm lg:max-w-none"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
@@ -114,7 +114,7 @@ export default function DemoSection() {
 
             {/* CTA Button */}
             <motion.button 
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/25 transition-all duration-300"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/25 transition-all duration-300 mx-auto lg:mx-0"
               whileHover={{ y: -2, scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
