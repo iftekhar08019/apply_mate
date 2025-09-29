@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/sheet";
 import { ModeToggle } from "../mode-toggle";
 
-
 const Navbar = () => {
   const menus = ["AI System", "Guide", "Explore", "Contact Us", "Discover"];
 
@@ -25,17 +24,10 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-
-          <Image 
-            src={logo} 
-            alt="Guide Logo" 
-            width={150} 
-
           <Image
             src={logo}
             alt="Guide Logo"
             width={150}
-
             height={50}
             className="w-32 sm:w-36 lg:w-40 dark:invert dark:brightness-90"
           />
@@ -58,11 +50,9 @@ const Navbar = () => {
         <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
           {/* Desktop buttons */}
           <div className="hidden lg:flex items-center gap-4 xl:gap-5">
-            {/* Add ModeToggle here */}
             <ModeToggle />
             <Link
               href="#"
-
               className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
             >
               Log in
@@ -75,22 +65,10 @@ const Navbar = () => {
             >
               Sign Up
             </Button>
-
-              className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition cursor-pointer mr-3"
-            >
-              Log in
-            </Link>
-            <Link href='/'>
-              <button className="cursor-pointer bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                Sign Up
-              </button>
-            </Link>
-
           </div>
 
-          {/* Tablet buttons (hidden on mobile, shown on tablet) */}
+          {/* Tablet buttons */}
           <div className="hidden md:flex lg:hidden items-center gap-3">
-            {/* Add ModeToggle here */}
             <ModeToggle />
             <Link
               href="#"
@@ -110,19 +88,12 @@ const Navbar = () => {
 
           {/* Mobile Menu */}
           <div className="lg:hidden flex items-center gap-2">
-            {/* Add ModeToggle for mobile/tablet */}
             <div className="md:hidden">
               <ModeToggle />
             </div>
             <Sheet>
               <SheetTrigger asChild>
                 <button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-
-                  <Menu size={24} className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300" />
-                </button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-80 sm:w-96 bg-white dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800">
-
                   <Menu
                     size={24}
                     className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300"
@@ -133,7 +104,6 @@ const Navbar = () => {
                 side="right"
                 className="w-80 sm:w-96 bg-white dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800"
               >
-
                 <SheetHeader>
                   <SheetTitle className="text-left">
                     <Image
@@ -156,7 +126,6 @@ const Navbar = () => {
                     </Link>
                   ))}
                   <hr className="my-2 w-full border-gray-200 dark:border-gray-800" />
-                  {/* Add ModeToggle in mobile menu if you want it there too */}
                   <div className="w-full flex justify-center">
                     <ModeToggle />
                   </div>
