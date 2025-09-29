@@ -22,7 +22,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 ">
       {/* Email */}
       <div>
         <label className="block text-sm font-medium mb-1">Email Address</label>
@@ -39,7 +39,9 @@ export default function LoginForm() {
             })}
             placeholder="Enter your email"
             className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+              errors.email
+                ? "border-red-500 focus:ring-red-500"
+                : "focus:ring-blue-500"
             }`}
           />
         </div>
@@ -58,7 +60,9 @@ export default function LoginForm() {
             {...register("password", { required: "Password is required" })}
             placeholder="Enter your password"
             className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+              errors.password
+                ? "border-red-500 focus:ring-red-500"
+                : "focus:ring-blue-500"
             }`}
           />
         </div>
@@ -70,7 +74,11 @@ export default function LoginForm() {
       {/* Remember & Forgot */}
       <div className="flex items-center justify-between text-sm">
         <label className="flex items-center gap-2">
-          <input type="checkbox" {...register("remember")} className="accent-blue-600" />
+          <input
+            type="checkbox"
+            {...register("remember")}
+            className="accent-blue-600"
+          />
           Remember me
         </label>
         <Link href="/" className="text-blue-600 hover:underline">
@@ -95,15 +103,7 @@ export default function LoginForm() {
         <Link href="/" className="text-blue-600 hover:underline">
           Privacy Policy
         </Link>
-        .
-      </p>
-
-      {/* Sign up link */}
-      <p className="text-sm text-center">
-        Dont have an account?{" "}
-        <Link href="/sign-up" className="text-blue-600 font-medium hover:underline">
-          Sign Up
-        </Link>
+    
       </p>
     </form>
   );
