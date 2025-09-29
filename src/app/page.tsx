@@ -1,6 +1,8 @@
 import BannerSection from "./components/banner-section";
 import FeatureSection from "./components/feature-section";
 import HowItWorks from "./components/how-it-works";
+import PromotionalSection from "./components/promotional-section";
+import DemoSection from "./components/demo-section";
 
 
 export default function Home() {
@@ -11,7 +13,9 @@ export default function Home() {
         <BannerSection />
         <FeatureSection />
         <HowItWorks />
-      </section>
+      <PromotionalSection />
+        <DemoSection />
+        </section>
     </>
   );
 }
