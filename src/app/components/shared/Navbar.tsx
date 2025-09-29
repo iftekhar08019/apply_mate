@@ -21,7 +21,7 @@ const Navbar = () => {
   const menus = ["AI System", "Guide", "Explore", "Contact Us", "Discover"];
 
   return (
-    <header className="w-full bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full bg-white dark:bg-gray-950 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
         <Link href="/" className="flex items-center">
