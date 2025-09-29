@@ -25,17 +25,10 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-
-          <Image 
-            src={logo} 
-            alt="Guide Logo" 
-            width={150} 
-
           <Image
             src={logo}
             alt="Guide Logo"
             width={150}
-
             height={50}
             className="w-32 sm:w-36 lg:w-40 dark:invert dark:brightness-90"
           />
@@ -62,7 +55,6 @@ const Navbar = () => {
             <ModeToggle />
             <Link
               href="#"
-
               className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
             >
               Log in
@@ -75,17 +67,6 @@ const Navbar = () => {
             >
               Sign Up
             </Button>
-
-              className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition cursor-pointer mr-3"
-            >
-              Log in
-            </Link>
-            <Link href='/'>
-              <button className="cursor-pointer bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                Sign Up
-              </button>
-            </Link>
-
           </div>
 
           {/* Tablet buttons (hidden on mobile, shown on tablet) */}
@@ -117,16 +98,7 @@ const Navbar = () => {
             <Sheet>
               <SheetTrigger asChild>
                 <button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-
                   <Menu size={24} className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300" />
-                </button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-80 sm:w-96 bg-white dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800">
-
-                  <Menu
-                    size={24}
-                    className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300"
-                  />
                 </button>
               </SheetTrigger>
               <SheetContent

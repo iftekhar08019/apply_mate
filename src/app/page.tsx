@@ -4,9 +4,6 @@ import FeatureSection from "./components/feature-section";
 import HowItWorks from "./components/how-it-works";
 import PromotionalSection from "./components/promotional-section";
 
-import PromotionalSection from "./components/promotional-section";
-import ProblemStrip from "./components/feature-section";
-
 import DemoSection from "./components/demo-section";
 
 
@@ -23,11 +20,7 @@ export default function Home() {
         <DemoSection />
         </section>
 
-      <BannerSection />
-      <PromotionalSection />
-      <ProblemStrip/>
-      <DemoSection />
-
+    
     </>
   );
 }
