@@ -2,6 +2,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Mail, Lock } from "lucide-react";
+import Link from "next/link";
 
 type FormValues = {
   email: string;
@@ -72,9 +73,9 @@ export default function LoginForm() {
           <input type="checkbox" {...register("remember")} className="accent-blue-600" />
           Remember me
         </label>
-        <a href="#" className="text-blue-600 hover:underline">
+        <Link href="/" className="text-blue-600 hover:underline">
           Forgot Password?
-        </a>
+        </Link>
       </div>
 
       {/* Submit Button */}
@@ -82,28 +83,27 @@ export default function LoginForm() {
         type="submit"
         className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
       >
-        Login →
+        Login
       </button>
 
-      {/* Terms */}
       <p className="text-xs text-gray-500 text-center">
         By creating an account, you agree to our{" "}
-        <a href="#" className="text-blue-600 hover:underline">
+        <Link href="/" className="text-blue-600 hover:underline">
           Terms of Service
-        </a>{" "}
+        </Link>{" "}
         and{" "}
-        <a href="#" className="text-blue-600 hover:underline">
+        <Link href="/" className="text-blue-600 hover:underline">
           Privacy Policy
-        </a>
+        </Link>
         .
       </p>
 
       {/* Sign up link */}
       <p className="text-sm text-center">
-        Don’t have an account?{" "}
-        <a href="#" className="text-blue-600 font-medium hover:underline">
+        Dont have an account?{" "}
+        <Link href="/sign-up" className="text-blue-600 font-medium hover:underline">
           Sign Up
-        </a>
+        </Link>
       </p>
     </form>
   );
