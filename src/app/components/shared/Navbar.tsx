@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 import { ModeToggle } from "../mode-toggle";
 
+
 const Navbar = () => {
   const menus = ["AI System", "Guide", "Explore", "Contact Us", "Discover"];
 
@@ -54,15 +55,18 @@ const Navbar = () => {
             <ModeToggle />
             <Link
               href="#"
-              className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition cursor-pointer mr-3"
+              className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
             >
               Log in
             </Link>
-            <Link href='/'>
-              <button className="cursor-pointer bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                Sign Up
-              </button>
-            </Link>
+            <Button
+              className={cn(
+                "rounded-full px-6 xl:px-8 py-2 xl:py-3 text-sm xl:text-base font-semibold shadow-md transition",
+                "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white"
+              )}
+            >
+              Sign Up
+            </Button>
           </div>
 
           {/* Tablet buttons (hidden on mobile, shown on tablet) */}
@@ -94,16 +98,14 @@ const Navbar = () => {
             <Sheet>
               <SheetTrigger asChild>
                 <button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                  <Menu
-                    size={24}
-                    className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300"
-                  />
+                  <Menu size={24} className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300" />
                 </button>
               </SheetTrigger>
               <SheetContent
                 side="right"
                 className="w-80 sm:w-96 bg-white dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800"
               >
+
                 <SheetHeader>
                   <SheetTitle className="text-left">
                     <Image
