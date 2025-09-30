@@ -68,7 +68,7 @@ export default function HowItWorks() {
           const Icon = step.icon;
           return (
             <motion.div
-              key={step.id}
+              key={step.id}  
               className="relative flex items-center gap-4 rounded-lg border bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-5 shadow-sm transition-transform duration-200 hover:scale-[1.02] border-blue-600 border-l-8"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
