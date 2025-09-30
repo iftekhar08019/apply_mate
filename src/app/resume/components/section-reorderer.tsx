@@ -33,21 +33,21 @@ function SectionItem({ id, title, isVisible }: SectionItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg ${
+      className={`flex items-center gap-2 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg min-w-0 ${
         !isVisible ? 'opacity-50' : ''
       }`}
     >
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 flex-shrink-0"
       >
-        <GripVertical size={16} />
+        <GripVertical size={14} />
       </div>
-      <span className="flex-1 text-sm font-medium text-gray-900 dark:text-white">
+      <span className="flex-1 text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">
         {title}
       </span>
-      <div className={`w-2 h-2 rounded-full ${isVisible ? 'bg-green-500' : 'bg-gray-300'}`} />
+      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-green-500' : 'bg-gray-300'}`} />
     </div>
   );
 }
@@ -93,12 +93,14 @@ export default function SectionReorderer({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
-        Section Order
-      </h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        Drag sections to reorder them in your resume. Click the dot to toggle visibility.
-      </p>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          Section Order
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Drag to reorder • Click dot to toggle visibility
+        </p>
+      </div>
       
       <DndContext
         sensors={sensors}
@@ -106,19 +108,17 @@ export default function SectionReorderer({
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={sectionOrder} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2">
+          <div className="flex flex-wrap gap-2">
             {sectionOrder.map((sectionId) => (
-              <div key={sectionId} className="flex items-center gap-2">
-                <div className="flex-1">
-                  <SectionItem
-                    id={sectionId}
-                    title={sectionTitles[sectionId] || sectionId}
-                    isVisible={sectionVisibility[sectionId] || false}
-                  />
-                </div>
+              <div key={sectionId} className="flex items-center gap-1">
+                <SectionItem
+                  id={sectionId}
+                  title={sectionTitles[sectionId] || sectionId}
+                  isVisible={sectionVisibility[sectionId] || false}
+                />
                 <button
                   onClick={() => onToggleVisibility(sectionId)}
-                  className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                  className={`px-2 py-1 text-xs rounded-md transition-colors ${
                     sectionVisibility[sectionId] 
                       ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'

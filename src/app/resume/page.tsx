@@ -163,8 +163,9 @@ export default function ResumeBuilder() {
           </p>
         </div>
         
-        {/* Top Sidebar - Section Navigation */}
-        <div className="mb-6">
+        {/* Top Section - Section Navigation and Order */}
+        <div className="mb-6 space-y-4">
+          {/* Section Navigation */}
           <SectionSidebar
             availableSections={availableSections}
             activeSections={resumeData.activeSections}
@@ -174,11 +175,23 @@ export default function ResumeBuilder() {
             onRemoveSection={handleRemoveSection}
             onAddGenericSection={handleAddGenericSection}
           />
+          
+          {/* Section Reorderer - Horizontal Layout */}
+          {resumeData.activeSections.length > 0 && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+              <SectionReorderer
+                sectionOrder={resumeData.activeSections}
+                onReorder={handleSectionReorder}
+                sectionVisibility={sectionVisibility}
+                onToggleVisibility={handleToggleVisibility}
+              />
+            </div>
+          )}
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-400px)]">
-          {/* Left Column - Section Form - 1/2 width on large screens */}
-          <div className="lg:col-span-6">
+          {/* Left Column - Section Form - 1/3 width on large screens */}
+          <div className="lg:col-span-4">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 h-full">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {selectedSection === 'personal' ? 'Personal Information' : 
@@ -195,22 +208,9 @@ export default function ResumeBuilder() {
             </div>
           </div>
           
-          {/* Right Column - Preview and Management - 1/2 width on large screens */}
-          <div className="lg:col-span-6 space-y-4">
-            {/* Section Reorderer */}
-            {resumeData.activeSections.length > 0 && (
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-                <SectionReorderer
-                  sectionOrder={resumeData.activeSections}
-                  onReorder={handleSectionReorder}
-                  sectionVisibility={sectionVisibility}
-                  onToggleVisibility={handleToggleVisibility}
-                />
-              </div>
-            )}
-            
-            {/* Preview Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 min-h-[600px]">
+          {/* Right Column - Preview - 2/3 width on large screens */}
+          <div className="lg:col-span-8">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 h-full">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Live Preview

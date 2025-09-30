@@ -161,14 +161,19 @@ export default function SectionSidebar({
 
         </div>
         
-        {/* Active Sections Summary */}
+        {/* Active Sections and Order */}
         {activeSections.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
-              Active Sections ({activeSections.length})
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                Active Sections ({activeSections.length})
+              </div>
+              <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                Order
+              </div>
             </div>
             <div className="flex flex-wrap gap-1">
-              {activeSections.map((sectionId) => {
+              {activeSections.map((sectionId, index) => {
                 const Icon = getSectionIcon(sectionId);
                 const title = getSectionTitle(sectionId);
                 return (
@@ -176,6 +181,9 @@ export default function SectionSidebar({
                     key={sectionId}
                     className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-600 dark:text-gray-400"
                   >
+                    <span className="bg-blue-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+                      {index + 1}
+                    </span>
                     <Icon size={12} />
                     <span className="truncate">{title}</span>
                   </div>
