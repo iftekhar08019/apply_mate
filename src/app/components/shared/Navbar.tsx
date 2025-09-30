@@ -29,7 +29,7 @@ const Navbar = () => {
             alt="Guide Logo"
             width={150}
             height={50}
-            className="w-32 sm:w-36 lg:w-40 dark:invert dark:brightness-90"
+            className="w-32 sm:w-36 lg:w-40"
           />
         </Link>
 
@@ -53,18 +53,15 @@ const Navbar = () => {
             <ModeToggle />
             <Link
               href="#"
-              className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
+              className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition mx-3"
             >
               Log in
             </Link>
-            <Button
-              className={cn(
-                "rounded-full px-6 xl:px-8 py-2 xl:py-3 text-sm xl:text-base font-semibold shadow-md transition",
-                "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white"
-              )}
-            >
-              Sign Up
-            </Button>
+            <Link href='/'>
+              <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
+                Sign Up
+              </button>
+            </Link>
           </div>
 
           {/* Tablet buttons */}
@@ -94,12 +91,10 @@ const Navbar = () => {
             <Sheet>
               <SheetTrigger asChild>
                 <button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-
                   <Menu
                     size={24}
                     className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300"
                   />
-
                 </button>
               </SheetTrigger>
               <SheetContent
