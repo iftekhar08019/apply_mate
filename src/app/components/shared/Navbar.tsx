@@ -17,7 +17,7 @@ import {
 import { ModeToggle } from "../mode-toggle";
 
 const Navbar = () => {
-  const menus = ["AI System", "Guide", "Explore", "Contact Us", "Discover"];
+  const menus = ["AI System", "Guide", "Explore", "Resume Builder", "Contact Us", "Discover"];
 
   return (
     <header className="w-full bg-white dark:bg-gray-950 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
@@ -38,7 +38,7 @@ const Navbar = () => {
           {menus.map((menu, idx) => (
             <Link
               key={idx}
-              href="#"
+              href={menu === "Resume Builder" ? "/resume" : "#"}
               className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap"
             >
               {menu}
@@ -116,7 +116,7 @@ const Navbar = () => {
                   {menus.map((menu, idx) => (
                     <Link
                       key={idx}
-                      href="#"
+                      href={menu === "Resume Builder" ? "/resume" : "#"}
                       className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition w-full text-center py-2"
                     >
                       {menu}
