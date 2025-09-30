@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import ResumeForm from "./components/resume-form";
 import ResumePreview from "./components/resume-preview";
 import SectionReorderer from "./components/section-reorderer";
-import SectionSelector from "./components/section-selector";
+import SectionSidebar from "./components/section-sidebar";
+import SingleSectionForm from "./components/single-section-form";
 import PDFDownload from "./components/pdf-download";
 import { ResumeData, AvailableSection, GenericSection } from "./types/resume-types";
 
@@ -48,6 +48,8 @@ export default function ResumeBuilder() {
     education: true,
     languages: true
   });
+
+  const [selectedSection, setSelectedSection] = useState<string | null>('personal');
 
   const availableSections: AvailableSection[] = [
     {
@@ -161,20 +163,40 @@ export default function ResumeBuilder() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-300px)]">
-          {/* Left Column - Form and Section Management - 1/3 width on large screens */}
-          <div className="lg:col-span-4 space-y-4">
-            {/* Section Selector */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-              <SectionSelector
-                availableSections={availableSections}
-                activeSections={resumeData.activeSections}
-                onAddSection={handleAddSection}
-                onRemoveSection={handleRemoveSection}
-                onAddGenericSection={handleAddGenericSection}
+        {/* Top Sidebar - Section Navigation */}
+        <div className="mb-6">
+          <SectionSidebar
+            availableSections={availableSections}
+            activeSections={resumeData.activeSections}
+            selectedSection={selectedSection}
+            onSelectSection={setSelectedSection}
+            onAddSection={handleAddSection}
+            onRemoveSection={handleRemoveSection}
+            onAddGenericSection={handleAddGenericSection}
+          />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-400px)]">
+          {/* Left Column - Section Form - 1/2 width on large screens */}
+          <div className="lg:col-span-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 h-full">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                {selectedSection === 'personal' ? 'Personal Information' : 
+                 selectedSection ? `${availableSections.find(s => s.id === selectedSection)?.title || 'Section'} Details` : 
+                 'Resume Information'}
+              </h2>
+              <SingleSectionForm 
+                resumeData={resumeData} 
+                selectedSection={selectedSection}
+                updateResumeData={updateResumeData}
+                updateGenericSection={handleUpdateGenericSection}
+                removeGenericSection={handleRemoveGenericSection}
               />
             </div>
-            
+          </div>
+          
+          {/* Right Column - Preview and Management - 1/2 width on large screens */}
+          <div className="lg:col-span-6 space-y-4">
             {/* Section Reorderer */}
             {resumeData.activeSections.length > 0 && (
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
@@ -187,22 +209,7 @@ export default function ResumeBuilder() {
               </div>
             )}
             
-            {/* Resume Form */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Resume Information
-              </h2>
-              <ResumeForm 
-                resumeData={resumeData} 
-                updateResumeData={updateResumeData}
-                updateGenericSection={handleUpdateGenericSection}
-                removeGenericSection={handleRemoveGenericSection}
-              />
-            </div>
-          </div>
-          
-          {/* Right Column - Preview Section - 2/3 width on large screens */}
-          <div className="lg:col-span-8">
+            {/* Preview Section */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 min-h-[600px]">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
