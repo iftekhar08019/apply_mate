@@ -1,7 +1,9 @@
+'use client'
 import Link from "next/link";
 import logo from "../../../../public/assets/Logo.png";
 import { Github, LinkedinIcon, Mail } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
   const socialIcons = [
@@ -10,7 +12,10 @@ const Footer = () => {
     { icon: Mail, href: "#", label: "Email" },
   ];
 
-  return (
+  const pathName = usePathname();
+
+  if(!pathName.includes('/dashboard')){
+    return (
     <footer className="w-full bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 py-12">
         {/* Main footer content */}
@@ -88,6 +93,12 @@ const Footer = () => {
       </div>
     </footer>
   );
+  }
+  else{
+    <></>
+  }
+
+  
 };
 
 export default Footer;
