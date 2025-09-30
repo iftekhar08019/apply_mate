@@ -94,10 +94,12 @@ const Navbar = () => {
             <Sheet>
               <SheetTrigger asChild>
                 <button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+
                   <Menu
                     size={24}
                     className="sm:w-7 sm:h-7 text-gray-700 dark:text-gray-300"
                   />
+
                 </button>
               </SheetTrigger>
               <SheetContent
