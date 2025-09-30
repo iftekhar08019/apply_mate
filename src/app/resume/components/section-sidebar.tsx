@@ -62,23 +62,24 @@ export default function SectionSidebar({
 
   return (
     <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+      <div className="p-3 lg:p-4">
+        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
           Resume Sections
         </h3>
         
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1 lg:gap-2">
           {/* Personal Info - Always available */}
           <button
             onClick={() => onSelectSection('personal')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg transition-colors text-sm lg:text-base ${
               selectedSection === 'personal'
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
                 : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           >
-            <User size={16} />
-            <span className="font-medium">Personal Info</span>
+            <User size={14} className="lg:w-4 lg:h-4" />
+            <span className="font-medium hidden sm:inline">Personal Info</span>
+            <span className="font-medium sm:hidden">Personal</span>
           </button>
 
           {/* Available Sections */}
@@ -88,37 +89,38 @@ export default function SectionSidebar({
             const Icon = sectionIcons[section.id] || FileText;
 
             return (
-              <div key={section.id} className="flex items-center gap-1">
-                <button
-                  onClick={() => onSelectSection(section.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                    isSelected
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span className="font-medium">{section.title}</span>
-                </button>
-                
-                {isActive ? (
-                  <button
-                    onClick={() => onRemoveSection(section.id)}
-                    className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded"
-                    title="Remove section"
-                  >
-                    <Settings size={14} />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => onAddSection(section.id)}
-                    className="p-1 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 rounded"
-                    title="Add section"
-                  >
-                    <Plus size={14} />
-                  </button>
-                )}
-              </div>
+                  <div key={section.id} className="flex items-center gap-1">
+                    <button
+                      onClick={() => onSelectSection(section.id)}
+                      className={`flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg transition-colors text-sm lg:text-base ${
+                        isSelected
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                          : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                      }`}
+                    >
+                      <Icon size={14} className="lg:w-4 lg:h-4" />
+                      <span className="font-medium hidden sm:inline">{section.title}</span>
+                      <span className="font-medium sm:hidden">{section.title.split(' ')[0]}</span>
+                    </button>
+                    
+                    {isActive ? (
+                      <button
+                        onClick={() => onRemoveSection(section.id)}
+                        className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded"
+                        title="Remove section"
+                      >
+                        <Settings size={12} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => onAddSection(section.id)}
+                        className="p-1 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 rounded"
+                        title="Add section"
+                      >
+                        <Plus size={12} />
+                      </button>
+                    )}
+                  </div>
             );
           })}
 
@@ -126,36 +128,39 @@ export default function SectionSidebar({
           {!showAddGeneric ? (
             <button
               onClick={() => setShowAddGeneric(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors border border-dashed border-gray-300 dark:border-gray-600"
+              className="flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors border border-dashed border-gray-300 dark:border-gray-600 text-sm lg:text-base"
             >
-              <Plus size={16} />
-              <span className="font-medium">Add Custom</span>
+              <Plus size={14} className="lg:w-4 lg:h-4" />
+              <span className="font-medium hidden sm:inline">Add Custom</span>
+              <span className="font-medium sm:hidden">Add</span>
             </button>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
               <input
                 type="text"
                 value={genericTitle}
                 onChange={(e) => setGenericTitle(e.target.value)}
-                placeholder="Section title (e.g., Certifications)"
-                className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Section title"
+                className="px-2 lg:px-3 py-1.5 lg:py-2 text-xs lg:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white flex-1 min-w-0"
               />
-              <button
-                onClick={handleAddGeneric}
-                disabled={!genericTitle.trim()}
-                className="bg-blue-600 text-white py-2 px-3 rounded text-sm hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                Add
-              </button>
-              <button
-                onClick={() => {
-                  setShowAddGeneric(false);
-                  setGenericTitle('');
-                }}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
-              >
-                Cancel
-              </button>
+              <div className="flex gap-1">
+                <button
+                  onClick={handleAddGeneric}
+                  disabled={!genericTitle.trim()}
+                  className="bg-blue-600 text-white py-1.5 lg:py-2 px-2 lg:px-3 rounded text-xs lg:text-sm hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => {
+                    setShowAddGeneric(false);
+                    setGenericTitle('');
+                  }}
+                  className="px-2 lg:px-3 py-1.5 lg:py-2 border border-gray-300 dark:border-gray-600 rounded text-xs lg:text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           )}
 

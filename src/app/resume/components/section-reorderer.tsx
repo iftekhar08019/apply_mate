@@ -1,7 +1,7 @@
 "use client";
 
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, rectIntersection } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
@@ -40,7 +40,7 @@ function SectionItem({ id, title, isVisible }: SectionItemProps) {
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 flex-shrink-0"
+        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 flex-shrink-0 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         <GripVertical size={14} />
       </div>
@@ -48,6 +48,51 @@ function SectionItem({ id, title, isVisible }: SectionItemProps) {
         {title}
       </span>
       <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-green-500' : 'bg-gray-300'}`} />
+    </div>
+  );
+}
+
+interface SortableSectionItemProps {
+  id: string;
+  title: string;
+  isVisible: boolean;
+}
+
+function SortableSectionItem({ id, title, isVisible }: SortableSectionItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`flex items-center gap-1 lg:gap-2 p-1.5 lg:p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg min-w-0 ${
+        !isVisible ? 'opacity-50' : ''
+      }`}
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 flex-shrink-0 p-0.5 lg:p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+      >
+        <GripVertical size={12} className="lg:w-3.5 lg:h-3.5" />
+      </div>
+      <span className="flex-1 text-xs lg:text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">
+        {title}
+      </span>
+      <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-green-500' : 'bg-gray-300'}`} />
     </div>
   );
 }
@@ -74,12 +119,17 @@ export default function SectionReorderer({
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
+    console.log('Drag end:', { active: active.id, over: over?.id });
 
-    if (active.id !== over.id) {
+    if (active.id !== over?.id && over) {
       const oldIndex = sectionOrder.indexOf(active.id);
       const newIndex = sectionOrder.indexOf(over.id);
       
-      onReorder(arrayMove(sectionOrder, oldIndex, newIndex));
+      console.log('Reordering:', { oldIndex, newIndex });
+      
+      if (oldIndex !== -1 && newIndex !== -1) {
+        onReorder(arrayMove(sectionOrder, oldIndex, newIndex));
+      }
     }
   };
 
@@ -92,12 +142,12 @@ export default function SectionReorderer({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+    <div className="space-y-3 lg:space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
           Section Order
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
           Drag to reorder • Click dot to toggle visibility
         </p>
       </div>
@@ -108,23 +158,24 @@ export default function SectionReorderer({
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={sectionOrder} strategy={verticalListSortingStrategy}>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1 lg:gap-2">
             {sectionOrder.map((sectionId) => (
               <div key={sectionId} className="flex items-center gap-1">
-                <SectionItem
+                <SortableSectionItem
                   id={sectionId}
                   title={sectionTitles[sectionId] || sectionId}
                   isVisible={sectionVisibility[sectionId] || false}
                 />
                 <button
                   onClick={() => onToggleVisibility(sectionId)}
-                  className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                  className={`px-1.5 lg:px-2 py-1 text-xs rounded-md transition-colors ${
                     sectionVisibility[sectionId] 
                       ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
                   }`}
                 >
-                  {sectionVisibility[sectionId] ? 'Visible' : 'Hidden'}
+                  <span className="hidden sm:inline">{sectionVisibility[sectionId] ? 'Visible' : 'Hidden'}</span>
+                  <span className="sm:hidden">{sectionVisibility[sectionId] ? 'V' : 'H'}</span>
                 </button>
               </div>
             ))}

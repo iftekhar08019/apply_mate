@@ -189,11 +189,11 @@ export default function ResumeBuilder() {
           )}
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-400px)]">
-          {/* Left Column - Section Form - 1/3 width on large screens */}
-          <div className="lg:col-span-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 h-full">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 lg:gap-6 min-h-[calc(100vh-400px)]">
+          {/* Left Column - Section Form - Full width on mobile/tablet, 1/3 on desktop */}
+          <div className="xl:col-span-4 order-2 xl:order-1">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 lg:p-4 h-full">
+              <h2 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
                 {selectedSection === 'personal' ? 'Personal Information' : 
                  selectedSection ? `${availableSections.find(s => s.id === selectedSection)?.title || 'Section'} Details` : 
                  'Resume Information'}
@@ -208,20 +208,24 @@ export default function ResumeBuilder() {
             </div>
           </div>
           
-          {/* Right Column - Preview - 2/3 width on large screens */}
-          <div className="lg:col-span-8">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 h-full">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          {/* Right Column - Preview - Full width on mobile/tablet, 2/3 on desktop */}
+          <div className="xl:col-span-8 order-1 xl:order-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 lg:p-4 h-full">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 lg:mb-4 gap-2">
+                <h2 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
                   Live Preview
                 </h2>
-                <PDFDownload fileName={`${resumeData.personalInfo.name || 'resume'}`} />
+                <div className="flex-shrink-0">
+                  <PDFDownload fileName={`${resumeData.personalInfo.name || 'resume'}`} />
+                </div>
               </div>
               <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                <ResumePreview 
-                  resumeData={resumeData} 
-                  sectionVisibility={sectionVisibility}
-                />
+                <div className="overflow-x-auto">
+                  <ResumePreview 
+                    resumeData={resumeData} 
+                    sectionVisibility={sectionVisibility}
+                  />
+                </div>
               </div>
             </div>
           </div>

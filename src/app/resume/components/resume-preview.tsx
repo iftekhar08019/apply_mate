@@ -26,29 +26,30 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
       className="bg-white text-black mx-auto" 
       style={{ 
         fontFamily: 'Calibri, Arial, sans-serif',
-        fontSize: '11pt',
+        fontSize: 'clamp(9pt, 2.5vw, 11pt)',
         lineHeight: '1.2',
-        width: '210mm', // A4 width
+        width: '100%',
+        maxWidth: '210mm', // A4 width
         minHeight: '297mm', // A4 height
-        padding: '20mm',
+        padding: 'clamp(10mm, 3vw, 15mm)',
         margin: '0 auto',
         boxSizing: 'border-box'
       }}
     >
       {/* Header Section */}
-      <div className="text-center mb-6">
-        <h1 className="font-bold mb-1" style={{ fontSize: '16pt' }}>
+      <div className="text-center mb-4 lg:mb-6">
+        <h1 className="font-bold mb-1" style={{ fontSize: 'clamp(14pt, 4vw, 16pt)' }}>
           {personalInfo.name || "Your Name"}
         </h1>
-        <p className="font-bold mb-1" style={{ fontSize: '12pt' }}>
+        <p className="font-bold mb-1" style={{ fontSize: 'clamp(10pt, 3vw, 12pt)' }}>
           {personalInfo.title || "Professional Title"}
         </p>
-        <p className="mb-3" style={{ fontSize: '11pt' }}>
+        <p className="mb-3" style={{ fontSize: 'clamp(9pt, 2.5vw, 11pt)' }}>
           {personalInfo.location || "Location"}
         </p>
-        <div style={{ fontSize: '11pt' }}>
+        <div style={{ fontSize: 'clamp(9pt, 2.5vw, 11pt)' }} className="flex flex-wrap justify-center items-center gap-1">
           <span>{personalInfo.phone || "Phone"}</span>
-          <span className="mx-1">|</span>
+          <span className="hidden sm:inline">|</span>
           <a 
             href={personalInfo.email ? `mailto:${personalInfo.email}` : "#"} 
             className="text-blue-600 hover:underline"
