@@ -20,7 +20,7 @@ const Navbar = () => {
   const menus = ["AI System", "Guide", "Explore", "Contact Us", "Discover"];
 
   return (
-    <header className="w-full bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full bg-white dark:bg-gray-950 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -50,7 +50,6 @@ const Navbar = () => {
         <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
           {/* Desktop buttons */}
           <div className="hidden lg:flex items-center gap-4 xl:gap-5">
-            {/* Add ModeToggle here */}
             <ModeToggle />
             <Link
               href="#"
@@ -65,9 +64,8 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Tablet buttons (hidden on mobile, shown on tablet) */}
+          {/* Tablet buttons */}
           <div className="hidden md:flex lg:hidden items-center gap-3">
-            {/* Add ModeToggle here */}
             <ModeToggle />
             <Link
               href="#"
@@ -87,7 +85,6 @@ const Navbar = () => {
 
           {/* Mobile Menu */}
           <div className="lg:hidden flex items-center gap-2">
-            {/* Add ModeToggle for mobile/tablet */}
             <div className="md:hidden">
               <ModeToggle />
             </div>
@@ -126,7 +123,6 @@ const Navbar = () => {
                     </Link>
                   ))}
                   <hr className="my-2 w-full border-gray-200 dark:border-gray-800" />
-                  {/* Add ModeToggle in mobile menu if you want it there too */}
                   <div className="w-full flex justify-center">
                     <ModeToggle />
                   </div>
