@@ -1,7 +1,8 @@
 "use client";
 
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, rectIntersection } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useState } from 'react';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
@@ -47,7 +48,7 @@ function SectionItem({ id, title, isVisible }: SectionItemProps) {
       <span className="flex-1 text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">
         {title}
       </span>
-      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-green-500' : 'bg-gray-300'}`} />
+      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-blue-500' : 'bg-gray-300'}`} />
     </div>
   );
 }
@@ -56,9 +57,10 @@ interface SortableSectionItemProps {
   id: string;
   title: string;
   isVisible: boolean;
+  onToggleVisibility: (id: string) => void;
 }
 
-function SortableSectionItem({ id, title, isVisible }: SortableSectionItemProps) {
+function SortableSectionItem({ id, title, isVisible, onToggleVisibility }: SortableSectionItemProps) {
   const {
     attributes,
     listeners,
@@ -71,28 +73,44 @@ function SortableSectionItem({ id, title, isVisible }: SortableSectionItemProps)
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-1 lg:gap-2 p-1.5 lg:p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg min-w-0 ${
-        !isVisible ? 'opacity-50' : ''
+      className={`flex items-center gap-1 ${
+        isDragging ? 'opacity-50' : ''
       }`}
     >
-      <div
-        {...attributes}
-        {...listeners}
-        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 flex-shrink-0 p-0.5 lg:p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-      >
-        <GripVertical size={12} className="lg:w-3.5 lg:h-3.5" />
+      <div className={`flex items-center gap-1 lg:gap-2 p-1.5 lg:p-2 bg-white dark:bg-gray-800 border-2 rounded-lg min-w-0 ${
+        isDragging 
+          ? 'border-blue-500 shadow-lg scale-105 z-50' 
+          : 'border-gray-200 dark:border-gray-700'
+      } ${!isVisible ? 'opacity-50' : ''}`}>
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-blue-500 dark:text-gray-500 dark:hover:text-blue-400 flex-shrink-0 p-0.5 lg:p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+        >
+          <GripVertical size={12} className="lg:w-3.5 lg:h-3.5" />
+        </div>
+        <span className="flex-1 text-xs lg:text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">
+          {title}
+        </span>
+        <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-blue-500' : 'bg-gray-300'}`} />
       </div>
-      <span className="flex-1 text-xs lg:text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">
-        {title}
-      </span>
-      <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-green-500' : 'bg-gray-300'}`} />
+      <button
+        onClick={() => onToggleVisibility(id)}
+        className={`px-1.5 lg:px-2 py-1 text-xs rounded-md transition-colors ${
+          isVisible 
+            ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300' 
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+        }`}
+      >
+        <span className="hidden sm:inline">{isVisible ? 'Visible' : 'Hidden'}</span>
+        <span className="sm:hidden">{isVisible ? 'V' : 'H'}</span>
+      </button>
     </div>
   );
 }
@@ -112,12 +130,22 @@ export default function SectionReorderer({
   onToggleVisibility,
   genericSections = []
 }: SectionReordererProps) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px movement before activating drag
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const handleDragStart = (event: any) => {
+    setActiveId(event.active.id);
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = (event: any) => {
@@ -134,6 +162,12 @@ export default function SectionReorderer({
         onReorder(arrayMove(sectionOrder, oldIndex, newIndex));
       }
     }
+    
+    setActiveId(null);
+  };
+
+  const handleDragCancel = () => {
+    setActiveId(null);
   };
 
   const getSectionTitle = (sectionId: string): string => {
@@ -174,32 +208,34 @@ export default function SectionReorderer({
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
       >
-        <SortableContext items={sectionOrder} strategy={verticalListSortingStrategy}>
-          <div className="flex flex-wrap gap-1 lg:gap-2">
+        <SortableContext items={sectionOrder}>
+          <div className="flex flex-wrap gap-2">
             {sectionOrder.map((sectionId) => (
-              <div key={sectionId} className="flex items-center gap-1">
-                <SortableSectionItem
-                  id={sectionId}
-                  title={getSectionTitle(sectionId)}
-                  isVisible={sectionVisibility[sectionId] || false}
-                />
-                <button
-                  onClick={() => onToggleVisibility(sectionId)}
-                  className={`px-1.5 lg:px-2 py-1 text-xs rounded-md transition-colors ${
-                    sectionVisibility[sectionId] 
-                      ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
-                  }`}
-                >
-                  <span className="hidden sm:inline">{sectionVisibility[sectionId] ? 'Visible' : 'Hidden'}</span>
-                  <span className="sm:hidden">{sectionVisibility[sectionId] ? 'V' : 'H'}</span>
-                </button>
-              </div>
+              <SortableSectionItem
+                key={sectionId}
+                id={sectionId}
+                title={getSectionTitle(sectionId)}
+                isVisible={sectionVisibility[sectionId] || false}
+                onToggleVisibility={onToggleVisibility}
+              />
             ))}
           </div>
         </SortableContext>
+        <DragOverlay>
+          {activeId ? (
+            <div className="flex items-center gap-1 lg:gap-2 p-1.5 lg:p-2 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg shadow-2xl opacity-90">
+              <GripVertical size={12} className="lg:w-3.5 lg:h-3.5 text-blue-500" />
+              <span className="text-xs lg:text-sm font-medium text-gray-900 dark:text-white">
+                {getSectionTitle(activeId)}
+              </span>
+              <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full ${sectionVisibility[activeId] ? 'bg-blue-500' : 'bg-gray-300'}`} />
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );

@@ -49,75 +49,50 @@ function getDefaultResumeData(): ResumeData {
 }
 
 export default function ResumeBuilder() {
-  // Initialize state with default values
-  const getInitialResumeData = (): ResumeData => {
-    if (typeof window === 'undefined') {
-      return getDefaultResumeData();
-    }
-    
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (error) {
-      console.error('Error loading resume data from localStorage:', error);
-    }
-    
-    return getDefaultResumeData();
-  };
+  // Initialize with default values (hydration-safe)
+  const [resumeData, setResumeData] = useState<ResumeData>(getDefaultResumeData);
+  const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean>>({
+    skills: true,
+    experiences: true,
+    projects: true,
+    education: true,
+    languages: true
+  });
+  const [selectedSection, setSelectedSection] = useState<string | null>('personal');
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  const getInitialVisibility = (): Record<string, boolean> => {
-    if (typeof window === 'undefined') {
-      return {
-        skills: true,
-        experiences: true,
-        projects: true,
-        education: true,
-        languages: true
-      };
-    }
-    
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY_VISIBILITY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (error) {
-      console.error('Error loading visibility data from localStorage:', error);
-    }
-    
-    return {
-      skills: true,
-      experiences: true,
-      projects: true,
-      education: true,
-      languages: true
-    };
-  };
-
-  const getInitialSelectedSection = (): string | null => {
-    if (typeof window === 'undefined') {
-      return 'personal';
-    }
-    
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY_SELECTED_SECTION);
-      return stored || 'personal';
-    } catch (error) {
-      console.error('Error loading selected section from localStorage:', error);
-    }
-    
-    return 'personal';
-  };
-
-  const [resumeData, setResumeData] = useState<ResumeData>(getInitialResumeData);
-  const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean>>(getInitialVisibility);
-  const [selectedSection, setSelectedSection] = useState<string | null>(getInitialSelectedSection);
-
-  // Save resume data to localStorage whenever it changes
+  // Load data from localStorage after hydration (client-side only)
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      try {
+        // Load resume data
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        if (storedData) {
+          setResumeData(JSON.parse(storedData));
+        }
+
+        // Load visibility data
+        const storedVisibility = localStorage.getItem(STORAGE_KEY_VISIBILITY);
+        if (storedVisibility) {
+          setSectionVisibility(JSON.parse(storedVisibility));
+        }
+
+        // Load selected section
+        const storedSection = localStorage.getItem(STORAGE_KEY_SELECTED_SECTION);
+        if (storedSection) {
+          setSelectedSection(storedSection);
+        }
+      } catch (error) {
+        console.error('Error loading data from localStorage:', error);
+      }
+      
+      setIsHydrated(true);
+    }
+  }, []);
+
+  // Save resume data to localStorage whenever it changes (only after hydration)
+  useEffect(() => {
+    if (isHydrated && typeof window !== 'undefined') {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
         // Only show toast after initial load (not on first mount)
@@ -135,29 +110,29 @@ export default function ResumeBuilder() {
         toast.error('Failed to save changes');
       }
     }
-  }, [resumeData]);
+  }, [resumeData, isHydrated]);
 
-  // Save section visibility to localStorage whenever it changes
+  // Save section visibility to localStorage whenever it changes (only after hydration)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (isHydrated && typeof window !== 'undefined') {
       try {
         localStorage.setItem(STORAGE_KEY_VISIBILITY, JSON.stringify(sectionVisibility));
       } catch (error) {
         console.error('Error saving visibility data to localStorage:', error);
       }
     }
-  }, [sectionVisibility]);
+  }, [sectionVisibility, isHydrated]);
 
-  // Save selected section to localStorage whenever it changes
+  // Save selected section to localStorage whenever it changes (only after hydration)
   useEffect(() => {
-    if (typeof window !== 'undefined' && selectedSection) {
+    if (isHydrated && typeof window !== 'undefined' && selectedSection) {
       try {
         localStorage.setItem(STORAGE_KEY_SELECTED_SECTION, selectedSection);
       } catch (error) {
         console.error('Error saving selected section to localStorage:', error);
       }
     }
-  }, [selectedSection]);
+  }, [selectedSection, isHydrated]);
 
   const availableSections: AvailableSection[] = [
     {
@@ -362,90 +337,116 @@ export default function ResumeBuilder() {
         }}
       />
       <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-8">
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-center sm:text-left">
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                Resume Builder
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Create your professional resume with our easy-to-use builder
-              </p>
-            </div>
-            <button
-              onClick={handleClearAllData}
-              className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 border border-red-600 dark:border-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors whitespace-nowrap"
-            >
-              Clear All Data
-            </button>
-          </div>
+        <div className="mb-10 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+            Build Your{" "}
+            <span className="text-blue-600 dark:text-blue-400">
+              Professional Resume
+            </span>
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Create a stunning, ATS-friendly resume in minutes with our easy-to-use builder
+          </p>
         </div>
         
         {/* Top Section - Section Navigation and Order */}
-        <div className="mb-6 space-y-4">
+        <div className="mb-8 space-y-6">
           {/* Section Navigation */}
-          <SectionSidebar
-            availableSections={availableSections}
-            activeSections={resumeData.activeSections}
-            selectedSection={selectedSection}
-            onSelectSection={setSelectedSection}
-            onAddSection={handleAddSection}
-            onRemoveSection={handleRemoveSection}
-            onAddGenericSection={handleAddGenericSection}
-            genericSections={resumeData.genericSections}
-            onRemoveGenericSection={handleRemoveGenericSection}
-          />
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-1 shadow-xl border border-blue-100 dark:border-blue-800">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4">
+              <SectionSidebar
+                availableSections={availableSections}
+                activeSections={resumeData.activeSections}
+                selectedSection={selectedSection}
+                onSelectSection={setSelectedSection}
+                onAddSection={handleAddSection}
+                onRemoveSection={handleRemoveSection}
+                onAddGenericSection={handleAddGenericSection}
+                genericSections={resumeData.genericSections}
+                onRemoveGenericSection={handleRemoveGenericSection}
+              />
+            </div>
+          </div>
           
           {/* Section Reorderer - Horizontal Layout */}
           {resumeData.activeSections.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-              <SectionReorderer
-                sectionOrder={resumeData.activeSections}
-                onReorder={handleSectionReorder}
-                sectionVisibility={sectionVisibility}
-                onToggleVisibility={handleToggleVisibility}
-                genericSections={resumeData.genericSections}
-              />
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-1 shadow-xl border border-purple-100 dark:border-purple-800">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-4">
+                <SectionReorderer
+                  sectionOrder={resumeData.activeSections}
+                  onReorder={handleSectionReorder}
+                  sectionVisibility={sectionVisibility}
+                  onToggleVisibility={handleToggleVisibility}
+                  genericSections={resumeData.genericSections}
+                />
+              </div>
             </div>
           )}
         </div>
         
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 lg:gap-6 min-h-[calc(100vh-400px)]">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-8 min-h-[calc(100vh-400px)]">
           {/* Left Column - Section Form - Full width on mobile/tablet, 1/3 on desktop */}
           <div className="xl:col-span-4 order-2 xl:order-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 lg:p-4 h-full">
-              <h2 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
-                {selectedSection === 'personal' ? 'Personal Information' : 
-                 selectedSection ? `${availableSections.find(s => s.id === selectedSection)?.title || 'Section'} Details` : 
-                 'Resume Information'}
-              </h2>
-              <SingleSectionForm 
-                resumeData={resumeData} 
-                selectedSection={selectedSection}
-                updateResumeData={updateResumeData}
-                updateGenericSection={handleUpdateGenericSection}
-                removeGenericSection={handleRemoveGenericSection}
-              />
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-1 shadow-xl border border-blue-100 dark:border-blue-800 h-full">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 h-full">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+                    {selectedSection === 'personal' ? 'Personal Information' : 
+                     selectedSection ? `${availableSections.find(s => s.id === selectedSection)?.title || 'Section'} Details` : 
+                     'Resume Information'}
+                  </h2>
+                </div>
+                <SingleSectionForm 
+                  resumeData={resumeData} 
+                  selectedSection={selectedSection}
+                  updateResumeData={updateResumeData}
+                  updateGenericSection={handleUpdateGenericSection}
+                  removeGenericSection={handleRemoveGenericSection}
+                />
+              </div>
             </div>
           </div>
           
           {/* Right Column - Preview - Full width on mobile/tablet, 2/3 on desktop */}
           <div className="xl:col-span-8 order-1 xl:order-2">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 lg:p-4 h-full">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 lg:mb-4 gap-2">
-                <h2 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
-                  Live Preview
-                </h2>
-                <div className="flex-shrink-0">
-                  <PDFDownload fileName={`${resumeData.personalInfo.name || 'resume'}`} />
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-1 shadow-xl border border-blue-100 dark:border-blue-800 h-full">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 h-full">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+                      Live Preview
+                    </h2>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleClearAllData}
+                      className="px-4 py-2 text-sm font-medium text-red-600 hover:text-white dark:text-red-400 dark:hover:text-white border-2 border-red-500 dark:border-red-400 rounded-lg hover:bg-red-500 dark:hover:bg-red-500 transition-all duration-200 whitespace-nowrap"
+                    >
+                      Clear Data
+                    </button>
+                    <div className="flex-shrink-0">
+                      <PDFDownload fileName={`${resumeData.personalInfo.name || 'resume'}`} />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
-                  <ResumePreview 
-                    resumeData={resumeData} 
-                    sectionVisibility={sectionVisibility}
-                  />
+                <div className="border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-inner bg-gray-50 dark:bg-gray-900/50">
+                  <div className="overflow-x-auto">
+                    <ResumePreview 
+                      resumeData={resumeData} 
+                      sectionVisibility={sectionVisibility}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
