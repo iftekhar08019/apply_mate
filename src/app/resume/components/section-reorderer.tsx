@@ -117,6 +117,7 @@ export default function SectionReorderer({
     })
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     console.log('Drag end:', { active: active.id, over: over?.id });
