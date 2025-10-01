@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from 'react';
+import toast from 'react-hot-toast';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Download } from 'lucide-react';
@@ -16,9 +17,11 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
     const element = document.getElementById('resume-content');
     if (!element) {
       console.error('Resume content element not found');
-      alert('Resume content not found. Please try again.');
+      toast.error('Resume content not found. Please try again.');
       return;
     }
+
+    const toastId = toast.loading('Generating PDF...');
 
     try {
       // Show loading state
@@ -72,6 +75,8 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
       const safeFileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
       pdf.save(`${safeFileName || 'resume'}.pdf`);
       
+      toast.success('PDF downloaded successfully!', { id: toastId, icon: '📄' });
+      
       // Reset button state
       if (button) {
         button.disabled = false;
@@ -79,6 +84,7 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
       }
     } catch (error) {
       console.error('Error generating PDF:', error);
+      toast.error('Failed to generate PDF. Trying fallback method...', { id: toastId });
       
       // Try fallback method
       try {
@@ -106,12 +112,13 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
           `);
           printWindow.document.close();
           printWindow.print();
+          toast.success('Print dialog opened. Save as PDF from there.', { id: toastId, icon: '🖨️' });
         } else {
-          alert('Please use your browser\'s print function (Ctrl+P) to save as PDF');
+          toast.error('Please use Ctrl+P (Cmd+P on Mac) to print and save as PDF', { id: toastId });
         }
       } catch (fallbackError) {
         console.error('Fallback method also failed:', fallbackError);
-        alert('PDF generation failed. Please use your browser\'s print function (Ctrl+P) to save as PDF');
+        toast.error('Please use Ctrl+P (Cmd+P on Mac) to print and save as PDF', { id: toastId });
       }
       
       // Reset button state
