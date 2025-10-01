@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   fullName: string;
@@ -69,10 +72,46 @@ export default function SignUpForm() {
     }
     setPasswordStrength({ width, color });
   }, [password]);
-
+  const router = useRouter();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log("Signup data:", data);
+    console.log("Login data:", data);
+    // user credebtials for manual login
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (res?.error) {
+      toast.error("Invalid email or password");
+    } else {
+      toast.success("Welcome Back");
+      router.push("/");
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const res = await signIn("google", { redirect: false });
+
+    if (res?.error) {
+      toast.error("Google login failed");
+    } else {
+      toast.success("Logged in with Google successfully");
+      router.push("/");
+    }
+  };
+
+  const handleGitHubLogin = async () => {
+    const res = await signIn("github", { redirect: false });
+
+    if (res?.error) {
+      toast.error("GitHub login failed");
+    } else {
+      toast.success("Logged in with GitHub successfully");
+      router.push("/");
+    }
   };
 
   const containerVariants = {
@@ -274,6 +313,7 @@ export default function SignUpForm() {
       {/* Social Signup */}
       <div className="flex gap-2">
         <button
+          onClick={handleGoogleLogin}
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
         >
@@ -281,6 +321,7 @@ export default function SignUpForm() {
           Google
         </button>
         <button
+          onClick={handleGitHubLogin}
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
         >
