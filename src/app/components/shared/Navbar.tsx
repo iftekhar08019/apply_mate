@@ -15,11 +15,21 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ModeToggle } from "../mode-toggle";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-  const menus = ["AI System", "Guide", "Explore", "Resume Builder", "Contact Us", "Discover"];
+  const menus = [
+    "AI System",
+    "Guide",
+    "Explore",
+    "Resume Builder",
+    "Contact Us",
+    "Discover",
+  ];
+  const pathName = usePathname();
 
-  return (
+  if(!pathName.includes('/dashboard')){
+    return (
     <header className="w-full bg-white dark:bg-gray-950 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
@@ -52,12 +62,12 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-4 xl:gap-5">
             <ModeToggle />
             <Link
-              href="#"
+              href="login"
               className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition mx-3"
             >
               Log in
             </Link>
-            <Link href='/'>
+            <Link href="signup">
               <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
                 Sign Up
               </button>
@@ -68,19 +78,21 @@ const Navbar = () => {
           <div className="hidden md:flex lg:hidden items-center gap-3">
             <ModeToggle />
             <Link
-              href="#"
+              href="login"
               className="text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
             >
               Log in
             </Link>
-            <Button
-              className={cn(
-                "rounded-full px-4 py-2 text-sm font-semibold shadow-md transition",
-                "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white"
-              )}
-            >
-              Sign Up
-            </Button>
+            <Link href='signup'>
+              <Button
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-semibold shadow-md transition",
+                  "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white"
+                )}
+              >
+                Sign Up
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu */}
@@ -148,6 +160,12 @@ const Navbar = () => {
       </div>
     </header>
   );
+  }
+  else{
+    return<></>
+  }
+  
+  
 };
 
 export default Navbar;
