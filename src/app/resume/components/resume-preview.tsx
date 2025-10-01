@@ -37,7 +37,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
       }}
     >
       {/* Header Section */}
-      <div className="text-center mb-4 lg:mb-6">
+      <div className="text-center mb-4 pb-4 border-b border-gray-300">
         <h1 className="font-bold mb-1" style={{ fontSize: 'clamp(14pt, 4vw, 16pt)' }}>
           {personalInfo.name || "Your Name"}
         </h1>
@@ -104,7 +104,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           case 'skills':
             if (!defaultVisibility.skills || (!skills.frontend && !skills.backend && !skills.tools && !skills.softSkills)) return null;
             return (
-              <div key="skills" className="mb-4">
+              <div key="skills" className="mb-4 pb-4 border-b border-gray-300">
                 <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>SKILLS</h2>
                 <div className="space-y-1">
                   {skills.frontend && (
@@ -138,7 +138,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           case 'experiences':
             if (!defaultVisibility.experiences || experiences.length === 0) return null;
             return (
-              <div key="experiences" className="mb-4">
+              <div key="experiences" className="mb-4 pb-4 border-b border-gray-300">
                 <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>EXPERIENCES</h2>
                 <div className="space-y-3">
                   {experiences.map((exp, index) => (
@@ -174,7 +174,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           case 'projects':
             if (!defaultVisibility.projects || projects.length === 0) return null;
             return (
-              <div key="projects" className="mb-4">
+              <div key="projects" className="mb-4 pb-4 border-b border-gray-300">
                 <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>PROJECTS</h2>
                 <div className="space-y-3">
                   {projects.map((project, index) => (
@@ -188,9 +188,9 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
                                 href={project.liveLink} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-600 underline italic"
                               >
-                                Live Link
+                                Live Link |
                               </a>
                             )}
                             {project.clientLink && (
@@ -198,9 +198,9 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
                                 href={project.clientLink} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-600 underline italic"
                               >
-                                Client
+                                Client Link |
                               </a>
                             )}
                             {project.serverLink && (
@@ -208,9 +208,9 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
                                 href={project.serverLink} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-600 underline italic"
                               >
-                                Server
+                                Server Link
                               </a>
                             )}
                           </div>
@@ -244,7 +244,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           case 'education':
             if (!defaultVisibility.education || (!education.institution && !education.degree)) return null;
             return (
-              <div key="education" className="mb-4">
+              <div key="education" className="mb-4 pb-4 border-b border-gray-300">
                 <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>EDUCATION</h2>
                 <div className="flex justify-between items-start">
                   <div>
@@ -262,7 +262,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           case 'languages':
             if (!defaultVisibility.languages || !languages) return null;
             return (
-              <div key="languages" className="mb-4">
+              <div key="languages" className="mb-4 pb-4 border-b border-gray-300">
                 <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>LANGUAGES</h2>
                 <div style={{ fontSize: '11pt' }}>
                   {languages.split(' | ').map((lang, index) => (
@@ -278,14 +278,45 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           default:
             // Handle generic sections
             const genericSection = genericSections.find(s => s.id === sectionId);
-            if (genericSection && defaultVisibility[sectionId] !== false) {
+            if (genericSection && defaultVisibility[sectionId] !== false && genericSection.entries.length > 0) {
               return (
-                <div key={sectionId} className="mb-4">
+                <div key={sectionId} className="mb-4 pb-4 border-b border-gray-300">
                   <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                     {genericSection.title.toUpperCase()}
                   </h2>
-                  <div style={{ fontSize: '11pt', whiteSpace: 'pre-line' }}>
-                    {genericSection.content}
+                  <div className="space-y-3">
+                    {genericSection.entries.map((entry, index) => (
+                      <div key={entry.id || index}>
+                        <div className="flex justify-between items-start mb-1">
+                          <div>
+                            <div className="font-bold" style={{ fontSize: '11pt' }}>
+                              {entry.mainHeading}
+                              {entry.subHeading && ` - ${entry.subHeading}`}
+                            </div>
+                          </div>
+                          <div className="text-right" style={{ fontSize: '11pt' }}>
+                            {entry.location && <div>{entry.location}</div>}
+                            {(entry.startDate || entry.endDate) && (
+                              <div>
+                                {entry.startDate} {entry.startDate && entry.endDate && '- '} {entry.endDate}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {entry.description.length > 0 && (
+                          <ul className="ml-4 space-y-0.5">
+                            {entry.description.map((desc, descIndex) => (
+                              desc && (
+                                <li key={descIndex} className="flex items-start">
+                                  <span className="mr-2" style={{ fontSize: '11pt' }}>•</span>
+                                  <span style={{ fontSize: '11pt' }}>{desc}</span>
+                                </li>
+                              )
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               );

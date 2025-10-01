@@ -2,7 +2,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Mail, Lock } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
+import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react";
 
 type FormValues = {
   email: string;
@@ -22,7 +25,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 ">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {/* Email */}
       <div>
         <label className="block text-sm font-medium mb-1">Email Address</label>
@@ -94,7 +97,36 @@ export default function LoginForm() {
         Login
       </button>
 
-      <p className="text-xs text-gray-500 text-center">
+      {/* Or Divider */}
+      <div className="flex items-center gap-3 mt-2 mb-2">
+        <hr className="flex-1 border-gray-300" />
+        <span className="text-gray-500 text-sm">OR</span>
+        <hr className="flex-1 border-gray-300" />
+      </div>
+
+      {/* Social Login Buttons */}
+      <div className="flex gap-3">
+        <button
+          type="button"
+          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100  dark:hover:bg-gray-800 transition"
+        >
+          <FcGoogle />
+          Login with Google
+        </button>
+        <button
+          onClick={() => signIn("github", {
+            callbackUrl: "http://localhost:3000"
+          })}
+          type="button"
+          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          <FaGithub />
+          Login with GitHub
+        </button>
+      </div>
+
+      {/* Terms */}
+      <p className="text-xs text-gray-500 text-center mt-3">
         By creating an account, you agree to our{" "}
         <Link href="/" className="text-blue-600 hover:underline">
           Terms of Service
@@ -103,7 +135,6 @@ export default function LoginForm() {
         <Link href="/" className="text-blue-600 hover:underline">
           Privacy Policy
         </Link>
-    
       </p>
     </form>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from 'react';
+import toast from 'react-hot-toast';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Download } from 'lucide-react';
@@ -16,9 +17,11 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
     const element = document.getElementById('resume-content');
     if (!element) {
       console.error('Resume content element not found');
-      alert('Resume content not found. Please try again.');
+      toast.error('Resume content not found. Please try again.');
       return;
     }
+
+    const toastId = toast.loading('Generating PDF...');
 
     try {
       // Show loading state
@@ -31,46 +34,102 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
       // Wait a bit for any pending renders
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Create canvas with high quality
+      // Create canvas with higher quality and exact dimensions
       const canvas = await html2canvas(element, {
-        scale: 1.5, // Reduced scale for better compatibility
+        scale: 2, // Higher scale for better quality
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
         logging: false,
-        width: element.offsetWidth,
-        height: element.offsetHeight,
+        width: element.scrollWidth,
+        height: element.scrollHeight,
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
         scrollX: 0,
         scrollY: 0,
+        onclone: (clonedDoc) => {
+          const clonedElement = clonedDoc.getElementById('resume-content');
+          if (clonedElement) {
+            // Ensure all styles are properly applied in the clone
+            clonedElement.style.width = '210mm';
+            clonedElement.style.minHeight = '297mm';
+            clonedElement.style.margin = '0 auto';
+            clonedElement.style.padding = '20mm';
+            clonedElement.style.boxSizing = 'border-box';
+            clonedElement.style.background = '#ffffff';
+          }
+        }
       });
 
-      // Create PDF
-      const imgData = canvas.toDataURL('image/png', 0.95);
+      // Create PDF with exact A4 dimensions
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
+        compress: true,
       });
 
-      // Get A4 dimensions in mm
+      // Get A4 dimensions in mm (210 x 297)
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      // Calculate image dimensions to fit A4
+      // Calculate image dimensions to fit exactly on A4
+      const imgData = canvas.toDataURL('image/png', 1.0);
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       
-      // Center the image on the page
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 0;
-
-      // Add image to PDF
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      // Calculate the ratio to fit the content on A4
+      const ratio = Math.min(pdfWidth / (imgWidth / (canvas.width / element.scrollWidth)), 
+                              pdfHeight / (imgHeight / (canvas.height / element.scrollHeight)));
+      
+      const finalWidth = pdfWidth;
+      const finalHeight = (imgHeight * pdfWidth) / imgWidth;
+      
+      // If content is taller than one page, we might need multiple pages
+      if (finalHeight > pdfHeight) {
+        let position = 0;
+        const pageHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        while (position < finalHeight) {
+          const pageCanvas = document.createElement('canvas');
+          pageCanvas.width = canvas.width;
+          pageCanvas.height = Math.min(canvas.height, (canvas.width * pdfHeight) / pdfWidth);
+          
+          const ctx = pageCanvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+            ctx.drawImage(
+              canvas,
+              0,
+              (position / finalHeight) * canvas.height,
+              canvas.width,
+              pageCanvas.height,
+              0,
+              0,
+              pageCanvas.width,
+              pageCanvas.height
+            );
+            
+            const pageImgData = pageCanvas.toDataURL('image/png', 1.0);
+            if (position > 0) {
+              pdf.addPage();
+            }
+            pdf.addImage(pageImgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          }
+          
+          position += pdfHeight;
+        }
+      } else {
+        // Single page - center it
+        pdf.addImage(imgData, 'PNG', 0, 0, finalWidth, finalHeight);
+      }
 
       // Download PDF
       const safeFileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
       pdf.save(`${safeFileName || 'resume'}.pdf`);
+      
+      toast.success('PDF downloaded successfully!', { id: toastId, icon: '📄' });
       
       // Reset button state
       if (button) {
@@ -79,6 +138,7 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
       }
     } catch (error) {
       console.error('Error generating PDF:', error);
+      toast.error('Failed to generate PDF. Trying fallback method...', { id: toastId });
       
       // Try fallback method
       try {
@@ -106,12 +166,13 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
           `);
           printWindow.document.close();
           printWindow.print();
+          toast.success('Print dialog opened. Save as PDF from there.', { id: toastId, icon: '🖨️' });
         } else {
-          alert('Please use your browser\'s print function (Ctrl+P) to save as PDF');
+          toast.error('Please use Ctrl+P (Cmd+P on Mac) to print and save as PDF', { id: toastId });
         }
       } catch (fallbackError) {
         console.error('Fallback method also failed:', fallbackError);
-        alert('PDF generation failed. Please use your browser\'s print function (Ctrl+P) to save as PDF');
+        toast.error('Please use Ctrl+P (Cmd+P on Mac) to print and save as PDF', { id: toastId });
       }
       
       // Reset button state
@@ -127,9 +188,9 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
     <button
       data-pdf-button
       onClick={downloadPDF}
-      className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white px-4 py-2 rounded-md transition-colors font-medium"
+      className="flex items-center gap-2 bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-5 py-2.5 rounded-lg font-semibold transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-105"
     >
-      <Download size={16} />
+      <Download size={18} />
       Download PDF
     </button>
   );
