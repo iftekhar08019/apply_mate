@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/sheet";
 import { ModeToggle } from "../mode-toggle";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { toast } from "sonner";
 
 type UserSessionProps = {
   user?: {
@@ -32,6 +34,10 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
     "Discover",
   ];
   const pathName = usePathname();
+  const handleLogOutButton = () => {
+    signOut({ callbackUrl: "/" });
+    toast.success("LogOut successfully.!!");
+  };
 
   if (!pathName.includes("/dashboard")) {
     return (
@@ -67,11 +73,11 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
             <div className="hidden lg:flex items-center gap-4 xl:gap-5">
               <ModeToggle />
               {session?.user ? (
-                <Link href="/">
-                  <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
+                
+                  <button onClick={handleLogOutButton} className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
                     Logout
                   </button>
-                </Link>
+            
               ) : (
                 <>
                   <Link
@@ -93,11 +99,12 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
             <div className="hidden md:flex lg:hidden items-center gap-3">
               <ModeToggle />
               {session?.user ? (
-                <Link href="/">
-                  <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                    Logout
-                  </button>
-                </Link>
+                <button
+                  onClick={handleLogOutButton}
+                  className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                >
+                  Logout
+                </button>
               ) : (
                 <>
                   <Link
@@ -159,11 +166,11 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                       <ModeToggle />
                     </div>
                     {session?.user ? (
-                      <Link href="/">
-                        <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
+                    
+                        <button onClick={handleLogOutButton} className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
                           Logout
                         </button>
-                      </Link>
+                      
                     ) : (
                       <>
                         <Link

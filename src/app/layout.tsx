@@ -3,7 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/theme-provider";
 import Navbar from "./components/shared/Navbar";
-
+import { Toaster } from "sonner";
 import Footer from "./components/shared/Footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
@@ -41,7 +41,8 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar session = {session} />
+          <Navbar session={session} />
+          <Toaster richColors position="top-center" />
           {children}
           <Footer />
         </ThemeProvider>
