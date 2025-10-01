@@ -17,12 +17,12 @@ export default function AuthPage() {
   },[pathname])
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <section className="flex flex-col items-center gap-4">
       <AnimatePresence mode="wait">
         {isLogin ? (
           <motion.div
             key="login"
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.4 }}
@@ -48,10 +48,10 @@ export default function AuthPage() {
         ) : (
           <motion.div
             key="signup"
-            initial={{ opacity: 0, x: 50 }}
+             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.4 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ duration: 0.4 }}
           >
             <SignUpForm />
 
@@ -67,6 +67,6 @@ export default function AuthPage() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 }

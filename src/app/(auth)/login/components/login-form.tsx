@@ -111,17 +111,19 @@ export default function LoginForm() {
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100  dark:hover:bg-gray-800 transition"
         >
           <FcGoogle />
-          Login with Google
+          Google
         </button>
         <button
-          onClick={() => signIn("github", {
-            callbackUrl: "http://localhost:3000"
-          })}
+          onClick={() =>
+            signIn("github", {
+              callbackUrl: "http://localhost:3000",
+            })
+          }
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
         >
           <FaGithub />
-          Login with GitHub
+          GitHub
         </button>
       </div>
 

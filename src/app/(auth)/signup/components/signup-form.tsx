@@ -83,11 +83,6 @@ export default function SignUpForm() {
     },
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
-  };
-
   return (
     <>
       <div className="text-center mb-4">
@@ -101,8 +96,7 @@ export default function SignUpForm() {
         initial="hidden"
         animate="visible"
       >
-        {/* Full Name */}
-        <motion.div variants={itemVariants}>
+        <motion.div>
           <label htmlFor="fullName" className="block text-sm font-medium  mb-1">
             Full Name
           </label>
@@ -128,7 +122,7 @@ export default function SignUpForm() {
         </motion.div>
 
         {/* Email */}
-        <motion.div variants={itemVariants}>
+        <motion.div>
           <label htmlFor="email" className="block text-sm font-medium  mb-1">
             Email Address
           </label>
@@ -160,7 +154,7 @@ export default function SignUpForm() {
         </motion.div>
 
         {/* Password */}
-        <motion.div variants={itemVariants}>
+        <motion.div>
           <label htmlFor="password" className="block text-sm font-medium  mb-1">
             Password
           </label>
@@ -198,7 +192,7 @@ export default function SignUpForm() {
         </motion.div>
 
         {/* Confirm Password */}
-        <motion.div variants={itemVariants}>
+        <motion.div>
           <label
             htmlFor="confirmPassword"
             className="block text-sm font-medium  mb-1"
@@ -231,7 +225,7 @@ export default function SignUpForm() {
         </motion.div>
 
         {/* Terms Agreement */}
-        <motion.div variants={itemVariants}>
+        <motion.div>
           <div className="flex items-start gap-3">
             <input
               id="terms"
@@ -260,7 +254,6 @@ export default function SignUpForm() {
 
         {/* Submit Button */}
         <motion.button
-          variants={itemVariants}
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={isSubmitting}
@@ -271,7 +264,7 @@ export default function SignUpForm() {
       </motion.form>
 
       {/* Divider */}
-  
+
       <div className="my-6 flex items-center gap-3">
         <hr className="w-full border-t-2 border-gray-800" />
         <span className="text-sm">OR</span>
@@ -285,14 +278,14 @@ export default function SignUpForm() {
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
         >
           <FcGoogle />
-          Login with Google
+          Google
         </button>
         <button
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
         >
-          <FaGithub className="text-gray-800" />
-          Login with GitHub
+          <FaGithub />
+          GitHub
         </button>
       </div>
     </>
