@@ -84,6 +84,7 @@ export default function ResumeBuilder() {
     }
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateResumeData = (section: keyof ResumeData, data: any) => {
     setResumeData(prev => ({
       ...prev,

@@ -17,7 +17,7 @@ export default function AuthPage() {
   },[pathname])
 
   return (
-    <div className="flex flex-col items-center gap-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-3xl p-8 border border-blue-200/50 dark:border-blue-700/50">
+    <div className="flex flex-col items-center gap-4">
       <AnimatePresence mode="wait">
         {isLogin ? (
           <motion.div
@@ -51,7 +51,7 @@ export default function AuthPage() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.4 }}
+              transition={{ duration: 0.4 }}
           >
             <SignUpForm />
 

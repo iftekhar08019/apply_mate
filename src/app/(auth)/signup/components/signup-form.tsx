@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 
 import { FcGoogle } from "react-icons/fc";
 
-// --- Form Data Structure ---
 type FormValues = {
   fullName: string;
   email: string;
@@ -16,7 +15,6 @@ type FormValues = {
 };
 
 
-// signup 
 export default function SignUpForm() {
   const {
     register,
