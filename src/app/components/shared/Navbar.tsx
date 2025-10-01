@@ -82,14 +82,14 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                 <>
                   <Link
                     href="/login"
-                    className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition mx-3"
+                    className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-white dark:hover:text-white transition  border-2 border-blue-600 px-6 py-2.5 hover:bg-blue-600 rounded-lg"
                   >
                     Log in
                   </Link>
-                  <Link href="/signup">
-                    <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
+                  <Link href="/signup"
+                    className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
                       Sign Up
-                    </button>
+                   
                   </Link>
                 </>
               )}
@@ -109,7 +109,7 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                 <>
                   <Link
                     href="/login"
-                    className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition mx-3"
+                    className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition  border-blue-600 px-6 py-2.5 hover:bg-blue-600 rounded-lg border-2"
                   >
                     Log in
                   </Link>
@@ -175,7 +175,7 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                       <>
                         <Link
                           href="/login"
-                          className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition mx-3"
+                          className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition border-blue-600 px-6 py-2.5 hover:bg-blue-600 rounded-lg border-2"
                         >
                           Log in
                         </Link>
