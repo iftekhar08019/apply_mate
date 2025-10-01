@@ -120,6 +120,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 /* Spinner */
 @keyframes rotate {
   0% {
@@ -188,4 +189,3 @@
   box-sizing: border-box;
   animation: animloader 6s linear infinite;
 }
-

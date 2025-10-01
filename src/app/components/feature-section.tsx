@@ -41,7 +41,7 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.2, 
+      staggerChildren: 0.2,
     },
   },
 };
@@ -60,10 +60,7 @@ const contentVariants = {
 
 const FeatureCard = ({ icon: Icon, title, description }: Feature) => {
   return (
-    <motion.div
-      className="hexagon-card-wrapper"
-      variants={cardVariants}
-    >
+    <motion.div className="hexagon-card-wrapper" variants={cardVariants}>
       <div className="hexagon-card flex flex-col items-center justify-center p-6 sm:p-8 text-center">
         <motion.div
           className="mb-4 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-blue-600 text-white ring-4 ring-blue-200 dark:ring-blue-500/50"
@@ -145,8 +142,8 @@ export default function FeatureSection() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
           >
             {features.map((feature) => (
               <FeatureCard

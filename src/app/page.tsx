@@ -1,9 +1,10 @@
 import BannerSection from "./components/banner-section";
-
 import FeatureSection from "./components/feature-section";
 import HowItWorks from "./components/how-it-works";
 import PromotionalSection from "./components/promotional-section";
 import DemoSection from "./components/demo-section";
+import FAQSection from "@/app/components/FAQ";
+import Testimonials from "./components/Testimonials";
 
 export default function Home() {
   return (
@@ -14,6 +15,8 @@ export default function Home() {
         <HowItWorks />
         <PromotionalSection />
         <DemoSection />
+        <FAQSection />
+        <Testimonials />
       </section>
     </>
   );
