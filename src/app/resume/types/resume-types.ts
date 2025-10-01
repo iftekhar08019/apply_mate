@@ -46,10 +46,20 @@ export interface Education {
   endDate: string;
 }
 
+export interface GenericSectionEntry {
+  id: string;
+  mainHeading: string;
+  subHeading: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  description: string[];
+}
+
 export interface GenericSection {
   id: string;
   title: string;
-  content: string;
+  entries: GenericSectionEntry[];
   type: 'generic';
 }
 

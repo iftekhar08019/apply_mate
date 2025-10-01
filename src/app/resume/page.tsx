@@ -124,7 +124,7 @@ export default function ResumeBuilder() {
     const newSection: GenericSection = {
       id: `generic_${Date.now()}`,
       title,
-      content: '',
+      entries: [],
       type: 'generic'
     };
     
@@ -133,6 +133,9 @@ export default function ResumeBuilder() {
       genericSections: [...prev.genericSections, newSection],
       activeSections: [...prev.activeSections, newSection.id]
     }));
+
+    // Select the newly added section
+    setSelectedSection(newSection.id);
   };
 
   const handleUpdateGenericSection = (updatedSection: GenericSection) => {
@@ -175,6 +178,8 @@ export default function ResumeBuilder() {
             onAddSection={handleAddSection}
             onRemoveSection={handleRemoveSection}
             onAddGenericSection={handleAddGenericSection}
+            genericSections={resumeData.genericSections}
+            onRemoveGenericSection={handleRemoveGenericSection}
           />
           
           {/* Section Reorderer - Horizontal Layout */}

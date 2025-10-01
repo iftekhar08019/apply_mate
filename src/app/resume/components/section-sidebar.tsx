@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Plus, Settings, User, Briefcase, Code, GraduationCap, Globe, FileText } from 'lucide-react';
-import { AvailableSection } from '../types/resume-types';
+import { AvailableSection, GenericSection } from '../types/resume-types';
 
 interface SectionSidebarProps {
   availableSections: AvailableSection[];
@@ -12,6 +12,8 @@ interface SectionSidebarProps {
   onAddSection: (sectionId: string) => void;
   onRemoveSection: (sectionId: string) => void;
   onAddGenericSection: (title: string) => void;
+  genericSections?: GenericSection[];
+  onRemoveGenericSection?: (sectionId: string) => void;
 }
 
 const sectionIcons: Record<string, any> = {
@@ -31,7 +33,9 @@ export default function SectionSidebar({
   onSelectSection,
   onAddSection,
   onRemoveSection,
-  onAddGenericSection
+  onAddGenericSection,
+  genericSections = [],
+  onRemoveGenericSection
 }: SectionSidebarProps) {
   const [showAddGeneric, setShowAddGeneric] = useState(false);
   const [genericTitle, setGenericTitle] = useState('');
@@ -53,8 +57,8 @@ export default function SectionSidebar({
   const getSectionTitle = (sectionId: string) => {
     if (sectionId === 'personal') return 'Personal Info';
     if (sectionId.startsWith('generic_')) {
-      // This would need to be passed from parent or stored differently
-      return 'Custom Section';
+      const genericSection = genericSections.find(s => s.id === sectionId);
+      return genericSection?.title || 'Custom Section';
     }
     const section = availableSections.find(s => s.id === sectionId);
     return section?.title || sectionId;
@@ -124,7 +128,41 @@ export default function SectionSidebar({
             );
           })}
 
-          {/* Generic Section */}
+          {/* Generic/Custom Sections */}
+          {genericSections.map((genericSection) => {
+            const isActive = activeSections.includes(genericSection.id);
+            const isSelected = selectedSection === genericSection.id;
+            const Icon = FileText;
+
+            return (
+              <div key={genericSection.id} className="flex items-center gap-1">
+                <button
+                  onClick={() => onSelectSection(genericSection.id)}
+                  className={`flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg transition-colors text-sm lg:text-base ${
+                    isSelected
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                  }`}
+                >
+                  <Icon size={14} className="lg:w-4 lg:h-4" />
+                  <span className="font-medium hidden sm:inline">{genericSection.title}</span>
+                  <span className="font-medium sm:hidden">{genericSection.title.split(' ')[0]}</span>
+                </button>
+                
+                {isActive && onRemoveGenericSection && (
+                  <button
+                    onClick={() => onRemoveGenericSection(genericSection.id)}
+                    className="p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded"
+                    title="Remove custom section"
+                  >
+                    <Settings size={12} />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Add Generic Section Button */}
           {!showAddGeneric ? (
             <button
               onClick={() => setShowAddGeneric(true)}
