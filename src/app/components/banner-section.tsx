@@ -27,7 +27,7 @@ export default function BannerSection() {
             <span className="font-semibold">Apply Mate</span> helps you track,
             manage, and stay ahead in your job search.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <div className="flex flex-col items-center md:items-start my-2 sm:flex-row gap-4 justify-center md:justify-start ">
             <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
               Get Started
             </button>
