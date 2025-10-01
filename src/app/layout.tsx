@@ -5,7 +5,8 @@ import { ThemeProvider } from "./components/theme-provider";
 import Navbar from "./components/shared/Navbar";
 
 import Footer from "./components/shared/Footer";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,11 +25,13 @@ export const metadata: Metadata = {
   description: "Web application Tracker",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await getServerSession(authOptions)
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased`}>
@@ -38,9 +41,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar/>
+          <Navbar session = {session} />
           {children}
-          <Footer/>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
