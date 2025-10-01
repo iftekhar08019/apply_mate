@@ -106,7 +106,7 @@ function ParallaxSlide({ slide }: { slide: (typeof slides)[0] }) {
 const AnimationStyles = () => (
   <style jsx global>{`
     .animated-gradient {
-      background: linear-gradient(to bottom right, #0046ff, #0065F8, #4300FF);
+      background: linear-gradient(to bottom right, #0046ff, #0065f8, #4300ff);
       background-size: 400% 400%;
       animation: gradient-xy 15s ease infinite;
     }
@@ -145,12 +145,9 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isSignup = pathname.includes("signup");
 
   const imageSide = (
-    <div
-      className="hidden md:flex flex-col items-center justify-center text-white p-10 relative overflow-hidden rounded-bl-[96px]  rounded-tl-[96px] border border-blue-400 dark:border-blue-700 m-4"
-    >
+    <div className="hidden md:flex flex-col items-center justify-center text-white p-10 relative overflow-hidden rounded-bl-[96px] rounded-tl-[96px] border border-blue-400 dark:border-blue-700 m-4">
       <AnimationStyles />
 
       <div className="absolute inset-0 w-full h-full animated-gradient"></div>
@@ -172,6 +169,7 @@ export default function AuthLayout({
           fadeEffect={{ crossFade: true }}
           autoplay={{ delay: 4000, disableOnInteraction: false }}
           loop
+          aria-live="polite"
           className="w-full h-full"
         >
           {slides.map((slide, idx) => (
@@ -193,17 +191,8 @@ export default function AuthLayout({
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-4">
       <div className="w-full max-w-5xl bg-white dark:bg-gray-900 shadow-2xl rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        {isSignup ? (
-          <>
-            {imageSide}
-            {formSide}
-          </>
-        ) : (
-          <>
-            {formSide}
-            {imageSide}
-          </>
-        )}
+        {formSide}
+        {imageSide}
       </div>
     </section>
   );

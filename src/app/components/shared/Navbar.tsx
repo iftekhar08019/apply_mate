@@ -52,12 +52,12 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-4 xl:gap-5">
             <ModeToggle />
             <Link
-              href="#"
+              href="login"
               className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition mx-3"
             >
               Log in
             </Link>
-            <Link href='/'>
+            <Link href='/signup'>
               <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
                 Sign Up
               </button>
