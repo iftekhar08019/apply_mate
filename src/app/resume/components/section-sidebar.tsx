@@ -65,7 +65,7 @@ export default function SectionSidebar({
   };
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <div className="w-full">
       <div className="p-3 lg:p-4">
         <h3 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
           Resume Sections
