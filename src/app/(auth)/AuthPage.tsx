@@ -1,11 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "./login/components/login-form";
 import SignUpForm from "./signup/components/signup-form";
+import { usePathname } from "next/navigation";
 
 export default function AuthPage() {
+  const pathname = usePathname()
   const [isLogin, setIsLogin] = useState(true);
+  useEffect(() => {
+    if (pathname.includes('signup')){
+      setIsLogin(false)
+    } else {
+      setIsLogin(true)
+    }
+  },[pathname])
 
   return (
     <div className="flex flex-col items-center gap-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-3xl p-8 border border-blue-200/50 dark:border-blue-700/50">
