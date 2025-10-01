@@ -5,6 +5,7 @@ import { Mail, Lock, User, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 type FormValues = {
   fullName: string;
@@ -13,7 +14,6 @@ type FormValues = {
   confirmPassword: string;
   terms: boolean;
 };
-
 
 export default function SignUpForm() {
   const {
@@ -103,10 +103,7 @@ export default function SignUpForm() {
       >
         {/* Full Name */}
         <motion.div variants={itemVariants}>
-          <label
-            htmlFor="fullName"
-            className="block text-sm font-medium  mb-1"
-          >
+          <label htmlFor="fullName" className="block text-sm font-medium  mb-1">
             Full Name
           </label>
           <div className="relative">
@@ -132,10 +129,7 @@ export default function SignUpForm() {
 
         {/* Email */}
         <motion.div variants={itemVariants}>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium  mb-1"
-          >
+          <label htmlFor="email" className="block text-sm font-medium  mb-1">
             Email Address
           </label>
           <div className="relative">
@@ -167,10 +161,7 @@ export default function SignUpForm() {
 
         {/* Password */}
         <motion.div variants={itemVariants}>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium  mb-1"
-          >
+          <label htmlFor="password" className="block text-sm font-medium  mb-1">
             Password
           </label>
           <div className="relative">
@@ -228,7 +219,7 @@ export default function SignUpForm() {
               className={`w-full pl-10 pr-3 py-2.5 bg-white/5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.confirmPassword
                   ? "border-red-500/50 focus:ring-red-500"
-                  : "border-white/20 focus:ring-blue-500"
+                  : " focus:ring-blue-500"
               }`}
             />
           </div>
@@ -280,6 +271,7 @@ export default function SignUpForm() {
       </motion.form>
 
       {/* Divider */}
+  
       <div className="my-6 flex items-center gap-3">
         <hr className="w-full border-t-2 border-gray-800" />
         <span className="text-sm">OR</span>
@@ -287,14 +279,22 @@ export default function SignUpForm() {
       </div>
 
       {/* Social Signup */}
-      <motion.button
-        whileTap={{ scale: 0.98 }}
-        className="w-full flex items-center justify-center gap-3 py-2.5 border border-blue-600 rounded-lg hover:bg-white/10 transition-colors duration-300"
-      >
-      
-    <FcGoogle/>
-        Sign Up with Google
-      </motion.button>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+        >
+          <FcGoogle />
+          Login with Google
+        </button>
+        <button
+          type="button"
+          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+        >
+          <FaGithub className="text-gray-800" />
+          Login with GitHub
+        </button>
+      </div>
     </>
   );
 }
