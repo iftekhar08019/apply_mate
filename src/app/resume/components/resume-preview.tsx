@@ -278,14 +278,45 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
           default:
             // Handle generic sections
             const genericSection = genericSections.find(s => s.id === sectionId);
-            if (genericSection && defaultVisibility[sectionId] !== false) {
+            if (genericSection && defaultVisibility[sectionId] !== false && genericSection.entries.length > 0) {
               return (
                 <div key={sectionId} className="mb-4">
                   <h2 className="font-bold uppercase mb-2" style={{ fontSize: '11pt', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                     {genericSection.title.toUpperCase()}
                   </h2>
-                  <div style={{ fontSize: '11pt', whiteSpace: 'pre-line' }}>
-                    {genericSection.content}
+                  <div className="space-y-3">
+                    {genericSection.entries.map((entry, index) => (
+                      <div key={entry.id || index}>
+                        <div className="flex justify-between items-start mb-1">
+                          <div>
+                            <div className="font-bold" style={{ fontSize: '11pt' }}>
+                              {entry.mainHeading}
+                              {entry.subHeading && ` - ${entry.subHeading}`}
+                            </div>
+                          </div>
+                          <div className="text-right" style={{ fontSize: '11pt' }}>
+                            {entry.location && <div>{entry.location}</div>}
+                            {(entry.startDate || entry.endDate) && (
+                              <div>
+                                {entry.startDate} {entry.startDate && entry.endDate && '- '} {entry.endDate}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {entry.description.length > 0 && (
+                          <ul className="ml-4 space-y-0.5">
+                            {entry.description.map((desc, descIndex) => (
+                              desc && (
+                                <li key={descIndex} className="flex items-start">
+                                  <span className="mr-2" style={{ fontSize: '11pt' }}>•</span>
+                                  <span style={{ fontSize: '11pt' }}>{desc}</span>
+                                </li>
+                              )
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               );
