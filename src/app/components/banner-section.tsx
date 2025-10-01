@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 
-import { Button } from "@/components/ui/button";
-
 
 export default function BannerSection() {
   const [animationData, setAnimationData] = useState(null);
@@ -16,9 +14,6 @@ export default function BannerSection() {
 
   return (
     <section className="bg-gray-100 dark:bg-gray-900">
-      <div className="container mx-auto flex flex-col md:flex-row items-center gap-10">
-
-    <section className="">
       <div className="container mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
 
         {/* Left Text Section */}

@@ -25,7 +25,7 @@ export default function FAQSection() {
     const [openIndex, setOpenIndex] = React.useState<number | null>(null)
 
     return (
-        <section className="relative py-24 bg-gradient-to-b from-white via-gray-50 to-gray-100 dark:from-gray-950 dark:via-black dark:to-black">
+        <section className="relative py-24 bg-gray-100 dark:bg-gray-900">
             <div className="w-11/13 mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 {/* Left Side - Accordion */}
                 <div>

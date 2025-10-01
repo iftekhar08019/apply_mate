@@ -1,6 +1,6 @@
 "use client";
 
-import { ResumeData, SectionType } from "../types/resume-types";
+import { ResumeData } from "../types/resume-types";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -11,7 +11,7 @@ export default function ResumePreview({ resumeData, sectionVisibility = {} }: Re
   const { personalInfo, skills, experiences, projects, education, languages, genericSections, sectionOrder } = resumeData;
 
   // Default visibility for all sections
-  const defaultVisibility = {
+  const defaultVisibility: Record<string, boolean> = {
     skills: true,
     experiences: true,
     projects: true,
