@@ -361,7 +361,7 @@ export default function ResumeBuilder() {
           },
         }}
       />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-8">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-center sm:text-left">
@@ -404,6 +404,7 @@ export default function ResumeBuilder() {
                 onReorder={handleSectionReorder}
                 sectionVisibility={sectionVisibility}
                 onToggleVisibility={handleToggleVisibility}
+                genericSections={resumeData.genericSections}
               />
             </div>
           )}

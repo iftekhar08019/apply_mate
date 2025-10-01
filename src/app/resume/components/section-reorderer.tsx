@@ -5,7 +5,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalList
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
-import { SectionType } from '../types/resume-types';
+import { SectionType, GenericSection } from '../types/resume-types';
 
 interface SectionItemProps {
   id: string;
@@ -102,13 +102,15 @@ interface SectionReordererProps {
   onReorder: (newOrder: string[]) => void;
   sectionVisibility: Record<string, boolean>;
   onToggleVisibility: (section: string) => void;
+  genericSections?: GenericSection[];
 }
 
 export default function SectionReorderer({ 
   sectionOrder, 
   onReorder, 
   sectionVisibility, 
-  onToggleVisibility 
+  onToggleVisibility,
+  genericSections = []
 }: SectionReordererProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -134,12 +136,28 @@ export default function SectionReorderer({
     }
   };
 
-  const sectionTitles: Record<string, string> = {
-    skills: 'Skills',
-    experiences: 'Work Experience',
-    projects: 'Projects',
-    education: 'Education',
-    languages: 'Languages'
+  const getSectionTitle = (sectionId: string): string => {
+    // Predefined sections
+    const sectionTitles: Record<string, string> = {
+      skills: 'Skills',
+      experiences: 'Work Experience',
+      projects: 'Projects',
+      education: 'Education',
+      languages: 'Languages'
+    };
+    
+    // Check if it's a predefined section
+    if (sectionTitles[sectionId]) {
+      return sectionTitles[sectionId];
+    }
+    
+    // Check if it's a generic/custom section
+    if (sectionId.startsWith('generic_')) {
+      const genericSection = genericSections.find(s => s.id === sectionId);
+      return genericSection?.title || 'Custom Section';
+    }
+    
+    return sectionId;
   };
 
   return (
@@ -164,7 +182,7 @@ export default function SectionReorderer({
               <div key={sectionId} className="flex items-center gap-1">
                 <SortableSectionItem
                   id={sectionId}
-                  title={sectionTitles[sectionId] || sectionId}
+                  title={getSectionTitle(sectionId)}
                   isVisible={sectionVisibility[sectionId] || false}
                 />
                 <button
