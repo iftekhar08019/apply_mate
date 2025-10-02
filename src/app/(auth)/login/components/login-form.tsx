@@ -106,7 +106,7 @@ export default function LoginForm() {
         )}
       </div>
 
-      {/* Remember & Forgot */}
+      {/* Remember and Forgot */}
       <div className="flex items-center justify-between text-sm">
         <label className="flex items-center gap-2">
           <input
@@ -136,7 +136,7 @@ export default function LoginForm() {
         <hr className="flex-1 border-gray-300" />
       </div>
 
-      {/* Social Login Buttons */}
+      {/* Social Buttons */}
       <div className="flex gap-3">
         <button
           onClick={handleGoogleLogin}
