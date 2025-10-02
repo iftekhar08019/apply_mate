@@ -76,6 +76,8 @@ export default function SignUpForm() {
     setPasswordStrength({ width, color });
   }, [password]);
   const router = useRouter();
+
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log("Signup data:", data);
@@ -83,6 +85,7 @@ export default function SignUpForm() {
     // user credebtials for manual login
     const res = await signIn("credentials", {
       redirect: false,
+      fullName: data.fullName,
       email: data.email,
       password: data.password,
     });

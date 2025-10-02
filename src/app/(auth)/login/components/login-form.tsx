@@ -23,11 +23,9 @@ export default function LoginForm() {
   } = useForm<FormValues>();
 
   const router = useRouter();
-    const [showPassword, setShowPassword] = useState(false);
-  
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = async (data: FormValues) => {
-    console.log("Login data:", data);
-    // user credebtials for manual login
     const res = await signIn("credentials", {
       redirect: false,
       email: data.email,
@@ -42,28 +40,14 @@ export default function LoginForm() {
     }
   };
 
-  
+  // Google login
   const handleGoogleLogin = async () => {
-    const res = await signIn("google", { redirect: false });
-
-    if (res?.error) {
-      toast.error("Google login failed");
-    } else {
-      toast.success("Logged in with Google successfully");
-      router.push("/");
-    }
+    await signIn("google", { callbackUrl: "/" });
   };
 
-
+  // GitHub login
   const handleGitHubLogin = async () => {
-    const res = await signIn("github", { redirect: false });
-
-    if (res?.error) {
-      toast.error("GitHub login failed");
-    } else {
-      toast.success("Logged in with GitHub successfully");
-      router.push("/");
-    }
+    await signIn("github", { callbackUrl: "/" });
   };
 
   return (
@@ -101,7 +85,7 @@ export default function LoginForm() {
         <div className="relative">
           <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
           <input
-            type={showPassword? "text":"password"}
+            type={showPassword ? "text" : "password"}
             {...register("password", { required: "Password is required" })}
             placeholder="Enter your password"
             className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
@@ -110,10 +94,12 @@ export default function LoginForm() {
                 : "focus:ring-blue-500"
             }`}
           />
-          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
-              onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <Eye size={20}/>:<EyeOff size={20}/>}
-            </button>
+          <button
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+          </button>
         </div>
         {errors.password && (
           <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
@@ -138,7 +124,6 @@ export default function LoginForm() {
       {/* Submit Button */}
       <button
         type="submit"
-    
         className="w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
       >
         Login
@@ -162,7 +147,7 @@ export default function LoginForm() {
           Google
         </button>
         <button
-         onClick={handleGitHubLogin}
+          onClick={handleGitHubLogin}
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
         >

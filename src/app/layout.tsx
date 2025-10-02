@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import Footer from "./components/shared/Footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
+import SessionProvider from "@/providers/NextAuthSessionProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,7 +36,8 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased`}>
-        <ThemeProvider
+        <SessionProvider session={session}>
+            <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
@@ -46,6 +48,7 @@ export default async function RootLayout({
           {children}
           <Footer />
         </ThemeProvider>
+      </SessionProvider>
       </body>
     </html>
   );
