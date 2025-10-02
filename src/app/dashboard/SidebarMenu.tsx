@@ -6,58 +6,68 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Settings,
+  FileText,
+  LogOut,
+  HelpCircle,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 export default function SidebarMenu() {
   const pathname = usePathname();
 
+  const menuItems = [
+    { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
+    { name: "My Applications", href: "/dashboard/my-applications", icon: FileText },
+    { name: "My Profile", href: "/dashboard/settings", icon: Settings },
+  ];
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full mt-10 lg:mt-0 dark:bg-gray-900">
+      {/* Top Navigation */}
       <ScrollArea className="flex-1 px-3">
         <nav className="space-y-1 py-6">
           <ul className="space-y-2">
-            <li>
-              <Link
-                href="/dashboard"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors
-                  ${pathname === "/dashboard"
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Overview
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/dashboard/settings"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors
-                  ${pathname === "/dashboard/settings"
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
-              >
-                <Settings className="h-4 w-4" />
-                My Profile
-              </Link>
-              <Link
-                href="/dashboard/my-applications"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors
-                  ${pathname === "/dashboard/my-applications"
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
-              >
-                <Settings className="h-4 w-4" />
-                My Applications
-              </Link>
-            </li>
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors
+                      ${
+                        pathname === item.href
+                          ? "bg-blue-600 text-white"
+                          : "text-gray-700 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-blue-400"
+                      }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </ScrollArea>
 
+      {/* Bottom Actions */}
+      <div className="border-t px-3 py-4 space-y-2 dark:border-gray-800">
+        <Button
+          variant="outline"
+          className="w-full flex items-center gap-2 dark:border-gray-700 dark:text-gray-200"
+        >
+          <HelpCircle className="h-4 w-4" />
+          Support
+        </Button>
+        <Button
+          variant="destructive"
+          className="w-full flex items-center gap-2"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </Button>
+      </div>
     </div>
   );
 }

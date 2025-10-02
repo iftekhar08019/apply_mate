@@ -12,35 +12,50 @@
       "company": "Google",
       "role": "Frontend Developer",
       "status": "Interview",
-      "appliedDate": "2025-09-15"
+      "appliedDate": "2025-09-15",
+      "location": "California, USA",
+      "experience": "2-3 years",
+      "jobType": "Full-time"
     },
     {
       "id": 2,
       "company": "Microsoft",
       "role": "Full Stack Developer",
       "status": "Applied",
-      "appliedDate": "2025-09-12"
+      "appliedDate": "2025-09-12",
+      "location": "Redmond, USA",
+      "experience": "3-5 years",
+      "jobType": "Full-time"
     },
     {
       "id": 3,
       "company": "Amazon",
       "role": "Backend Engineer",
       "status": "Rejected",
-      "appliedDate": "2025-09-10"
+      "appliedDate": "2025-09-10",
+      "location": "Seattle, USA",
+      "experience": "1-2 years",
+      "jobType": "Internship"
     },
     {
       "id": 4,
       "company": "Meta",
       "role": "UI/UX Designer",
       "status": "Offer",
-      "appliedDate": "2025-09-08"
+      "appliedDate": "2025-09-08",
+      "location": "Meal Park, USA",
+      "experience": "2-4 years",
+      "jobType": "Full-time"
     },
     {
       "id": 5,
       "company": "Tesla",
       "role": "Software Engineer",
       "status": "Applied",
-      "appliedDate": "2025-09-05"
+      "appliedDate": "2025-09-05",
+      "location": "California, USA",
+      "experience": "0-2 years",
+      "jobType": "Internship"
     }
   ]
 }
