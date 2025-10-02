@@ -55,10 +55,6 @@ function ParallaxSlide({ slide }: { slide: (typeof slides)[0] }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="flex flex-col items-center justify-center text-center h-full w-full"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8 }}
     >
       <motion.div
         style={{ rotateX, rotateY, perspective: 1000 }}
@@ -73,32 +69,8 @@ function ParallaxSlide({ slide }: { slide: (typeof slides)[0] }) {
           priority
         />
       </motion.div>
-      <motion.h3
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{
-          delay: 0.2,
-          duration: 0.6,
-          type: "spring",
-          stiffness: 100,
-        }}
-        className="text-2xl md:text-3xl font-bold"
-      >
-        {slide.title}
-      </motion.h3>
-      <motion.p
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{
-          delay: 0.3,
-          duration: 0.6,
-          type: "spring",
-          stiffness: 100,
-        }}
-        className="text-base md:text-lg mt-3 max-w-xs"
-      >
-        {slide.text}
-      </motion.p>
+      <h3 className="text-2xl md:text-3xl font-bold">{slide.title}</h3>
+      <p className="text-base md:text-lg mt-3 max-w-xs">{slide.text}</p>
     </motion.div>
   );
 }
@@ -145,13 +117,29 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isLogin = pathname.includes("login");
+
+  // Dynamic rounded corners
+  const roundedClass = isLogin
+    ? "rounded-br-[96px] rounded-tr-[96px]" // login → left image, right rounded
+    : "rounded-bl-[96px] rounded-tl-[96px]"; // signup → right image, left rounded
+
+  // Animation direction
+  const motionInitial = isLogin
+    ? { opacity: 0, x: -100 } // login → slide in from left
+    : { opacity: 0, x: 100 }; // signup → slide in from right
+
+  const motionAnimate = { opacity: 1, x: 0 };
 
   const imageSide = (
-    <div className="hidden md:flex flex-col items-center justify-center text-white p-10 relative overflow-hidden rounded-bl-[96px] rounded-tl-[96px] border border-blue-400 dark:border-blue-700 m-4">
+    <motion.div
+      initial={motionInitial}
+      animate={motionAnimate}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className={`hidden md:flex flex-col items-center justify-center text-white p-10 relative overflow-hidden border border-blue-400 dark:border-blue-700 m-4 ${roundedClass}`}
+    >
       <AnimationStyles />
-
       <div className="absolute inset-0 w-full h-full animated-gradient"></div>
-
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-500 rounded-full opacity-30 filter blur-3xl blob-animation"></div>
       <div
         className="absolute -bottom-20 -right-10 w-72 h-72 bg-blue-500 rounded-full opacity-30 filter blur-3xl blob-animation"
@@ -179,7 +167,7 @@ export default function AuthLayout({
           ))}
         </Swiper>
       </div>
-    </div>
+    </motion.div>
   );
 
   const formSide = (
@@ -191,8 +179,17 @@ export default function AuthLayout({
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-4">
       <div className="w-full max-w-5xl bg-white dark:bg-gray-900 shadow-2xl rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        {formSide}
-        {imageSide}
+        {isLogin ? (
+          <>
+            {imageSide}
+            {formSide}
+          </>
+        ) : (
+          <>
+            {formSide}
+            {imageSide}
+          </>
+        )}
       </div>
     </section>
   );

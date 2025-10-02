@@ -30,11 +30,11 @@ const testimonials = [
 
 export default function TestimonialSection() {
   return (
-    <section className="relative py-24 bg-gray-100 dark:bg-gray-900">
-      <div className="max-w-6xl mx-auto px-6 text-center">
+    <section className="relative py-10">
+      <div className="container mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-4xl md:text-5xl font-extrabold text-blue-600 mb-6">
-          What Job Seekers Say
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          What <span className=" text-blue-600">job seeker</span> Say
         </h2>
         <p className="text-lg text-gray-700 mb-16 max-w-2xl mx-auto">
           Hear from professionals who track their applications, interviews, and

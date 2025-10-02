@@ -11,6 +11,7 @@ export default function Home() {
     <>
       <section className="bg-gray-100 dark:bg-gray-900">
         <BannerSection />
+        
         <FeatureSection />
         <HowItWorks />
         <PromotionalSection />

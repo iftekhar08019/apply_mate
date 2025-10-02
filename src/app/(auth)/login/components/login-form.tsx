@@ -6,6 +6,8 @@ import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   email: string;
@@ -20,8 +22,46 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => {
+ const router = useRouter();
+  const onSubmit = async (data: FormValues) => {
     console.log("Login data:", data);
+    // user credebtials for manual login
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (res?.error) {
+      toast.error("Invalid email or password");
+    } else {
+      toast.success("Welcome Back");
+      router.push("/");
+    }
+  };
+
+  
+  const handleGoogleLogin = async () => {
+    const res = await signIn("google", { redirect: false });
+
+    if (res?.error) {
+      toast.error("Google login failed");
+    } else {
+      toast.success("Logged in with Google successfully");
+      router.push("/");
+    }
+  };
+
+
+  const handleGitHubLogin = async () => {
+    const res = await signIn("github", { redirect: false });
+
+    if (res?.error) {
+      toast.error("GitHub login failed");
+    } else {
+      toast.success("Logged in with GitHub successfully");
+      router.push("/");
+    }
   };
 
   return (
@@ -107,21 +147,20 @@ export default function LoginForm() {
       {/* Social Login Buttons */}
       <div className="flex gap-3">
         <button
+          onClick={handleGoogleLogin}
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100  dark:hover:bg-gray-800 transition"
         >
           <FcGoogle />
-          Login with Google
+          Google
         </button>
         <button
-          onClick={() => signIn("github", {
-            callbackUrl: "http://localhost:3000"
-          })}
+         onClick={handleGitHubLogin}
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
         >
           <FaGithub />
-          Login with GitHub
+          GitHub
         </button>
       </div>
 
