@@ -1,0 +1,46 @@
+{
+  "totalApplications": 12,
+  "statusSummary": {
+    "applied": 5,
+    "interview": 3,
+    "offer": 2,
+    "rejected": 2
+  },
+  "recentApplications": [
+    {
+      "id": 1,
+      "company": "Google",
+      "role": "Frontend Developer",
+      "status": "Interview",
+      "appliedDate": "2025-09-15"
+    },
+    {
+      "id": 2,
+      "company": "Microsoft",
+      "role": "Full Stack Developer",
+      "status": "Applied",
+      "appliedDate": "2025-09-12"
+    },
+    {
+      "id": 3,
+      "company": "Amazon",
+      "role": "Backend Engineer",
+      "status": "Rejected",
+      "appliedDate": "2025-09-10"
+    },
+    {
+      "id": 4,
+      "company": "Meta",
+      "role": "UI/UX Designer",
+      "status": "Offer",
+      "appliedDate": "2025-09-08"
+    },
+    {
+      "id": 5,
+      "company": "Tesla",
+      "role": "Software Engineer",
+      "status": "Applied",
+      "appliedDate": "2025-09-05"
+    }
+  ]
+}
