@@ -307,7 +307,7 @@ export default function SignUpForm() {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-blue-500 transition-all duration-300 disabled:bg-blue-400"
+          className="w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
         >
           {isSubmitting ? "Creating Account..." : "Sign Up"}
         </motion.button>

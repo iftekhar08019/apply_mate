@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
@@ -22,7 +22,9 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<FormValues>();
 
- const router = useRouter();
+  const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
+  
   const onSubmit = async (data: FormValues) => {
     console.log("Login data:", data);
     // user credebtials for manual login
@@ -99,7 +101,7 @@ export default function LoginForm() {
         <div className="relative">
           <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
           <input
-            type="password"
+            type={showPassword? "text":"password"}
             {...register("password", { required: "Password is required" })}
             placeholder="Enter your password"
             className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
@@ -108,6 +110,10 @@ export default function LoginForm() {
                 : "focus:ring-blue-500"
             }`}
           />
+          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <Eye size={20}/>:<EyeOff size={20}/>}
+            </button>
         </div>
         {errors.password && (
           <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
@@ -132,7 +138,8 @@ export default function LoginForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+    
+        className="w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
       >
         Login
       </button>
