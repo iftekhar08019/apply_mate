@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Mail, Lock, User, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { FcGoogle } from "react-icons/fc";
@@ -31,6 +31,9 @@ export default function SignUpForm() {
     color: "",
   });
   const password = watch("password");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
 
   useEffect(() => {
     let score = 0;
@@ -201,7 +204,7 @@ export default function SignUpForm() {
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register("password", {
                 required: "Password is required",
                 minLength: {
@@ -216,6 +219,10 @@ export default function SignUpForm() {
                   : "focus:ring-blue-500"
               }`}
             />
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <Eye size={20}/>:<EyeOff size={20}/>}
+            </button>
           </div>
           <div className="mt-2 h-1.5 w-full bg-gray-600 rounded-full overflow-hidden">
             <div
@@ -242,7 +249,7 @@ export default function SignUpForm() {
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               id="confirmPassword"
-              type="password"
+              type={confirmPassword?"text":"password"}
               {...register("confirmPassword", {
                 required: "Please confirm your password",
                 validate: (value) =>
@@ -255,6 +262,10 @@ export default function SignUpForm() {
                   : " focus:ring-blue-500"
               }`}
             />
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              onClick={() => setConfirmPassword(!confirmPassword)}>
+              {confirmPassword ? <Eye size={20}/>:<EyeOff size={20}/>}
+            </button>
           </div>
           {errors.confirmPassword && (
             <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
