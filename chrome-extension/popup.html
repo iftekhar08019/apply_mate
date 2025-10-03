@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        width: 300px;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        margin: 0;
+        border: 4px solid #1b50ff;
+        
+      }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    .header span {
+        color: #1b50ff;
+        font-weight: 600;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      input[type="email"] {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      .status {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .status.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .status.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .scrape-section {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
+
+      .scrape-button {
+        background: linear-gradient(to right, #0439e6, #0051ff);
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .scrape-button:hover {
+        background: linear-gradient(to right, #0051ff, #0439e6);
+      }
+
+      .scrape-button:disabled {
+        background: #e2e8f0;
+        color: #a0aec0;
+        cursor: not-allowed;
+      }
+
+      .email-info {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+
+      .login-status {
+        font-size: 14px;
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .email-value {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 10px;
+        word-break: break-all;
+        font-weight: 600;
+      }
+
+      .change-btn {
+        background-color: transparent;
+        color: #4a5568;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .change-btn:hover {
+        background-color: #3b82f6;
+        color: white;
+      }
+      .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="logo.png" alt="ApplyMate Logo" class="logo">
+    <div class="header">
+      <h1>Add your email and click scrape to track <span>your job applications</span></h1>
+    </div>
+
+    <!-- Email Setup Form (shown initially) -->
+    <div id="emailSetup">
+      <div class="form-group">
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" placeholder="Enter your email address" />
+      </div>
+
+      <button id="saveEmail">Save Email</button>
+    </div>
+
+    <!-- Email Display (shown after email is saved) -->
+    <div id="emailDisplay" style="display: none">
+      <div class="email-info">
+        <div class="login-status">You are logged in as</div>
+        <div class="email-value" id="savedEmail">user@example.com</div>
+        <button id="changeEmail" class="change-btn">Change Email</button>
+      </div>
+    </div>
+
+    <div id="status"></div>
+
+    <div class="scrape-section">
+      <button id="scrapeJob" class="scrape-button" disabled>
+        Scrape Current Job
+      </button>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
