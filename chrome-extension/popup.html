@@ -100,15 +100,19 @@
       }
 
       .scrape-button {
-        background-color: #28a745;
+        background: linear-gradient(to right, #0439e6, #0051ff);
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
       }
 
       .scrape-button:hover {
-        background-color: #218838;
+        background: linear-gradient(to right, #0051ff, #0439e6);
       }
 
       .scrape-button:disabled {
-        background-color: #ccc;
+        background: #e2e8f0;
+        color: #a0aec0;
         cursor: not-allowed;
       }
 
@@ -120,11 +124,12 @@
         margin-bottom: 15px;
       }
 
-      .email-label {
-        font-size: 12px;
-        color: #6c757d;
-        margin-bottom: 5px;
+      .login-status {
+        font-size: 14px;
+        color: #4a5568;
+        margin-bottom: 8px;
         font-weight: 500;
+        text-align: center;
       }
 
       .email-value {
@@ -136,18 +141,21 @@
       }
 
       .change-btn {
-        background-color: #6c757d;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 6px 12px;
+        background-color: transparent;
+        color: #4a5568;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 8px 16px;
         font-size: 12px;
+        font-weight: 600;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.3s ease;
+        width: 100%;
       }
 
       .change-btn:hover {
-        background-color: #5a6268;
+        background-color: #3b82f6;
+        color: white;
       }
       .logo {
         display: flex;
@@ -175,7 +183,7 @@
     <!-- Email Display (shown after email is saved) -->
     <div id="emailDisplay" style="display: none">
       <div class="email-info">
-        <div class="email-label">Saved Email:</div>
+        <div class="login-status">You are logged in as</div>
         <div class="email-value" id="savedEmail">user@example.com</div>
         <button id="changeEmail" class="change-btn">Change Email</button>
       </div>

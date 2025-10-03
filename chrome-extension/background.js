@@ -98,25 +98,88 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 function mightBeJobListing(url, title) {
   // Job-related keywords to look for in URL and title
   const jobKeywords = [
-    // Job-related terms
+    // English job-related terms
     'job', 'jobs', 'career', 'careers', 'position', 'positions',
     'employment', 'hiring', 'vacancy', 'vacancies', 'opening', 'openings',
     'opportunity', 'opportunities', 'role', 'roles', 'apply', 'application',
+    'candidate', 'candidates', 'jobseekers', 'job-seekers', 'jobseeker',
     
     // Work-related terms
     'work', 'workplace', 'employee', 'employer', 'recruit', 'recruitment',
-    'staff', 'staffing', 'talent', 'resume', 'cv', 'interview',
+    'recruiter', 'recruiters', 'staff', 'staffing', 'talent', 'resume', 'cv', 
+    'interview', 'interviews', 'candidate', 'candidates', 'jobboard', 'job-board',
     
     // Industry-specific terms
-    'developer', 'engineer', 'manager', 'analyst', 'designer', 'consultant',
-    'specialist', 'coordinator', 'director', 'executive', 'assistant',
-    'technician', 'supervisor', 'lead', 'senior', 'junior', 'intern',
+    'developer', 'developers', 'engineer', 'engineers', 'engineering',
+    'manager', 'managers', 'management', 'analyst', 'analysts', 'analysis',
+    'designer', 'designers', 'design', 'consultant', 'consultants', 'consulting',
+    'specialist', 'specialists', 'coordinator', 'coordinators', 'coordination',
+    'director', 'directors', 'executive', 'executives', 'assistant', 'assistants',
+    'technician', 'technicians', 'supervisor', 'supervisors', 'supervision',
+    'lead', 'leads', 'senior', 'junior', 'intern', 'interns', 'internship',
+    'entry-level', 'mid-level', 'senior-level', 'expert', 'expertise',
     
-    // Remote work terms
-    'remote', 'hybrid', 'onsite', 'work from home', 'wfh', 'flexible',
+    // Job types and work arrangements
+    'remote', 'hybrid', 'onsite', 'on-site', 'work from home', 'wfh', 'flexible',
+    'full-time', 'part-time', 'contract', 'contractor', 'freelance', 'freelancer',
+    'temporary', 'permanent', 'volunteer', 'intern', 'apprentice', 'apprenticeship',
     
-    // Company pages
-    'careers', 'about us', 'join us', 'work with us'
+    // Company and career pages
+    'careers', 'career', 'about us', 'join us', 'work with us', 'team',
+    'company', 'companies', 'organization', 'organizations', 'corporate',
+    
+    // German job-related terms
+    'stellen', 'stelle', 'stellenangebot', 'stellenanzeige', 'jobangebot',
+    'karriere', 'karrieren', 'bewerbung', 'bewerbungen', 'arbeit', 'arbeiten',
+    'arbeitsplatz', 'arbeitsplätze', 'mitarbeiter', 'mitarbeiterin', 'personal',
+    'einstellung', 'einstellungen', 'suche', 'sucht', 'gesucht', 'verfügbar',
+    'vollzeit', 'teilzeit', 'praktikum', 'praktikant', 'praktikantin',
+    'ausbildung', 'ausbildungsplatz', 'azubi', 'lehrstelle', 'lehrstellen',
+    'arbeitnehmer', 'arbeitgeber', 'unternehmen', 'firma', 'betrieb',
+    'beruf', 'berufe', 'tätigkeit', 'tätigkeiten', 'position', 'positionen',
+    'aufgabe', 'aufgaben', 'verantwortung', 'verantwortlichkeiten',
+    'qualifikation', 'qualifikationen', 'erfahrung', 'kenntnisse', 'skills',
+    'entwickler', 'entwicklerin', 'ingenieur', 'ingenieurin', 'manager',
+    'designer', 'designerin', 'berater', 'beraterin', 'spezialist', 'spezialistin',
+    'koordinator', 'koordinatorin', 'direktor', 'direktorin', 'assistent',
+    'assistentin', 'techniker', 'technikerin', 'supervisor', 'supervisorin',
+    'lead', 'senior', 'junior', 'trainee', 'werkstudent', 'werkstudentin',
+    'homeoffice', 'home-office', 'hybrid', 'vor-ort', 'flexibel', 'flexible',
+    'befristet', 'unbefristet', 'freiberufler', 'freiberuflerin', 'selbständig',
+    
+    // Additional German terms
+    'xing', 'linkedin', 'stepstone', 'indeed', 'glassdoor', 'monster',
+    'arbeitsagentur', 'jobcenter', 'börse', 'börsen', 'markt', 'märkte',
+    'branche', 'branchen', 'bereich', 'bereiche', 'abteilung', 'abteilungen',
+    'standort', 'standorte', 'niederlassung', 'niederlassungen',
+    'gehalt', 'lohn', 'vergütung', 'bezahlung', 'benefits', 'leistungen',
+    'kündigung', 'kündigen', 'wechsel', 'wechsler', 'neuorientierung',
+    
+    // Job search platforms (German)
+    'jobsuche', 'jobportal', 'jobbörse', 'stellenmarkt', 'karriereportal',
+    'bewerbungsportal', 'recruiting', 'headhunter', 'personalberatung',
+    'personaldienstleister', 'zeitarbeit', 'temp', 'temporär',
+    
+    // Additional English terms
+    'salary', 'compensation', 'benefits', 'perks', 'bonus', 'commission',
+    'startup', 'startups', 'scale-up', 'scaleup', 'unicorn', 'ipo',
+    'venture', 'capital', 'funding', 'investment', 'investor', 'investors',
+    'board', 'ceo', 'cto', 'cfo', 'cmo', 'vp', 'head of', 'chief',
+    'founder', 'founders', 'co-founder', 'cofounder', 'startup founder',
+    'entrepreneur', 'entrepreneurs', 'entrepreneurship', 'business',
+    'product', 'marketing', 'sales', 'customer', 'client', 'user',
+    'data', 'analytics', 'research', 'development', 'operations', 'ops',
+    'finance', 'accounting', 'hr', 'human resources', 'legal', 'compliance',
+    'security', 'devops', 'qa', 'quality assurance', 'testing', 'test',
+    'frontend', 'front-end', 'backend', 'back-end', 'fullstack', 'full-stack',
+    'mobile', 'ios', 'android', 'react', 'angular', 'vue', 'node', 'python',
+    'java', 'javascript', 'typescript', 'php', 'ruby', 'go', 'rust', 'swift',
+    'kotlin', 'scala', 'c++', 'c#', '.net', 'sql', 'nosql', 'database',
+    'cloud', 'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'microservices',
+    'api', 'rest', 'graphql', 'agile', 'scrum', 'kanban', 'ci/cd', 'devops',
+    'machine learning', 'ai', 'artificial intelligence', 'ml', 'data science',
+    'blockchain', 'cryptocurrency', 'fintech', 'healthtech', 'edtech',
+    'saas', 'paas', 'iaas', 'b2b', 'b2c', 'ecommerce', 'e-commerce'
   ];
   
   // Convert to lowercase for comparison
