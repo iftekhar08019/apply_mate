@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
@@ -22,10 +22,10 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<FormValues>();
 
- const router = useRouter();
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = async (data: FormValues) => {
-    console.log("Login data:", data);
-    // user credebtials for manual login
     const res = await signIn("credentials", {
       redirect: false,
       email: data.email,
@@ -40,29 +40,27 @@ export default function LoginForm() {
     }
   };
 
+  //  Google Login
+    const handleGoogleLogin = async () => {
+      const res = await signIn("google", { redirect: false });
+      if (res?.error) {
+        toast.error("Google login failed");
+      } else {
+        toast.success("Logged in with Google");
+        router.push("/");
+      }
+    };
   
-  const handleGoogleLogin = async () => {
-    const res = await signIn("google", { redirect: false });
-
-    if (res?.error) {
-      toast.error("Google login failed");
-    } else {
-      toast.success("Logged in with Google successfully");
-      router.push("/");
-    }
-  };
-
-
-  const handleGitHubLogin = async () => {
-    const res = await signIn("github", { redirect: false });
-
-    if (res?.error) {
-      toast.error("GitHub login failed");
-    } else {
-      toast.success("Logged in with GitHub successfully");
-      router.push("/");
-    }
-  };
+    // GitHub Login
+    const handleGitHubLogin = async () => {
+      const res = await signIn("github", { redirect: false });
+      if (res?.error) {
+        toast.error("GitHub login failed");
+      } else {
+        toast.success("Logged in with GitHub");
+        router.push("/");
+      }
+    };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -99,7 +97,7 @@ export default function LoginForm() {
         <div className="relative">
           <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             {...register("password", { required: "Password is required" })}
             placeholder="Enter your password"
             className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
@@ -108,13 +106,19 @@ export default function LoginForm() {
                 : "focus:ring-blue-500"
             }`}
           />
+          <button
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+          </button>
         </div>
         {errors.password && (
           <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
         )}
       </div>
 
-      {/* Remember & Forgot */}
+      {/* Remember and Forgot */}
       <div className="flex items-center justify-between text-sm">
         <label className="flex items-center gap-2">
           <input
@@ -132,7 +136,7 @@ export default function LoginForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+        className="w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
       >
         Login
       </button>
@@ -144,7 +148,7 @@ export default function LoginForm() {
         <hr className="flex-1 border-gray-300" />
       </div>
 
-      {/* Social Login Buttons */}
+      {/* Social Buttons */}
       <div className="flex gap-3">
         <button
           onClick={handleGoogleLogin}
@@ -155,7 +159,7 @@ export default function LoginForm() {
           Google
         </button>
         <button
-         onClick={handleGitHubLogin}
+          onClick={handleGitHubLogin}
           type="button"
           className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
         >

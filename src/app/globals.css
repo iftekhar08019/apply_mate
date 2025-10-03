@@ -178,7 +178,7 @@
 }
 
 .loader-text::after {
-  content: 'Loading';
+  content: 'ApplyMate';
   position: absolute;
   left: 0;
   top: 0;

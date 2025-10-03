@@ -25,14 +25,15 @@ type UserSessionProps = {
   };
 };
 const Navbar = ({ session }: { session: UserSessionProps | null }) => {
-  const menus = [
-    "AI System",
-    "Guide",
-    "Explore",
-    "Resume Builder",
-    "Contact Us",
-    "Discover",
-  ];
+  console.log(session);
+ const menus = [
+  { label: "Home", path: "/" },
+  { label: "Applications", path: "/application" },
+  { label: "Resume Builder", path: "/resume" },
+  { label: "Contact Us", path: "/contact" },
+  { label: "Terms & Condition", path: "/terms" },
+];
+
   const pathName = usePathname();
   const handleLogOutButton = () => {
     signOut({ callbackUrl: "/" });
@@ -59,10 +60,10 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
             {menus.map((menu, idx) => (
               <Link
                 key={idx}
-                href={menu === "Resume Builder" ? "/resume" : "#"}
+                href={menu.path}
                 className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap"
               >
-                {menu}
+                {menu.label}
               </Link>
             ))}
           </nav>
@@ -155,10 +156,10 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                     {menus.map((menu, idx) => (
                       <Link
                         key={idx}
-                        href={menu === "Resume Builder" ? "/resume" : "#"}
+                        href={menu.path}
                         className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition w-full text-center py-2"
                       >
-                        {menu}
+                        {menu.label}
                       </Link>
                     ))}
                     <hr className="my-2 w-full border-gray-200 dark:border-gray-800" />
