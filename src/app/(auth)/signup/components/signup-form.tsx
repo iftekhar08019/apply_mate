@@ -35,7 +35,7 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
 
-  // ✅ React Query signup hook
+  // React Query signup hook
   const { mutateAsync, isPending } = useSignup();
   const router = useRouter();
 
@@ -89,7 +89,7 @@ export default function SignUpForm() {
       });
       toast.success(res.message || "Account created successfully");
       router.push("/");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.response?.data?.error || "Signup failed");
     }
@@ -97,12 +97,20 @@ export default function SignUpForm() {
 
   //  Google Login
   const handleGoogleLogin = async () => {
-    const res = await signIn("google", { redirect: false });
-    if (res?.error) {
+    // const res = await signIn("google", { redirect: false });
+    // if (res?.error) {
+    //   toast.error("Google login failed");
+    // } else {
+    //   toast.success("Logged in with Google");
+    //   router.push("/");
+    try {
+      const result = await signIn("google", { redirect: false })
+      if (result?.ok) {
+        toast.success("Sign in Success");
+        router.push("/");
+      }
+    } catch (error) {
       toast.error("Google login failed");
-    } else {
-      toast.success("Logged in with Google");
-      router.push("/");
     }
   };
 

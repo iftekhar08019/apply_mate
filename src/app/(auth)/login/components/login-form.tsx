@@ -40,15 +40,27 @@ export default function LoginForm() {
     }
   };
 
-  // Google login
-  const handleGoogleLogin = async () => {
-    await signIn("google", { callbackUrl: "/" });
-  };
-
-  // GitHub login
-  const handleGitHubLogin = async () => {
-    await signIn("github", { callbackUrl: "/" });
-  };
+  //  Google Login
+    const handleGoogleLogin = async () => {
+      const res = await signIn("google", { redirect: false });
+      if (res?.error) {
+        toast.error("Google login failed");
+      } else {
+        toast.success("Logged in with Google");
+        router.push("/");
+      }
+    };
+  
+    // GitHub Login
+    const handleGitHubLogin = async () => {
+      const res = await signIn("github", { redirect: false });
+      if (res?.error) {
+        toast.error("GitHub login failed");
+      } else {
+        toast.success("Logged in with GitHub");
+        router.push("/");
+      }
+    };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
