@@ -160,6 +160,33 @@ function mightBeJobListing(url, title) {
     'bewerbungsportal', 'recruiting', 'headhunter', 'personalberatung',
     'personaldienstleister', 'zeitarbeit', 'temp', 'temporär',
     
+    // Bangladesh job portals
+    'bdjobs', 'chakri', 'jobsbd', 'jobsbangladesh', 'jobstoday', 'jobsalert',
+    'jobscircular', 'jobspoint', 'jobsnews', 'jobscareer', 'jobsportal',
+    'bdeshjobs', 'jobsbd24', 'jobsbangladesh24', 'jobsalertbd', 'jobspointbd',
+    
+    // German job portals
+    'arbeitsagentur', 'jobcenter', 'arbeitsamt', 'jobsuche', 'jobsucher',
+    'stellenmarkt', 'jobbörse', 'karriere', 'karriereportal', 'bewerbung',
+    'personalberatung', 'headhunter', 'recruiting', 'personaldienstleister',
+    'zeitarbeit', 'temp', 'temporär', 'befristet', 'unbefristet',
+    
+    // Popular job sites (Germany)
+    'stepstone', 'xing', 'monster', 'arbeitsagentur', 'jobcenter',
+    'karriere', 'bewerbung', 'stellen', 'jobs', 'arbeit', 'personal',
+    'recruiting', 'headhunter', 'personaldienstleister', 'zeitarbeit',
+    
+    // Popular job sites (Bangladesh)
+    'bdjobs', 'chakri', 'jobsbd', 'jobsbangladesh', 'jobstoday',
+    'jobsalert', 'jobscircular', 'jobspoint', 'jobsnews', 'jobscareer',
+    'jobsportal', 'bdeshjobs', 'jobsbd24', 'jobsbangladesh24',
+    
+    // International platforms
+    'linkedin', 'indeed', 'glassdoor', 'monster', 'ziprecruiter',
+    'careerbuilder', 'dice', 'angel', 'stackoverflow', 'remote',
+    'weworkremotely', 'flexjobs', 'github', 'apple', 'google',
+    'microsoft', 'amazon', 'facebook', 'netflix', 'uber', 'airbnb',
+    
     // Additional English terms
     'salary', 'compensation', 'benefits', 'perks', 'bonus', 'commission',
     'startup', 'startups', 'scale-up', 'scaleup', 'unicorn', 'ipo',

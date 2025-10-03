@@ -33,9 +33,172 @@ function scrapeJobData() {
   return jobData;
 }
 
-// Extract job title - try multiple selectors
+// Extract job title - try multiple selectors with platform-specific targeting
 function extractJobTitle() {
-  const titleSelectors = [
+  const url = window.location.href.toLowerCase();
+  
+  // LinkedIn-specific selectors
+  if (url.includes('linkedin.com')) {
+    const linkedinSelectors = [
+      // New LinkedIn selectors based on current DOM structure
+      'h1[data-testid="job-title"]',
+      '.jobs-unified-top-card__job-title',
+      '.job-details-jobs-unified-top-card__job-title',
+      '.jobs-details-top-card__job-title',
+      '.jobs-details-top-card__job-title-text',
+      '.jobs-details__main-content h1',
+      'h1.jobs-details-top-card__job-title',
+      '.job-details-jobs-unified-top-card__job-title-text',
+      // Additional fallback selectors
+      '.jobs-details__main-content .jobs-details-top-card__job-title',
+      '.jobs-details__main-content h1',
+      '.jobs-unified-top-card h1',
+      // Generic LinkedIn job title selectors
+      'h1[class*="job-title"]',
+      '.job-title h1',
+      'h1[class*="title"]'
+    ];
+    
+    for (const selector of linkedinSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        const title = element.textContent.trim();
+        // Skip if it's clearly not a job title
+        if (!title.includes('notifications') && !title.includes('Premium') && 
+            title.length > 3 && title.length < 100) {
+          return title;
+        }
+      }
+    }
+  }
+  
+  // Indeed-specific selectors
+  if (url.includes('indeed.com')) {
+    const indeedSelectors = [
+      'h1[data-testid="jobsearch-JobInfoHeader-title"]',
+      '.jobsearch-JobInfoHeader-title',
+      'h1.jobsearch-JobInfoHeader-title',
+      '.jobsearch-DesktopStickyContainer h1',
+      '[data-testid="job-title"]'
+    ];
+    
+    for (const selector of indeedSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // Glassdoor-specific selectors
+  if (url.includes('glassdoor.com')) {
+    const glassdoorSelectors = [
+      '[data-test="job-title"]',
+      '.jobTitle',
+      '.jobTitle h2',
+      '.jobDescriptionContent h2',
+      '.jobDetails h1'
+    ];
+    
+    for (const selector of glassdoorSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // StepStone (Germany) selectors
+  if (url.includes('stepstone.com') || url.includes('stepstone.de')) {
+    const stepstoneSelectors = [
+      '.jobTitle',
+      '.job-header h1',
+      '.job-details h1',
+      '[data-testid="job-title"]',
+      '.job-title'
+    ];
+    
+    for (const selector of stepstoneSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // XING (Germany) selectors
+  if (url.includes('xing.com')) {
+    const xingSelectors = [
+      '.job-title',
+      '.job-header h1',
+      '[data-testid="job-title"]',
+      '.job-details h1'
+    ];
+    
+    for (const selector of xingSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // BDJobs (Bangladesh) selectors
+  if (url.includes('bdjobs.com')) {
+    const bdjobsSelectors = [
+      '.job-title',
+      '.job-header h1',
+      '.job-details h1',
+      '.job-info h1',
+      '.job-title-text'
+    ];
+    
+    for (const selector of bdjobsSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // Chakri.com (Bangladesh) selectors
+  if (url.includes('chakri.com')) {
+    const chakriSelectors = [
+      '.job-title',
+      '.job-header h1',
+      '.job-details h1'
+    ];
+    
+    for (const selector of chakriSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // Additional Bangladesh job portals
+  if (url.includes('jobsbd.com') || url.includes('jobsbangladesh.com') || 
+      url.includes('jobstoday.com') || url.includes('jobsalert.com') ||
+      url.includes('jobscircular.com') || url.includes('jobspoint.com')) {
+    const bdPortalSelectors = [
+      '.job-title',
+      '.job-header h1',
+      '.job-details h1',
+      '.job-info h1',
+      '.job-title-text'
+    ];
+    
+    for (const selector of bdPortalSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+
+  // Generic selectors for all other sites
+  const genericSelectors = [
     'h1[data-testid*="job-title"]',
     'h1.job-title',
     'h1[class*="title"]',
@@ -47,7 +210,7 @@ function extractJobTitle() {
     '.job-title'
   ];
 
-  for (const selector of titleSelectors) {
+  for (const selector of genericSelectors) {
     const element = document.querySelector(selector);
     if (element && element.textContent.trim()) {
       return element.textContent.trim();
@@ -68,7 +231,42 @@ function extractJobTitle() {
 
 // Extract job description - look for main content area
 function extractJobDescription() {
-  const descriptionSelectors = [
+  const url = window.location.href.toLowerCase();
+  
+  // LinkedIn-specific description selectors
+  if (url.includes('linkedin.com')) {
+    const linkedinDescriptionSelectors = [
+      '.jobs-description-content__text',
+      '.jobs-description-content',
+      '.jobs-box__html-content',
+      '.jobs-description-content__text .jobs-description-content__text--stretch',
+      '.jobs-description-content__text--stretch',
+      // Fallback selectors for LinkedIn
+      '.jobs-details__main-content .jobs-description-content',
+      '.jobs-unified-top-card + .jobs-description-content',
+      // Generic LinkedIn content selectors
+      '[data-testid*="job-description"]',
+      '.job-description',
+      '.job-content'
+    ];
+    
+    for (const selector of linkedinDescriptionSelectors) {
+      const element = document.querySelector(selector);
+      if (element) {
+        const text = element.textContent.trim();
+        if (text.length > 100) { // Ensure it's substantial content
+          // Skip if it contains profile information
+          if (!text.includes('Premium') && !text.includes('Frontend & MERN') && 
+              !text.includes('Developer | Reac') && text.length > 200) {
+            return cleanText(text);
+          }
+        }
+      }
+    }
+  }
+
+  // Generic description selectors for all other sites
+  const genericDescriptionSelectors = [
     '[data-testid*="job-description"]',
     '.job-description',
     '.job-content',
@@ -80,7 +278,7 @@ function extractJobDescription() {
     '.main-content'
   ];
 
-  for (const selector of descriptionSelectors) {
+  for (const selector of genericDescriptionSelectors) {
     const element = document.querySelector(selector);
     if (element) {
       const text = element.textContent.trim();
@@ -103,9 +301,146 @@ function extractJobDescription() {
   return cleanText(description) || 'Job description not found';
 }
 
-// Extract company name
+// Extract company name with platform-specific selectors
 function extractCompanyName() {
-  const companySelectors = [
+  const url = window.location.href.toLowerCase();
+  
+  // LinkedIn-specific company selectors
+  if (url.includes('linkedin.com')) {
+    const linkedinCompanySelectors = [
+      // Updated LinkedIn company selectors
+      '.jobs-unified-top-card__company-name',
+      '.job-details-jobs-unified-top-card__company-name',
+      '.jobs-details-top-card__company-name',
+      '[data-testid="job-company-name"]',
+      // Additional selectors for company name
+      '.jobs-company__box a',
+      '.job-details-jobs-unified-top-card__company-name a',
+      '.jobs-details-top-card__company-name a',
+      '.jobs-unified-top-card__company-name a',
+      // Fallback selectors
+      '.jobs-details__main-content .jobs-details-top-card__company-name',
+      '.jobs-unified-top-card .jobs-unified-top-card__company-name',
+      // Generic company selectors for LinkedIn
+      'a[href*="/company/"]',
+      '.company-name',
+      '.jobs-company__box'
+    ];
+    
+    for (const selector of linkedinCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        const company = element.textContent.trim();
+        // Skip if it's clearly not a company name
+        if (company !== 'Company Not Found' && company.length > 1 && company.length < 100) {
+          return company;
+        }
+      }
+    }
+  }
+  
+  // Indeed-specific company selectors
+  if (url.includes('indeed.com')) {
+    const indeedCompanySelectors = [
+      '[data-testid="job-company-name"]',
+      '.jobsearch-CompanyInfoContainer .jobsearch-CompanyReview--primary',
+      '.jobsearch-CompanyInfoContainer-companyName',
+      '.jobsearch-InlineCompanyRating .jobsearch-CompanyReview--primary'
+    ];
+    
+    for (const selector of indeedCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // Glassdoor-specific company selectors
+  if (url.includes('glassdoor.com')) {
+    const glassdoorCompanySelectors = [
+      '[data-test="employer-name"]',
+      '.employerName',
+      '.jobDetails .employerName',
+      '.jobDescriptionContent .employerName'
+    ];
+    
+    for (const selector of glassdoorCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // StepStone (Germany) company selectors
+  if (url.includes('stepstone.com') || url.includes('stepstone.de')) {
+    const stepstoneCompanySelectors = [
+      '.company-name',
+      '.job-company',
+      '.job-header .company',
+      '.job-details .company'
+    ];
+    
+    for (const selector of stepstoneCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // XING (Germany) company selectors
+  if (url.includes('xing.com')) {
+    const xingCompanySelectors = [
+      '.company-name',
+      '.job-company',
+      '.job-header .company'
+    ];
+    
+    for (const selector of xingCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // BDJobs (Bangladesh) company selectors
+  if (url.includes('bdjobs.com')) {
+    const bdjobsCompanySelectors = [
+      '.company-name',
+      '.job-company',
+      '.job-header .company',
+      '.company-info .company-name'
+    ];
+    
+    for (const selector of bdjobsCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // Chakri.com (Bangladesh) company selectors
+  if (url.includes('chakri.com')) {
+    const chakriCompanySelectors = [
+      '.company-name',
+      '.job-company',
+      '.job-header .company'
+    ];
+    
+    for (const selector of chakriCompanySelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+
+  // Generic company selectors for all other sites
+  const genericCompanySelectors = [
     '[data-testid*="company"]',
     '.company-name',
     '.company',
@@ -117,7 +452,7 @@ function extractCompanyName() {
     '.job-details .company'
   ];
 
-  for (const selector of companySelectors) {
+  for (const selector of genericCompanySelectors) {
     const element = document.querySelector(selector);
     if (element && element.textContent.trim()) {
       return element.textContent.trim();
@@ -133,9 +468,125 @@ function extractCompanyName() {
   return 'Company Not Found';
 }
 
-// Extract location
+// Extract location with platform-specific selectors
 function extractLocation() {
-  const locationSelectors = [
+  const url = window.location.href.toLowerCase();
+  
+  // LinkedIn-specific location selectors (lean version)
+  if (url.includes('linkedin.com')) {
+    // Target the subtitle grouping bullet span
+    const locationElement = document.querySelector(
+      '.jobs-unified-top-card__subtitle-primary-grouping span.jobs-unified-top-card__bullet'
+    );
+
+    if (locationElement) {
+      const text = locationElement.textContent.trim();
+      if (text && !/city, state, or zip code/i.test(text)) {
+        return text;
+      }
+    }
+
+    // Fallback: look for any bullet span that looks like a location
+    const bullets = document.querySelectorAll('span.jobs-unified-top-card__bullet');
+    for (const span of bullets) {
+      const text = span.textContent.trim();
+      if (
+        text &&
+        text.includes(',') &&
+        text.length > 3 &&
+        text.length < 100 &&
+        !/city, state, or zip code/i.test(text) &&
+        !/applicant|ago|clicked|reposted|people/i.test(text)
+      ) {
+        return text;
+      }
+    }
+  }
+  
+  // Indeed-specific location selectors
+  if (url.includes('indeed.com')) {
+    const indeedLocationSelectors = [
+      '[data-testid="job-location"]',
+      '.jobsearch-JobInfoHeader-subtitle',
+      '.jobsearch-CompanyInfoContainer .jobsearch-JobInfoHeader-subtitle'
+    ];
+    
+    for (const selector of indeedLocationSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // Glassdoor-specific location selectors
+  if (url.includes('glassdoor.com')) {
+    const glassdoorLocationSelectors = [
+      '[data-test="job-location"]',
+      '.jobInfoItem .location',
+      '.jobDetails .location'
+    ];
+    
+    for (const selector of glassdoorLocationSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // StepStone (Germany) location selectors
+  if (url.includes('stepstone.com') || url.includes('stepstone.de')) {
+    const stepstoneLocationSelectors = [
+      '.job-location',
+      '.location',
+      '.job-header .location',
+      '.job-details .location'
+    ];
+    
+    for (const selector of stepstoneLocationSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // XING (Germany) location selectors
+  if (url.includes('xing.com')) {
+    const xingLocationSelectors = [
+      '.job-location',
+      '.location',
+      '.job-header .location'
+    ];
+    
+    for (const selector of xingLocationSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+  
+  // BDJobs (Bangladesh) location selectors
+  if (url.includes('bdjobs.com')) {
+    const bdjobsLocationSelectors = [
+      '.job-location',
+      '.location',
+      '.job-header .location',
+      '.job-info .location'
+    ];
+    
+    for (const selector of bdjobsLocationSelectors) {
+      const element = document.querySelector(selector);
+      if (element && element.textContent.trim()) {
+        return element.textContent.trim();
+      }
+    }
+  }
+
+  // Generic location selectors for all other sites
+  const genericLocationSelectors = [
     '[data-testid*="location"]',
     '.location',
     '[class*="location"]',
@@ -146,7 +597,7 @@ function extractLocation() {
     '.region'
   ];
 
-  for (const selector of locationSelectors) {
+  for (const selector of genericLocationSelectors) {
     const element = document.querySelector(selector);
     if (element && element.textContent.trim()) {
       return element.textContent.trim();
@@ -171,6 +622,52 @@ function extractLocation() {
 
 // Extract job type (Remote/Hybrid/Onsite)
 function extractJobType() {
+  const url = window.location.href.toLowerCase();
+  
+  // LinkedIn-specific job type detection
+  if (url.includes('linkedin.com')) {
+    // Look for LinkedIn job type buttons/elements
+    const linkedinTypeSelectors = [
+      'button[aria-pressed="true"]',
+      '.jobs-unified-top-card__job-insight span',
+      '.jobs-details-top-card__job-insight span',
+      '.jobs-unified-top-card__bullet',
+      '.jobs-details-top-card__bullet',
+      // Look for selected job type buttons
+      'button[data-testid*="job-type"]',
+      'button[class*="job-type"]'
+    ];
+    
+    for (const selector of linkedinTypeSelectors) {
+      const element = document.querySelector(selector);
+      if (element) {
+        const text = element.textContent.toLowerCase();
+        if (text.includes('on-site') || text.includes('onsite')) {
+          return 'onsite';
+        }
+        if (text.includes('hybrid')) {
+          return 'hybrid';
+        }
+        if (text.includes('remote')) {
+          return 'remote';
+        }
+      }
+    }
+    
+    // Check for LinkedIn job type indicators in the page
+    const pageText = document.body.textContent.toLowerCase();
+    if (pageText.includes('on-site') || pageText.includes('onsite')) {
+      return 'onsite';
+    }
+    if (pageText.includes('hybrid')) {
+      return 'hybrid';
+    }
+    if (pageText.includes('remote')) {
+      return 'remote';
+    }
+  }
+
+  // Generic job type detection for all sites
   const pageText = document.body.textContent.toLowerCase();
   
   // Check for remote keywords

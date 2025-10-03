@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Helper function to send job data to Next.js API
   async function sendJobToAPI(email, jobData) {
     try {
-      // You'll need to replace this URL with your actual Next.js app URL
+      
       // For development: http://localhost:3002 (or whatever port your server uses)
       // For production: https://yourdomain.com
       const apiUrl = 'http://localhost:3002/api/saveJob';
