@@ -32,44 +32,61 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
       }
 
       // Wait a bit for any pending renders
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 300));
 
       // Create canvas with higher quality and exact dimensions matching preview
       const canvas = await html2canvas(element, {
-        scale: 3, // Higher scale for better quality (increased from 2 to 3)
+        scale: 2, // Good quality without being too large
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
         logging: false,
         width: element.offsetWidth,
         height: element.offsetHeight,
-        windowWidth: element.offsetWidth,
+        windowWidth: 1200, // Fixed width for consistency
         windowHeight: element.offsetHeight,
         scrollX: 0,
         scrollY: -window.scrollY,
+        x: 0,
+        y: 0,
         onclone: (clonedDoc) => {
           const clonedElement = clonedDoc.getElementById('resume-content');
           if (clonedElement) {
-            // Ensure all styles are properly applied in the clone - match resume-preview exactly
-            clonedElement.style.fontFamily = 'Calibri, Arial, sans-serif';
-            clonedElement.style.fontSize = '11pt';
-            clonedElement.style.lineHeight = '1.2';
-            clonedElement.style.width = '210mm';
-            clonedElement.style.maxWidth = '210mm';
-            clonedElement.style.minHeight = '297mm';
+            // Force exact preview styles
+            const computedStyle = window.getComputedStyle(element);
+            
+            // Copy all computed styles
+            clonedElement.style.fontFamily = computedStyle.fontFamily || 'Calibri, Arial, sans-serif';
+            clonedElement.style.fontSize = computedStyle.fontSize || '11pt';
+            clonedElement.style.lineHeight = computedStyle.lineHeight || '1.2';
+            clonedElement.style.width = computedStyle.width;
+            clonedElement.style.maxWidth = computedStyle.maxWidth;
+            clonedElement.style.minHeight = computedStyle.minHeight;
+            clonedElement.style.padding = computedStyle.padding;
             clonedElement.style.margin = '0 auto';
-            clonedElement.style.padding = '15mm';
             clonedElement.style.boxSizing = 'border-box';
             clonedElement.style.background = '#ffffff';
             clonedElement.style.color = '#000000';
+            clonedElement.style.textAlign = computedStyle.textAlign;
             
-            // Ensure all text elements render properly
-            const allElements = clonedElement.querySelectorAll('*');
-            allElements.forEach((el: any) => {
-              // Force render all elements
-              if (el.style) {
-                el.style.webkitPrintColorAdjust = 'exact';
-                el.style.printColorAdjust = 'exact';
+            // Ensure all child elements maintain their styles
+            const originalElements = element.querySelectorAll('*');
+            const clonedElements = clonedElement.querySelectorAll('*');
+            
+            originalElements.forEach((originalEl, index) => {
+              const clonedEl = clonedElements[index] as HTMLElement;
+              if (clonedEl && originalEl instanceof HTMLElement) {
+                const style = window.getComputedStyle(originalEl);
+                clonedEl.style.cssText = originalEl.style.cssText;
+                
+                // Force color rendering
+                clonedEl.style.webkitPrintColorAdjust = 'exact';
+                clonedEl.style.printColorAdjust = 'exact';
+                
+                // Preserve text alignment
+                if (style.textAlign) {
+                  clonedEl.style.textAlign = style.textAlign;
+                }
               }
             });
           }
