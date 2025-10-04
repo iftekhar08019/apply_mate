@@ -31,69 +31,19 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
         button.textContent = 'Generating PDF...';
       }
 
-      // Wait a bit for any pending renders
-      await new Promise(resolve => setTimeout(resolve, 300));
+      // Wait for any pending renders
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Create canvas with higher quality and exact dimensions matching preview
+      // Capture the element exactly as it appears - no modifications
       const canvas = await html2canvas(element, {
-        scale: 2, // Good quality without being too large
+        scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
-        logging: false,
-        width: element.offsetWidth,
-        height: element.offsetHeight,
-        windowWidth: 1200, // Fixed width for consistency
-        windowHeight: element.offsetHeight,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        x: 0,
-        y: 0,
-        onclone: (clonedDoc) => {
-          const clonedElement = clonedDoc.getElementById('resume-content');
-          if (clonedElement) {
-            // Force exact preview styles
-            const computedStyle = window.getComputedStyle(element);
-            
-            // Copy all computed styles
-            clonedElement.style.fontFamily = computedStyle.fontFamily || 'Calibri, Arial, sans-serif';
-            clonedElement.style.fontSize = computedStyle.fontSize || '11pt';
-            clonedElement.style.lineHeight = computedStyle.lineHeight || '1.2';
-            clonedElement.style.width = computedStyle.width;
-            clonedElement.style.maxWidth = computedStyle.maxWidth;
-            clonedElement.style.minHeight = computedStyle.minHeight;
-            clonedElement.style.padding = computedStyle.padding;
-            clonedElement.style.margin = '0 auto';
-            clonedElement.style.boxSizing = 'border-box';
-            clonedElement.style.background = '#ffffff';
-            clonedElement.style.color = '#000000';
-            clonedElement.style.textAlign = computedStyle.textAlign;
-            
-            // Ensure all child elements maintain their styles
-            const originalElements = element.querySelectorAll('*');
-            const clonedElements = clonedElement.querySelectorAll('*');
-            
-            originalElements.forEach((originalEl, index) => {
-              const clonedEl = clonedElements[index] as HTMLElement;
-              if (clonedEl && originalEl instanceof HTMLElement) {
-                const style = window.getComputedStyle(originalEl);
-                clonedEl.style.cssText = originalEl.style.cssText;
-                
-                // Force color rendering
-                clonedEl.style.webkitPrintColorAdjust = 'exact';
-                clonedEl.style.printColorAdjust = 'exact';
-                
-                // Preserve text alignment
-                if (style.textAlign) {
-                  clonedEl.style.textAlign = style.textAlign;
-                }
-              }
-            });
-          }
-        }
+        logging: false
       });
 
-      // Create PDF with exact A4 dimensions
+      // Create PDF with A4 dimensions
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -101,61 +51,36 @@ export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
         compress: true,
       });
 
-      // Get A4 dimensions in mm (210 x 297)
+      // Get A4 dimensions
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      // Calculate image dimensions to fit exactly on A4
+      // Convert canvas to image
       const imgData = canvas.toDataURL('image/png', 1.0);
+      
+      // Calculate dimensions to fit the canvas on PDF page
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
       
-      // Calculate the ratio to fit the content on A4
-      const ratio = Math.min(pdfWidth / (imgWidth / (canvas.width / element.scrollWidth)), 
-                              pdfHeight / (imgHeight / (canvas.height / element.scrollHeight)));
+      // Calculate aspect ratio
+      const imgAspectRatio = imgWidth / imgHeight;
+      const pdfAspectRatio = pdfWidth / pdfHeight;
       
-      const finalWidth = pdfWidth;
-      const finalHeight = (imgHeight * pdfWidth) / imgWidth;
+      let finalWidth = pdfWidth;
+      let finalHeight = pdfWidth / imgAspectRatio;
       
-      // If content is taller than one page, we might need multiple pages
+      // If height exceeds page, fit to height instead
       if (finalHeight > pdfHeight) {
-        let position = 0;
-        const pageHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        while (position < finalHeight) {
-          const pageCanvas = document.createElement('canvas');
-          pageCanvas.width = canvas.width;
-          pageCanvas.height = Math.min(canvas.height, (canvas.width * pdfHeight) / pdfWidth);
-          
-          const ctx = pageCanvas.getContext('2d');
-          if (ctx) {
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-            ctx.drawImage(
-              canvas,
-              0,
-              (position / finalHeight) * canvas.height,
-              canvas.width,
-              pageCanvas.height,
-              0,
-              0,
-              pageCanvas.width,
-              pageCanvas.height
-            );
-            
-            const pageImgData = pageCanvas.toDataURL('image/png', 1.0);
-            if (position > 0) {
-              pdf.addPage();
-            }
-            pdf.addImage(pageImgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-          }
-          
-          position += pdfHeight;
-        }
-      } else {
-        // Single page - center it
-        pdf.addImage(imgData, 'PNG', 0, 0, finalWidth, finalHeight);
+        finalHeight = pdfHeight;
+        finalWidth = pdfHeight * imgAspectRatio;
       }
+      
+      // Center the image on the page
+      const xOffset = (pdfWidth - finalWidth) / 2;
+      const yOffset = (pdfHeight - finalHeight) / 2;
+      
+      // Add image to PDF
+      pdf.addImage(imgData, 'PNG', xOffset, yOffset, finalWidth, finalHeight);
 
       // Download PDF
       const safeFileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
