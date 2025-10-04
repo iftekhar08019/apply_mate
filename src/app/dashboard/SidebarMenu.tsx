@@ -9,6 +9,7 @@ import {
   FileText,
   LogOut,
   HelpCircle,
+  House,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ export default function SidebarMenu() {
   const pathname = usePathname();
 
   const menuItems = [
+    { name: "Home", href: "/", icon: House },
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "My Applications", href: "/dashboard/my-applications", icon: FileText },
     { name: "My Profile", href: "/dashboard/settings", icon: Settings },
