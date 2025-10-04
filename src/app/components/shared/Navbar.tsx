@@ -14,25 +14,28 @@ import {
 } from "@/components/ui/sheet";
 import { ModeToggle } from "../mode-toggle";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-type UserSessionProps = {
-  user?: {
-    name?: string | null | undefined;
-    email?: string | null | undefined;
-    image?: string | null | undefined;
-  };
-};
-const Navbar = ({ session }: { session: UserSessionProps | null }) => {
+const Navbar = () => {
+  // { session }: { session: UserSessionProps | null }
+  const { data: session } = useSession();
   console.log(session);
- const menus = [
-  { label: "Home", path: "/" },
-  { label: "Applications", path: "/application" },
-  { label: "Resume Builder", path: "/resume" },
-  { label: "Contact Us", path: "/contact" },
-  { label: "Terms & Condition", path: "/terms" },
-];
+  const menus = [
+    { label: "Home", path: "/" },
+    { label: "Applications", path: "/application" },
+    { label: "Resume Builder", path: "/resume" },
+    { label: "Contact Us", path: "/contact" },
+    { label: "Terms & Condition", path: "/terms" },
+  ];
 
   const pathName = usePathname();
   const handleLogOutButton = () => {
@@ -74,11 +77,51 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
             <div className="hidden lg:flex items-center gap-4 xl:gap-5">
               <ModeToggle />
               {session?.user ? (
-                
-                  <button onClick={handleLogOutButton} className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                    Logout
-                  </button>
-            
+                <>
+                  <div className="relative">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="flex items-center gap-2 focus:outline-none">
+                          <Image
+                            src={session.user.image || "/user.jpg"}
+                            alt={session.user.name || "User"}
+                            width={40}
+                            height={40}
+                            className="rounded-full border border-blue-600 cursor-pointer"
+                          />
+                        </button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent
+                        align="end"
+                        className="w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg rounded-md space-y-2 p-4"
+                      >
+                        <DropdownMenuLabel className="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                          {session.user.name || "User"}
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href="/dashboard"
+                            className="block w-full text-left px-4 py-2 text-sm bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                          >
+                            Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem asChild>
+                          <button
+                            onClick={handleLogOutButton}
+                            className="w-full text-left px-4 py-2 text-sm bg-gradient-to-r from-red-600 to-red-800 text-white rounded-sm font-medium transition duration-300 hover:from-red-600 hover:to-red-700"
+                          >
+                            Logout
+                          </button>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </>
               ) : (
                 <>
                   <Link
@@ -87,10 +130,11 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                   >
                     Log in
                   </Link>
-                  <Link href="/signup"
-                    className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                      Sign Up
-                   
+                  <Link
+                    href="/signup"
+                    className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                  >
+                    Sign Up
                   </Link>
                 </>
               )}
@@ -167,11 +211,12 @@ const Navbar = ({ session }: { session: UserSessionProps | null }) => {
                       <ModeToggle />
                     </div>
                     {session?.user ? (
-                    
-                        <button onClick={handleLogOutButton} className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
-                          Logout
-                        </button>
-                      
+                      <button
+                        onClick={handleLogOutButton}
+                        className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                      >
+                        Logout
+                      </button>
                     ) : (
                       <>
                         <Link

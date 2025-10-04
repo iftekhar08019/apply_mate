@@ -2,6 +2,8 @@ import { collectionName, connectToDatabase } from "@/libs/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+
+const DEFAULT_AVATAR = "https://i.ibb.co.com/ZRKJrzNz/5856.jpg";
 export async function POST(req: NextRequest) {
   const { name, email, password } = await req.json();
   const { db } = await connectToDatabase();
@@ -20,10 +22,12 @@ export async function POST(req: NextRequest) {
     name,
     email,
     password: hasedPassword,
+    image: DEFAULT_AVATAR,
     createdAt: new Date(),
   });
   return NextResponse.json({
     message: "User Created",
     userId: result.insertedId,
+    image: DEFAULT_AVATAR,
   });
 }
