@@ -39,7 +39,7 @@ export default function SignUpForm() {
   const { mutateAsync, isPending } = useSignup();
   const router = useRouter();
 
-  // ✅ Password strength meter
+  // Password strength meter
   useEffect(() => {
     let score = 0;
     if (!password) {
@@ -80,20 +80,43 @@ export default function SignUpForm() {
   }, [password]);
 
   //  Submit handler
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    try {
-      const res = await mutateAsync({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      });
-      toast.success(res.message || "Account created successfully");
-      router.push("/");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Signup failed");
+const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  try {
+    // user create
+    await mutateAsync({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+
+    // auto-login
+    const loginRes = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (loginRes?.ok) {
+      toast.success("Account created and logged in successfully!");
+      router.push("/dashboard"); // home বা dashboard
+    } else {
+      toast.error("Auto login failed, please login manually.");
     }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    const errorMessage =
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      "Signup failed";
+
+    if (errorMessage.toLowerCase().includes("exists")) {
+      toast.error("User already exists. Please log in.");
+    } else {
+      toast.error(errorMessage);
+    }
+  }
+};
+
 
   //  Google Login
   const handleGoogleLogin = async () => {

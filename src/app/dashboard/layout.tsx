@@ -70,17 +70,7 @@ export default function Layout({ children }: LayoutProps) {
 
             {/* User Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Image
-                    src={logo}
-                    alt="User"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
-                </Button>
-              </DropdownMenuTrigger>
+              
               <DropdownMenuContent
                 align="end"
                 className="w-40 dark:bg-gray-900 dark:border-gray-800"
