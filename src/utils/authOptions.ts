@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/libs/mongodb";
 
-const DEFAULT_AVATAR = "https://i.ibb.co.com/ZRKJrzNz/5856.jpg"; 
+const DEFAULT_AVATAR = "https://i.imgur.com/vIbJZdx.jpeg"; 
 
 interface AuthUser extends User {
   id: string;

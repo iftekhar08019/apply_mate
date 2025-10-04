@@ -28,7 +28,7 @@ import {
 const Navbar = () => {
   // { session }: { session: UserSessionProps | null }
   const { data: session } = useSession();
-  console.log(session);
+
   const menus = [
     { label: "Home", path: "/" },
     { label: "Applications", path: "/application" },
@@ -85,6 +85,7 @@ const Navbar = () => {
                           <Image
                             src={session.user.image || "/user.jpg"}
                             alt={session.user.name || "User"}
+                            onError={(e) => (e.currentTarget.src = "/default.jpg")}
                             width={40}
                             height={40}
                             className="rounded-full border border-blue-600 cursor-pointer"
