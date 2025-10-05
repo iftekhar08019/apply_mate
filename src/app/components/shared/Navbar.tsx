@@ -28,6 +28,7 @@ import {
 const Navbar = () => {
   // { session }: { session: UserSessionProps | null }
   const { data: session } = useSession();
+  console.log(session);
 
   const menus = [
     { label: "Home", path: "/" },

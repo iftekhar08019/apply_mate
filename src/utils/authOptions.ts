@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
-          image: user.image || DEFAULT_AVATAR, // default image
+          image: user.image || DEFAULT_AVATAR,
         };
       },
     }),
