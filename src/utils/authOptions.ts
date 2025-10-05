@@ -2,7 +2,8 @@ import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/libs/mongodb";
-
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 const DEFAULT_AVATAR = "https://i.imgur.com/vIbJZdx.jpeg"; 
 
 interface AuthUser extends User {
@@ -44,6 +45,14 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+     GoogleProvider({
+      clientId: process.env.GOOGLE_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
   ],
   pages: {
     signIn: "/login",
@@ -60,7 +69,7 @@ export const authOptions: NextAuthOptions = {
     return token;
   },
   async session({ session, token }) {
-    if (session.user) { // <-- safe check
+    if (session.user) { 
       session.user.id = token.id as string;
       session.user.image = token.image as string;
     }
