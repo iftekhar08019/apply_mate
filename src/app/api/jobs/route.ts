@@ -4,13 +4,13 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const { db } = await connectToDatabase();
-    const applications = await db
-      .collection(collectionName.APPLICATIONS)
+    const jobs = await db
+      .collection(collectionName.JOBS)
       .find({})
       .toArray();
 
-    return NextResponse.json(applications);
+    return NextResponse.json(jobs);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch applications" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch jobs" }, { status: 500 });
   }
 }

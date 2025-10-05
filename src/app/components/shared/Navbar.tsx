@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const menus = [
     { label: "Home", path: "/" },
-    { label: "Applications", path: "/application" },
+    { label: "Job Details", path: "/jobs" },
     { label: "Resume Builder", path: "/resume" },
     { label: "Contact Us", path: "/contact" },
     { label: "Terms & Condition", path: "/terms" },
