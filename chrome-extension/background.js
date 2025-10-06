@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     // Set default settings
     chrome.storage.local.set({
       extensionEnabled: true,
-      apiEndpoint: 'http://localhost:3002/api/saveJob'
+      apiEndpoint: 'http://localhost:3000/api/saveJob'
     });
   } else if (details.reason === 'update') {
     console.log('ApplyMate Job Scraper extension updated');

@@ -6,7 +6,7 @@ A Chrome extension that uses **AI-powered scraping** to extract job listings fro
 
 - **🤖 AI-Powered Extraction**: Uses DeepSeek-R1 via Hugging Face Router for state-of-the-art job data extraction
 - **📧 Email Storage**: Store your email once in the extension popup
-- **🔑 Hardcoded Token**: API token is embedded in the code for convenience
+- **🔐 Secure Token Management**: API token is securely fetched from backend
 - **🎯 Smart Detection**: AI automatically extracts job title, company, location, job type, and description
 - **💾 MongoDB Integration**: Saves scraped jobs to your ApplyMate database
 - **🔄 Fallback Mechanism**: Traditional DOM scraping as backup if AI fails
@@ -29,12 +29,14 @@ chrome-extension/
 
 ## 🚀 Quick Setup
 
-### Step 1: Get Hugging Face API Token
+### Step 1: Configure Backend API Token
 
 1. Go to [huggingface.co](https://huggingface.co) and create an account (free)
 2. Navigate to [Settings > Access Tokens](https://huggingface.co/settings/tokens)
 3. Click "New token" and select "Read" permissions
 4. Copy the generated token
+5. Add the token to your `.env` file: `HUGGINGFACE_API_TOKEN=your_token_here`
+6. Restart your Next.js development server
 
 ### Step 2: Install Extension
 
@@ -48,8 +50,7 @@ chrome-extension/
 
 1. Click the ApplyMate extension icon in your browser toolbar
 2. Enter your email address
-3. Paste your Hugging Face API token
-4. Click "Save Configuration"
+3. Click "Save Email"
 
 ✅ **You're ready to start scraping jobs with AI!**
 
@@ -57,12 +58,12 @@ chrome-extension/
 
 ### Configure API Endpoint
 
-The extension sends data to `http://localhost:3002/api/saveJob` by default.
+The extension sends data to `http://localhost:3000/api/saveJob` by default.
 
 To change this for production:
-1. Edit `popup.js` (line 296)
+1. Edit `popup.js` (line 350)
 2. Update the `apiUrl` variable in the `sendJobToAPI` function
-3. Replace `http://localhost:3002` with your production URL
+3. Replace `http://localhost:3000` with your production URL
 
 ## Usage
 
@@ -156,6 +157,24 @@ The extension communicates with your Next.js API at `/api/saveJob`:
 {
   "message": "Job saved successfully",
   "totalJobs": 5
+}
+```
+
+### Database Structure
+Jobs are saved as individual documents in the `jobs` collection:
+```json
+{
+  "_id": "68e3764829652dece8f7dd56",
+  "email": "user@example.com",
+  "title": "Software Engineer",
+  "company": "Tech Corp",
+  "location": "San Francisco, CA",
+  "type": "remote",
+  "description": "Job description...",
+  "url": "https://example.com/job/123",
+  "date": "2024-01-15",
+  "createdAt": "2025-01-15T...",
+  "source": "chrome-extension"
 }
 ```
 
