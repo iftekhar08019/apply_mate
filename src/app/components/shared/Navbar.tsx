@@ -33,7 +33,7 @@ const Navbar = () => {
     { label: "Home", path: "/" },
     { label: "Applications", path: "/application" },
     { label: "Resume Builder", path: "/resume" },
-    { label: "Contact Us", path: "/contact" },
+    { label: "About Us", path: "/about" },
     { label: "Terms & Condition", path: "/terms" },
   ];
 
