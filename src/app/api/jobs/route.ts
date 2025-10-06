@@ -1,16 +1,33 @@
 import { collectionName, connectToDatabase } from "@/libs/mongodb";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+
+export async function GET(req: Request) {
   try {
     const { db } = await connectToDatabase();
-    const jobs = await db
-      .collection(collectionName.JOBS)
-      .find({})
-      .toArray();
 
-    return NextResponse.json(jobs);
+    // extract email from query string
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get("email");
+
+    if (!email) {
+      return NextResponse.json({ message: "Email is required" }, { status: 400 });
+    }
+
+    const userData = await db
+      .collection(collectionName.JOBS)
+      .findOne({ email });
+
+    if (!userData) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: userData });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch jobs" }, { status: 500 });
+    console.error("Error fetching user jobs:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

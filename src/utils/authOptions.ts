@@ -1,9 +1,10 @@
 import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { connectToDatabase } from "@/libs/mongodb";
+import { connectToDatabase, collectionName } from "@/libs/mongodb";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+
 const DEFAULT_AVATAR = "https://i.imgur.com/vIbJZdx.jpeg"; 
 
 interface AuthUser extends User {
@@ -27,9 +28,8 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials.password) return null;
 
         const { db } = await connectToDatabase();
-
         const user = await db
-          .collection("users")
+          .collection(collectionName.USERS)
           .findOne({ email: credentials.email });
 
         if (!user) return null;
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
-     GoogleProvider({
+    GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
@@ -54,28 +54,53 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
+
   pages: {
     signIn: "/login",
   },
+
   session: {
     strategy: "jwt",
   },
- callbacks: {
-  async jwt({ token, user }) {
-    if (user) {
-      token.id = user.id;
-      token.image = user.image;
-    }
-    return token;
+
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        const { db } = await connectToDatabase();
+
+        const existingUser = await db
+          .collection(collectionName.USERS)
+          .findOne({ email: user.email });
+
+        if (!existingUser) {
+          await db.collection(collectionName.USERS).insertOne({
+            name: user.name,
+            email: user.email,
+            image: user.image || DEFAULT_AVATAR,
+            provider: account.provider,
+            createdAt: new Date(),
+          });
+        }
+      }
+      return true; 
+    },
+
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = (user as AuthUser).id || token.id;
+        token.image = user.image || token.image;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.image = token.image as string;
+      }
+      return session;
+    },
   },
-  async session({ session, token }) {
-    if (session.user) { 
-      session.user.id = token.id as string;
-      session.user.image = token.image as string;
-    }
-    return session;
-  },
-},
 
   secret: process.env.NEXTAUTH_SECRET,
 };
