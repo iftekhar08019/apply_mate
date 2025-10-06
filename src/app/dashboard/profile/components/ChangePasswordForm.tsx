@@ -43,7 +43,7 @@ export const ChangePasswordForm: React.FC = () => {
         className="w-full p-2 border rounded"
         required
       />
-      <button type="submit" disabled={loading} className="px-4 py-2 bg-indigo-600 text-white rounded">
+      <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded">
         {loading ? "Changing..." : "Change Password"}
       </button>
     </form>
