@@ -35,7 +35,6 @@ const Navbar = () => {
     { label: "Job Details", path: "/jobs" },
     { label: "Resume Builder", path: "/resume" },
     { label: "About Us", path: "/about" },
-    { label: "Terms & Condition", path: "/terms" },
   ];
 
   const pathName = usePathname();
