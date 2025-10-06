@@ -15,7 +15,7 @@ const useSignup = () => {
       return res.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Signup successful");
+      console.log(data.message);
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {

@@ -13,15 +13,18 @@ import {
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
-export default function SidebarMenu() {
+export default function SidebarMenu({}) {
   const pathname = usePathname();
+  const {data: session} = useSession();
+  const userId = session?.user?.id;
 
   const menuItems = [
     { name: "Home", href: "/", icon: House },
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "My Applications", href: "/dashboard/my-applications", icon: FileText },
-    { name: "My Profile", href: "/dashboard/settings", icon: Settings },
+    { name: "My Profile", href: `/dashboard/profile/${userId}`, icon: Settings },
   ];
 
   return (

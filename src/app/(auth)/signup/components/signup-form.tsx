@@ -120,14 +120,8 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
 
   //  Google Login
   const handleGoogleLogin = async () => {
-    // const res = await signIn("google", { redirect: false });
-    // if (res?.error) {
-    //   toast.error("Google login failed");
-    // } else {
-    //   toast.success("Logged in with Google");
-    //   router.push("/");
     try {
-      const result = await signIn("google", { redirect: false })
+      const result = await signIn("google", { callbackUrl:"/dashboard" })
       if (result?.ok) {
         toast.success("Sign in Success");
         router.push("/");
@@ -139,7 +133,7 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
 
   // GitHub Login
   const handleGitHubLogin = async () => {
-    const res = await signIn("github", { redirect: false });
+    const res = await signIn("github", { callbackUrl:"/dashboard" });
     if (res?.error) {
       toast.error("GitHub login failed");
     } else {

@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         hostname: "i.imgur.com",
         pathname: "/**",
       },
+      {
+       
+        hostname: "lh3.googleusercontent.com",
+        
+      },
     ],
   },
 };
