@@ -1,7 +1,7 @@
 // Popup script for ApplyMate Job Scraper
 
-// Hugging Face API token will be fetched from backend
-let HUGGINGFACE_API_TOKEN = null;
+// Google Gemini API key will be fetched from backend
+let GEMINI_API_KEY = null;
 
 document.addEventListener('DOMContentLoaded', function() {
   const emailInput = document.getElementById('email');
@@ -56,21 +56,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Initialize extension by fetching Hugging Face token
+  // Initialize extension by fetching Google Gemini API key
   async function initializeExtension() {
     try {
-      const token = await fetchHuggingFaceToken();
-      HUGGINGFACE_API_TOKEN = token;
-      console.log('Hugging Face token loaded successfully');
+      const token = await fetchGeminiApiKey();
+      GEMINI_API_KEY = token;
+      console.log('Google Gemini API key loaded successfully');
     } catch (error) {
-      console.error('Failed to load Hugging Face token:', error);
+      console.error('Failed to load Google Gemini API key:', error);
       showStatus('Failed to initialize AI service. Please check your connection.', 'error');
     }
   }
 
-  // Fetch Hugging Face token from backend
-  async function fetchHuggingFaceToken() {
-    const apiUrl = 'http://localhost:3000/api/huggingface-token';
+  // Fetch Google Gemini API key from backend
+  async function fetchGeminiApiKey() {
+    const apiUrl = 'http://localhost:3000/api/gemini-token';
     
     const response = await fetch(apiUrl, {
       method: 'GET',
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch token: ${response.status}`);
+      throw new Error(`Failed to fetch API key: ${response.status}`);
     }
 
     const data = await response.json();
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      if (!HUGGINGFACE_API_TOKEN) {
+      if (!GEMINI_API_KEY) {
         showStatus('AI service not initialized. Please refresh and try again.', 'error');
         return;
       }
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
               scrapeJobBtn.textContent = 'Processing with AI...';
               
               try {
-                const jobData = await processWithAI(response.pageContent, HUGGINGFACE_API_TOKEN);
+                const jobData = await processWithAI(response.pageContent, GEMINI_API_KEY);
                 
                 scrapeJobBtn.disabled = false;
                 scrapeJobBtn.textContent = 'Scrape Current Job';
@@ -189,37 +189,32 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Helper function to process job data with AI
-  async function processWithAI(pageContent, apiToken) {
+  async function processWithAI(pageContent, apiKey) {
     try {
-      console.log('Processing with AI using DeepSeek-R1...');
+      console.log('Processing with AI using Google Gemini 2.0 Flash...');
       
-      // Prepare the prompt in chat format
-      const systemMessage = "You are a helpful assistant that extracts structured job information from web pages. Always respond with valid JSON only, no additional text.";
-      const userMessage = createExtractionPrompt(pageContent);
+      // Prepare the prompt for Gemini API
+      const prompt = createGeminiPrompt(pageContent);
       
-      // Call Hugging Face Router API with DeepSeek-R1 (OpenAI-compatible)
+      // Call Google Gemini API
       const response = await fetch(
-        'https://router.huggingface.co/v1/chat/completions',
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
         {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${apiToken}`,
             'Content-Type': 'application/json',
+            'X-goog-api-key': apiKey,
           },
           body: JSON.stringify({
-            model: 'deepseek-ai/DeepSeek-R1:fireworks-ai',
-            messages: [
+            contents: [
               {
-                role: 'system',
-                content: systemMessage
-              },
-              {
-                role: 'user',
-                content: userMessage
+                parts: [
+                  {
+                    text: prompt
+                  }
+                ]
               }
-            ],
-            max_tokens: 500,
-            temperature: 0.1
+            ]
           })
         }
       );
@@ -232,8 +227,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const result = await response.json();
       console.log('AI Response:', result);
       
-      // Parse the OpenAI-format response
-      const jobData = parseOpenAIResponse(result, pageContent);
+      // Parse the Gemini response
+      const jobData = parseGeminiResponse(result, pageContent);
       
       return jobData;
     } catch (error) {
@@ -242,13 +237,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Helper function to create extraction prompt
-  function createExtractionPrompt(pageContent) {
+  // Helper function to create Gemini extraction prompt
+  function createGeminiPrompt(pageContent) {
     const { title, content, ogTitle, ogDescription, structuredData } = pageContent;
     
     // If structured data exists, prioritize it
     if (structuredData) {
-      return `You are analyzing a job posting page. Extract the job information accurately.
+      return `You are a helpful assistant that extracts structured job information from web pages. Always respond with valid JSON only, no additional text.
+
+You are analyzing a job posting page. Extract the job information accurately.
 
 **Structured Data (JSON-LD):**
 ${structuredData}
@@ -262,7 +259,9 @@ Extract and provide ONLY a JSON response in this exact format:
 {"title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}`;
     }
     
-    return `You are analyzing a job posting page. Extract the job information accurately from the content below.
+    return `You are a helpful assistant that extracts structured job information from web pages. Always respond with valid JSON only, no additional text.
+
+You are analyzing a job posting page. Extract the job information accurately from the content below.
 
 **Page Title:** ${title}
 ${ogTitle ? `**OG Title:** ${ogTitle}` : ''}
@@ -282,22 +281,29 @@ Provide ONLY a JSON response in this exact format (no other text):
 {"title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}`;
   }
 
-  // Helper function to parse OpenAI-format response
-  function parseOpenAIResponse(aiResponse, pageContent) {
+  // Helper function to parse Gemini response
+  function parseGeminiResponse(aiResponse, pageContent) {
     try {
-      // Extract content from OpenAI-format response
+      // Extract content from Gemini response
       let text = '';
       
-      if (aiResponse.choices && aiResponse.choices.length > 0) {
-        text = aiResponse.choices[0].message?.content || '';
+      if (aiResponse.candidates && aiResponse.candidates.length > 0) {
+        const candidate = aiResponse.candidates[0];
+        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+          text = candidate.content.parts[0].text || '';
+        }
       }
       
       console.log('Parsing AI text:', text);
       
-      // Try to extract JSON from the response
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      // Try to extract JSON from the response (handle markdown code blocks)
+      let jsonMatch = text.match(/```json\s*(\{[\s\S]*?\})\s*```/);
+      if (!jsonMatch) {
+        jsonMatch = text.match(/\{[\s\S]*\}/);
+      }
       if (jsonMatch) {
-        const jsonData = JSON.parse(jsonMatch[0]);
+        const jsonString = jsonMatch[1] || jsonMatch[0];
+        const jsonData = JSON.parse(jsonString);
         
         // Validate and clean the data
         return {
@@ -306,6 +312,7 @@ Provide ONLY a JSON response in this exact format (no other text):
           location: jsonData.location?.trim() || 'Location Not Specified',
           type: normalizeJobType(jsonData.type),
           description: jsonData.description?.trim() || 'Description not available',
+          status: 'Applied', // Always set to "Applied" when scraped
           url: pageContent.url,
           date: pageContent.date
         };
@@ -322,6 +329,7 @@ Provide ONLY a JSON response in this exact format (no other text):
         location: 'Location Not Specified',
         type: 'unknown',
         description: pageContent.ogDescription || 'Description not available',
+        status: 'Applied', // Always set to "Applied" when scraped
         url: pageContent.url,
         date: pageContent.date
       };
