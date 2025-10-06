@@ -1,7 +1,7 @@
 // Popup script for ApplyMate Job Scraper
 
-// Hugging Face API token (hardcoded for convenience)
-const HUGGINGFACE_API_TOKEN = 'Your token here';
+// Hugging Face API token will be fetched from backend
+let HUGGINGFACE_API_TOKEN = null;
 
 document.addEventListener('DOMContentLoaded', function() {
   const emailInput = document.getElementById('email');
@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const emailDisplay = document.getElementById('emailDisplay');
   const savedEmailDiv = document.getElementById('savedEmail');
   const changeEmailBtn = document.getElementById('changeEmail');
+
+  // Initialize the extension
+  initializeExtension();
 
   // Load saved email
   chrome.storage.local.get(['userEmail'], function(result) {
@@ -53,6 +56,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Initialize extension by fetching Hugging Face token
+  async function initializeExtension() {
+    try {
+      const token = await fetchHuggingFaceToken();
+      HUGGINGFACE_API_TOKEN = token;
+      console.log('Hugging Face token loaded successfully');
+    } catch (error) {
+      console.error('Failed to load Hugging Face token:', error);
+      showStatus('Failed to initialize AI service. Please check your connection.', 'error');
+    }
+  }
+
+  // Fetch Hugging Face token from backend
+  async function fetchHuggingFaceToken() {
+    const apiUrl = 'http://localhost:3000/api/huggingface-token';
+    
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch token: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.token;
+  }
+
   // Scrape job button handler
   scrapeJobBtn.addEventListener('click', async function() {
     chrome.storage.local.get(['userEmail'], async function(result) {
@@ -60,6 +94,11 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (!email) {
         showStatus('Please enter and save your email first', 'error');
+        return;
+      }
+
+      if (!HUGGINGFACE_API_TOKEN) {
+        showStatus('AI service not initialized. Please refresh and try again.', 'error');
         return;
       }
 
@@ -84,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             if (response && response.success && response.pageContent) {
-              // Process with AI using hardcoded token
+              // Process with AI using token from backend
               scrapeJobBtn.textContent = 'Processing with AI...';
               
               try {
@@ -125,8 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
     statusDiv.className = `status ${type}`;
     statusDiv.style.display = 'block';
     
-    // Hide status after 3 seconds for success messages
-    if (type === 'success') {
+    // Hide status after 3 seconds for success and warning messages
+    if (type === 'success' || type === 'warning') {
       setTimeout(() => {
         statusDiv.style.display = 'none';
       }, 3000);
@@ -306,9 +345,9 @@ Provide ONLY a JSON response in this exact format (no other text):
   async function sendJobToAPI(email, jobData) {
     try {
       
-      // For development: http://localhost:3002 (or whatever port your server uses)
+      // For development: http://localhost:3000 (or whatever port your server uses)
       // For production: https://yourdomain.com
-      const apiUrl = 'http://localhost:3002/api/saveJob';
+      const apiUrl = 'http://localhost:3000/api/saveJob';
       
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -323,7 +362,13 @@ Provide ONLY a JSON response in this exact format (no other text):
 
       if (response.ok) {
         const result = await response.json();
-        showStatus(`Job saved successfully! (${result.message || 'Success'})`, 'success');
+        
+        // Check if this is a duplicate job
+        if (result.isDuplicate) {
+          showStatus(`Job already exists in your collection (${result.totalJobs} total jobs)`, 'warning');
+        } else {
+          showStatus(`Job saved successfully! (${result.totalJobs} total jobs)`, 'success');
+        }
       } else {
         const errorData = await response.json();
         showStatus(`Failed to save job: ${errorData.message || 'Server error'}`, 'error');
