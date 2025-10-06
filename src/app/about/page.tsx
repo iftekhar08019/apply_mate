@@ -1,32 +1,44 @@
-// app/about/page.tsx
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Zap, Brain, Shield } from "lucide-react";
+import { Users, Zap, Brain, Shield, Rocket } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function AboutPage() {
   const teamRoles = [
     {
       title: "Frontend Developer",
-      description: "Next.js + TypeScript, Dashboard UI, authentication, job detail forms",
-      icon: <Zap className="h-5 w-5" />
+      description:
+        "Crafting intuitive Next.js + TypeScript interfaces, dashboard UI, authentication, and job detail forms.",
+      icon: <Zap className="h-6 w-6" />,
     },
     {
       title: "Backend Developer",
-      description: "API + Database, API routes, database design, user management",
-      icon: <Brain className="h-5 w-5" />
+      description:
+        "Building robust API routes, database architecture, and secure user management systems.",
+      icon: <Brain className="h-6 w-6" />,
     },
     {
       title: "Extension Developer",
-      description: "Chrome Extension, job data scraping, integration with backend",
-      icon: <Users className="h-5 w-5" />
+      description:
+        "Developing Chrome extension for seamless job data scraping and backend integration.",
+      icon: <Users className="h-6 w-6" />,
     },
     {
       title: "Integration & Automation",
-      description: "Gmail API integration, status automation, deployment",
-      icon: <Shield className="h-5 w-5" />
-    }
+      description:
+        "Implementing Gmail API integration, automated status updates, and streamlined deployment.",
+      icon: <Shield className="h-6 w-6" />,
+    },
   ];
 
   const techStack = [
@@ -34,148 +46,252 @@ export default function AboutPage() {
     { name: "TypeScript", category: "Frontend" },
     { name: "Tailwind CSS", category: "Frontend" },
     { name: "shadcn/ui", category: "Frontend" },
-    { name: "Node.js/Express", category: "Backend" },
-    { name: "MongoDB/PostgreSQL", category: "Database" },
+    { name: "MongoDB", category: "Database" },
     { name: "Chrome Extension", category: "Extension" },
     { name: "Gmail API", category: "Integration" },
-    { name: "Vercel", category: "Deployment" }
+    { name: "Vercel", category: "Deployment" },
   ];
 
   const features = [
     "One-click job application saving",
     "Gmail integration for automatic status updates",
-    "Chrome extension for easy job extraction",
-    "Centralized application tracking",
+    "Chrome extension for seamless job extraction",
+    "Centralized application tracking dashboard",
     "Smart status categorization",
-    "Cross-platform compatibility"
+    "Cross-platform compatibility",
+  ];
+
+  const developmentPhases = [
+    {
+      phase: "Phase 1: Foundation",
+      description:
+        "Core application setup, database design, and initial UI development.",
+      status: "Completed",
+    },
+    {
+      phase: "Phase 2: Integration",
+      description: "Chrome extension and Gmail API integration.",
+      status: "Completed",
+    },
+    {
+      phase: "Phase 3: Enhancement",
+      description: "Advanced analytics and AI-powered status prediction.",
+      status: "In Progress",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 py-12">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-gray-100 py-16 transition-colors duration-300">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl space-y-24">
         {/* Hero Section */}
-        <section className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center space-y-6"
+        >
+          <Badge
+            variant="outline"
+            className="mb-4 border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400"
+          >
             About Application Tracker
           </Badge>
-          <h1 className="text-4xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">
-            Revolutionizing Job Application Management
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
+            Streamline Your Job Hunt
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
-            A comprehensive solution built by a dedicated team of 4 developers to 
-            streamline your job hunting process and bring order to the chaos of application tracking.
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Built by a passionate team of four developers, Application Tracker
+            simplifies your job search with cutting-edge tools and seamless
+            organization.
           </p>
-        </section>
+          <Button
+            asChild
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white"
+          >
+            <Link href="/signup">Start Organizing Now</Link>
+          </Button>
+        </motion.section>
 
         {/* Problem Statement */}
-        <section className="mb-16">
-          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
-                <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                The Problem We Solve
-              </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
-                Job hunting is messy and disorganized
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4 text-gray-600 dark:text-gray-300">
-                <p>
-                  Candidates apply to dozens of jobs across multiple portals, keep scattered notes, 
-                  and lose track of deadlines, interview updates, and rejections. This lack of 
-                  organization leads to missed opportunities and increased stress during the job search process.
-                </p>
-                <p>
-                  Our Application Tracker centralizes everything in one place, providing clarity 
-                  and control over your job hunting journey.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+        <Card className="border border-gray-200 dark:border-gray-800 shadow-md bg-white/70 dark:bg-gray-900/40 backdrop-blur-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3 text-2xl text-gray-900 dark:text-white">
+              <Users className="h-7 w-7 text-blue-600 dark:text-blue-500" />
+              Why We Built This
+            </CardTitle>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-400">
+              Solving the chaos of job applications
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6 text-gray-700 dark:text-gray-300">
+            <p>
+              Job hunting can feel overwhelming — scattered applications, missed
+              deadlines, and disorganized notes create unnecessary stress. We
+              experienced this firsthand and decided to build a solution.
+            </p>
+            <p>
+              Application Tracker brings clarity to the process, centralizing
+              all your applications, automating updates, and helping you focus
+              on landing your dream job.
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Team & Roles */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">Our Team & Expertise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamRoles.map((role, index) => (
-              <Card key={index} className="text-center bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300">
-                <CardHeader>
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-                      {role.icon}
+        <section>
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            Meet Our Team
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {teamRoles.map((role, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Card className="border-gray-200 dark:border-gray-800 hover:shadow-xl bg-white dark:bg-gray-900 transition-all duration-300">
+                  <CardHeader className="text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="p-4 rounded-full bg-blue-600/10 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+                        {role.icon}
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="text-lg text-gray-900 dark:text-white">{role.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-gray-600 dark:text-gray-400">{role.description}</CardDescription>
-                </CardContent>
-              </Card>
+                    <CardTitle className="text-xl">{role.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-center text-gray-600 dark:text-gray-400">
+                      {role.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* Tech Stack */}
-        <section className="mb-16">
-          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            <CardHeader className="text-center">
-              <CardTitle className="text-gray-900 dark:text-white">Technology Stack</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
-                Modern, scalable, and developer-friendly technologies
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {techStack.map((tech, index) => (
-                  <div
-                    key={index}
-                    className="text-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
-                  >
-                    <div className="font-semibold text-gray-900 dark:text-white">{tech.name}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      {tech.category}
-                    </div>
+        <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Our Technology Stack</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">
+              Built with modern, reliable technologies
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {techStack.map((tech, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="text-center p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/50 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition"
+                >
+                  <div className="font-semibold text-black dark:text-white">
+                    {tech.name}
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    {tech.category}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Features */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Core Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md transition-all duration-200"
+        <section>
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            What We Offer
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {features.map((f, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition"
               >
-                <div className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mr-3"></div>
-                <span className="text-gray-900 dark:text-gray-100">{feature}</span>
-              </div>
+                <div className="w-3 h-3 rounded-full bg-blue-600 dark:bg-blue-500 mr-4"></div>
+                <span>{f}</span>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* Phases */}
+        <section>
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            Development Journey
+          </h2>
+          <div className="space-y-6">
+            {developmentPhases.map((p, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+                  <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6">
+                    <div>
+                      <h3 className="text-xl font-semibold">{p.phase}</h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {p.description}
+                      </p>
+                    </div>
+                    <Badge
+                      variant={
+                        p.status === "Completed" ? "default" : "secondary"
+                      }
+                      className={`mt-3 sm:mt-0 ${
+                        p.status === "Completed"
+                          ? "bg-blue-600 dark:bg-blue-500 text-white"
+                          : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {p.status}
+                    </Badge>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
         <section className="text-center">
-          <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 transition-colors duration-300">
+          <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white">Ready to Transform Your Job Hunt?</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
-                Join thousands of job seekers who have organized their application process
+              <CardTitle className="text-3xl font-bold">
+                Ready to Simplify Your Job Hunt?
+              </CardTitle>
+              <CardDescription className="text-lg text-gray-600 dark:text-gray-400">
+                Join thousands of job seekers who trust Application Tracker
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white">
-                  <Link href="/signup">Get Started</Link>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white group"
+                >
+                  <Link href="/signup" className="flex items-center gap-2">
+                    Get Started
+                    <Rocket className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
-                  <Link href="/features">View Features</Link>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-600/10 dark:hover:bg-blue-500/10"
+                >
+                  <Link href="/features">Explore Features</Link>
                 </Button>
               </div>
             </CardContent>
