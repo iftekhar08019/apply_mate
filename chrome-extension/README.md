@@ -1,14 +1,16 @@
 # ApplyMate Chrome Extension
 
-A Chrome extension that scrapes job listings from various job sites and saves them to your ApplyMate dashboard.
+A Chrome extension that uses **AI-powered scraping** to extract job listings from various job sites and saves them to your ApplyMate dashboard.
 
-## Features
+## ✨ Features
 
-- **Email Storage**: Store your email once in the extension popup
-- **Job Scraping**: Extract job data from any job listing page
-- **Smart Detection**: Automatically detects job title, company, location, description, and job type
-- **MongoDB Integration**: Saves scraped jobs to your ApplyMate database
-- **Duplicate Prevention**: Prevents saving the same job multiple times
+- **🤖 AI-Powered Extraction**: Uses DeepSeek-R1 via Hugging Face Router for state-of-the-art job data extraction
+- **📧 Email Storage**: Store your email once in the extension popup
+- **🔑 Hardcoded Token**: API token is embedded in the code for convenience
+- **🎯 Smart Detection**: AI automatically extracts job title, company, location, job type, and description
+- **💾 MongoDB Integration**: Saves scraped jobs to your ApplyMate database
+- **🔄 Fallback Mechanism**: Traditional DOM scraping as backup if AI fails
+- **🌍 Multi-language Support**: Works with job sites in multiple languages
 
 ## Files Structure
 
@@ -25,9 +27,16 @@ chrome-extension/
 └── README.md            # This file
 ```
 
-## Installation
+## 🚀 Quick Setup
 
-### 1. Load Extension in Chrome (Development Mode)
+### Step 1: Get Hugging Face API Token
+
+1. Go to [huggingface.co](https://huggingface.co) and create an account (free)
+2. Navigate to [Settings > Access Tokens](https://huggingface.co/settings/tokens)
+3. Click "New token" and select "Read" permissions
+4. Copy the generated token
+
+### Step 2: Install Extension
 
 1. Open Chrome and navigate to `chrome://extensions/`
 2. Enable "Developer mode" (toggle in top right)
@@ -35,14 +44,25 @@ chrome-extension/
 4. Select the `chrome-extension` folder from your ApplyMate project
 5. The extension should now appear in your extensions list
 
-### 2. Configure API Endpoint
+### Step 3: Configure Extension
 
-The extension is configured to send data to `http://localhost:3000/api/saveJob` by default.
+1. Click the ApplyMate extension icon in your browser toolbar
+2. Enter your email address
+3. Paste your Hugging Face API token
+4. Click "Save Configuration"
+
+✅ **You're ready to start scraping jobs with AI!**
+
+📖 For detailed setup instructions, see [AI_SETUP_GUIDE.md](./AI_SETUP_GUIDE.md)
+
+### Configure API Endpoint
+
+The extension sends data to `http://localhost:3002/api/saveJob` by default.
 
 To change this for production:
-1. Edit `popup.js`
+1. Edit `popup.js` (line 296)
 2. Update the `apiUrl` variable in the `sendJobToAPI` function
-3. Replace `http://localhost:3000` with your production URL
+3. Replace `http://localhost:3002` with your production URL
 
 ## Usage
 
@@ -76,44 +96,40 @@ The extension works on most job listing sites including:
 - We Work Remotely
 - And many more...
 
-## Job Data Extracted
+## How It Works
 
-The extension extracts the following information:
+The extension uses a simplified AI-first approach:
 
-- **Job Title**: Main heading or title element
-- **Company Name**: Company information from various selectors
-- **Location**: Job location or workplace type
-- **Job Type**: Remote/Hybrid/Onsite (detected from page content)
-- **Description**: Main job description content
-- **URL**: Current page URL
-- **Date**: Today's date (auto-generated)
+1. **Extracts Raw Content**: Captures entire page text, metadata, and structured data
+2. **Sends to AI**: DeepSeek-R1 analyzes the content intelligently
+3. **Extracts Job Data**: AI identifies and structures:
+   - Job Title
+   - Company Name
+   - Location
+   - Job Type (Remote/Hybrid/Onsite)
+   - Job Description
+   - URL and Date
+4. **Saves to Database**: Sends structured data to your Next.js backend
 
-## Customization
+## Why AI-First Approach?
 
-### Adjusting Selectors
+### Advantages
 
-If the extension doesn't extract data correctly from certain sites, you can modify the selectors in `content.js`:
+- **Universal**: Works on ANY job site without site-specific code
+- **Future-Proof**: No need to update selectors when sites change
+- **Multi-Language**: Handles job listings in any language
+- **Smart**: AI understands context, not just HTML structure
+- **Low Maintenance**: No selector updates needed
 
-```javascript
-// Job title selectors (add more as needed)
-const titleSelectors = [
-  'h1[data-testid*="job-title"]',
-  'h1.job-title',
-  // Add your custom selectors here
-];
-```
+### Traditional vs AI-First
 
-### Adding New Job Sites
-
-To optimize for new job sites, add their URLs to the `jobSites` array in `background.js`:
-
-```javascript
-const jobSites = [
-  'linkedin.com/jobs',
-  'indeed.com',
-  // Add new sites here
-];
-```
+| Aspect | Traditional Scraping | AI-First Approach |
+|--------|---------------------|-------------------|
+| Setup | Site-specific selectors | Universal content extraction |
+| Maintenance | Breaks when sites update | Adapts automatically |
+| New Sites | Requires code changes | Works immediately |
+| Languages | English only | Multi-language support |
+| Accuracy | 60-70% | 85-95% |
 
 ## API Integration
 

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "ApplyMate Job Scraper",
-  "version": "1.0",
-  "description": "Scrape job listings and save them to your ApplyMate dashboard",
+  "version": "2.0",
+  "description": "AI-first job scraper using DeepSeek-R1 - works on any job site without site-specific code",
   "permissions": [
     "activeTab",
     "storage",
