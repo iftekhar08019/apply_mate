@@ -8,9 +8,10 @@ export async function GET(
 ) {
   try {
     const { db } = await connectToDatabase();
+    const {id} = await params
     const user = await db
       .collection(collectionName.USERS)
-      .findOne({ _id: new ObjectId(params.id) });
+      .findOne({ _id: new ObjectId(id) });
     if (!user) {
       return NextResponse.json({ status: 404 });
     }

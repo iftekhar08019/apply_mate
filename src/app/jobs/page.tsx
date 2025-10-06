@@ -48,7 +48,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-type Application = {
+type job = {
   _id: string;
   company: string;
   role: string;
@@ -60,7 +60,7 @@ type Application = {
 };
 
 // Badge color helper
-const getStatusBadgeClass = (status: Application["status"]) => {
+const getStatusBadgeClass = (status: job["status"]) => {
   switch (status) {
     case "offer":
       return "bg-[#22c55e]";
@@ -82,21 +82,21 @@ export default function ApplicationSection() {
     data: applications = [],
     isLoading,
     isError,
-  } = useQuery<Application[]>({
+  } = useQuery<job[]>({
     queryKey: ["applications"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/applications");
+      const res = await axiosSecure.get("/jobs");
       console.log(res);
       return res.data;
     },
   });
 
   const { mutate: addApplication, isPending: isAdding } = useMutation({
-    mutationFn: (newApplication: Omit<Application, "_id">) =>
+    mutationFn: (newApplication: Omit<job, "_id">) =>
       axiosSecure.post("/applications", newApplication),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["applications"] });
-      toast.success("Application added successfully!");
+      toast.success("job added successfully!");
       setIsDialogOpen(false);
     },
     onError: (error) => {
@@ -113,8 +113,8 @@ export default function ApplicationSection() {
       role: formData.get("role") as string,
       location: formData.get("location") as string,
       source: formData.get("source") as string,
-      status: formData.get("status") as Application["status"],
-      jobtype: formData.get("jobtype") as Application["jobtype"],
+      status: formData.get("status") as job["status"],
+      jobtype: formData.get("jobtype") as job["jobtype"],
       appliedDate: formData.get("appliedDate") as string,
     };
     addApplication(newApp);
@@ -160,17 +160,17 @@ export default function ApplicationSection() {
               <Filter size={16} /> Filter
             </Button>
 
-            {/* Add Application Modal */}
+            {/* Add job Modal */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="flex items-center gap-2 font-semibold w-full md:w-auto">
-                  <Plus size={16} /> Add Application
+                  <Plus size={16} /> Add job
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[480px]">
                 <DialogHeader>
                   <DialogTitle className="text-2xl">
-                    Add New Job Application
+                    Add New Job job
                   </DialogTitle>
                   <DialogDescription>
                     Fill in the details below to track a new application.
@@ -232,7 +232,7 @@ export default function ApplicationSection() {
                       </Button>
                     </DialogClose>
                     <Button type="submit" disabled={isAdding}>
-                      {isAdding ? "Saving..." : "Save Application"}
+                      {isAdding ? "Saving..." : "Save job"}
                     </Button>
                   </DialogFooter>
                 </form>

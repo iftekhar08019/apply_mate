@@ -15,4 +15,5 @@ export async function connectToDatabase() {
 export const collectionName = {
   USERS: "users",
   APPLICATIONS: "applications",
+  JOBS: "jobs",
 };

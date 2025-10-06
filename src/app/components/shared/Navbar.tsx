@@ -28,10 +28,11 @@ import {
 const Navbar = () => {
   // { session }: { session: UserSessionProps | null }
   const { data: session } = useSession();
+  console.log(session);
 
   const menus = [
     { label: "Home", path: "/" },
-    { label: "Applications", path: "/application" },
+    { label: "Job Details", path: "/jobs" },
     { label: "Resume Builder", path: "/resume" },
     { label: "About Us", path: "/about" },
     { label: "Terms & Condition", path: "/terms" },

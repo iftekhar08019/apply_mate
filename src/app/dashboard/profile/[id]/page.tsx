@@ -1,5 +1,4 @@
 "use client";
-
 import React, { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
