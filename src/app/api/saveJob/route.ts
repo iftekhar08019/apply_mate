@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
       location: job.location || 'Not specified',
       type: job.type || 'unknown',
       description: job.description || '',
+      status: job.status || 'Applied', // Default to "Applied" if not provided
       url: job.url || '',
       date: job.date || new Date().toISOString().split('T')[0],
       source: 'chrome-extension'

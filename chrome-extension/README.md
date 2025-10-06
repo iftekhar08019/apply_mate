@@ -4,7 +4,7 @@ A Chrome extension that uses **AI-powered scraping** to extract job listings fro
 
 ## ✨ Features
 
-- **🤖 AI-Powered Extraction**: Uses DeepSeek-R1 via Hugging Face Router for state-of-the-art job data extraction
+- **🤖 AI-Powered Extraction**: Uses Google Gemini 2.0 Flash for state-of-the-art job data extraction
 - **📧 Email Storage**: Store your email once in the extension popup
 - **🔐 Secure Token Management**: API token is securely fetched from backend
 - **🎯 Smart Detection**: AI automatically extracts job title, company, location, job type, and description
@@ -29,13 +29,13 @@ chrome-extension/
 
 ## 🚀 Quick Setup
 
-### Step 1: Configure Backend API Token
+### Step 1: Configure Backend API Key
 
-1. Go to [huggingface.co](https://huggingface.co) and create an account (free)
-2. Navigate to [Settings > Access Tokens](https://huggingface.co/settings/tokens)
-3. Click "New token" and select "Read" permissions
-4. Copy the generated token
-5. Add the token to your `.env` file: `HUGGINGFACE_API_TOKEN=your_token_here`
+1. Go to [Google AI Studio](https://aistudio.google.com/) and create an account (free)
+2. Navigate to [Get API Key](https://aistudio.google.com/app/apikey)
+3. Click "Create API Key" and select "Create API key in new project" or use existing project
+4. Copy the generated API key
+5. Add the key to your `.env` file: `GOOGLE_GEMINI_API_KEY=your_api_key_here`
 6. Restart your Next.js development server
 
 ### Step 2: Install Extension
@@ -54,7 +54,6 @@ chrome-extension/
 
 ✅ **You're ready to start scraping jobs with AI!**
 
-📖 For detailed setup instructions, see [AI_SETUP_GUIDE.md](./AI_SETUP_GUIDE.md)
 
 ### Configure API Endpoint
 
@@ -102,13 +101,14 @@ The extension works on most job listing sites including:
 The extension uses a simplified AI-first approach:
 
 1. **Extracts Raw Content**: Captures entire page text, metadata, and structured data
-2. **Sends to AI**: DeepSeek-R1 analyzes the content intelligently
+2. **Sends to AI**: Google Gemini 2.0 Flash analyzes the content intelligently
 3. **Extracts Job Data**: AI identifies and structures:
    - Job Title
    - Company Name
    - Location
    - Job Type (Remote/Hybrid/Onsite)
    - Job Description
+   - Status (Always set to "Applied")
    - URL and Date
 4. **Saves to Database**: Sends structured data to your Next.js backend
 
@@ -119,7 +119,7 @@ The extension uses a simplified AI-first approach:
 - **Universal**: Works on ANY job site without site-specific code
 - **Future-Proof**: No need to update selectors when sites change
 - **Multi-Language**: Handles job listings in any language
-- **Smart**: AI understands context, not just HTML structure
+- **Smart**: Google Gemini understands context, not just HTML structure
 - **Low Maintenance**: No selector updates needed
 
 ### Traditional vs AI-First
@@ -146,6 +146,7 @@ The extension communicates with your Next.js API at `/api/saveJob`:
     "company": "Tech Corp",
     "location": "San Francisco, CA",
     "type": "remote",
+    "status": "Applied",
     "url": "https://example.com/job/123",
     "date": "2024-01-15"
   }
@@ -171,6 +172,7 @@ Jobs are saved as individual documents in the `jobs` collection:
   "location": "San Francisco, CA",
   "type": "remote",
   "description": "Job description...",
+  "status": "Applied",
   "url": "https://example.com/job/123",
   "date": "2024-01-15",
   "createdAt": "2025-01-15T...",
