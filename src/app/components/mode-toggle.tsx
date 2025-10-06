@@ -7,10 +7,26 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, systemTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // সার্ভার-রেন্ডার মিসম্যাচ এড়াতে কিছুই রেন্ডার করব না যতক্ষণ না ক্লায়েন্ট লোড হয়
+    return (
+      <Button variant="outline" size="icon" disabled>
+        <Sun className="h-[1.2rem] w-[1.2rem]" />
+      </Button>
+    );
+  }
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(currentTheme === "dark" ? "light" : "dark");
   };
 
   return (
@@ -21,7 +37,7 @@ export function ModeToggle() {
       className="relative overflow-hidden transition-all cursor-pointer"
     >
       <AnimatePresence mode="wait" initial={false}>
-        {theme === "dark" ? (
+        {currentTheme === "dark" ? (
           <motion.div
             key="sun"
             initial={{ rotate: -90, scale: 0 }}
