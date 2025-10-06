@@ -34,7 +34,7 @@ const Navbar = () => {
     { label: "Home", path: "/" },
     { label: "Job Details", path: "/jobs" },
     { label: "Resume Builder", path: "/resume" },
-    { label: "Contact Us", path: "/contact" },
+    { label: "About Us", path: "/about" },
     { label: "Terms & Condition", path: "/terms" },
   ];
 

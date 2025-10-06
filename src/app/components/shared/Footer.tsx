@@ -12,6 +12,14 @@ const Footer = () => {
     { icon: Mail, href: "#", label: "Email" },
   ];
 
+  const menus = [
+    { label: "Home", path: "/" },
+    { label: "Applications", path: "/application" },
+    { label: "Resume Builder", path: "/resume" },
+    { label: "About Us", path: "/about" },
+    { label: "Terms & Condition", path: "/terms" },
+  ];
+
   const pathName = usePathname();
 
   if(!pathName.includes('/dashboard')){
