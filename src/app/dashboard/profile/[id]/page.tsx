@@ -1,77 +1,108 @@
 "use client";
-import React, { use } from "react";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { Toaster } from "sonner";
 import axiosSecure from "@/hooks/useAxiosSecure";
+import { User } from "../types/types";
+import { EditProfileForm } from "../components/EditProfileForm";
+import { ChangePasswordForm } from "../components/ChangePasswordForm";
+import { ProfileView } from "../components/ProfileView";
 
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  bio?: string;
-}
-
-const getUser = async (id: string): Promise<User | null> => {
+// Fetch function
+const getLoggedInUser = async (): Promise<User | null> => {
   try {
-    const res = await axiosSecure.get(`/users/${id}`);
+    const res = await axiosSecure.get("/profile/user");
     return res.data;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error(error);
     return null;
   }
 };
 
-export default function ProfilePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const unwrappedParams = use(params);
-  const { id } = unwrappedParams;
+export default function ProfilePage() {
+  const { data: session, status } = useSession();
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
+
+  const queryClient = useQueryClient();
   const {
     data: user,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["user", id],
-    queryFn: () => getUser(id),
+    queryKey: ["loggedInUser"],
+    queryFn: getLoggedInUser,
+    enabled: status === "authenticated",
   });
 
-  if (isLoading) {
-    return (
-      <div className="p-10 text-center text-gray-500 font-medium">
-        Loading user data...
-      </div>
-    );
-  }
+  const handleProfileUpdate = () => {
+    queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
+    setIsEditing(false);
+  };
 
-  if (isError || !user) {
+  if (status === "loading" || isLoading)
+    return <div className="p-10 text-center">Loading...</div>;
+  if (status === "unauthenticated" || isError || !user)
     return (
       <div className="p-10 text-center text-red-500 font-semibold">
-        User not found!
+        Please log in to view your profile.
       </div>
     );
-  }
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg">
-      <div className="flex flex-col items-center">
-        <Image
-          src={user.avatar || "/user.jpg"}
-          alt={'user-img'}
-          className="w-24 h-24 rounded-full border mb-3"
-          width={150}
-          height={50}
-        />
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          {user.name}
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">{user.email}</p>
-        {user.bio && (
-          <p className="mt-3 text-gray-700 dark:text-gray-300">{user.bio}</p>
-        )}
+    <>
+      <Toaster position="top-center" />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
+        <div className="max-w-2xl mx-auto">
+          {isEditing ? (
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+              <div className="mb-6 border-b border-gray-200 dark:border-gray-700">
+                <nav className="-mb-px flex space-x-6" aria-label="Tabs">
+                  <button
+                    onClick={() => setActiveTab("profile")}
+                    className={`${
+                      activeTab === "profile"
+                        ? "border-indigo-500 text-indigo-600"
+                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("password")}
+                    className={`${
+                      activeTab === "password"
+                        ? "border-indigo-500 text-indigo-600"
+                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                  >
+                    Change Password
+                  </button>
+                </nav>
+              </div>
+
+              {activeTab === "profile" && (
+                <EditProfileForm
+                  user={user}
+                  onUpdateSuccess={handleProfileUpdate}
+                />
+              )}
+              {activeTab === "password" && <ChangePasswordForm />}
+
+              <button
+                onClick={() => setIsEditing(false)}
+                className="mt-6 w-full text-center text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <ProfileView user={user} onEditClick={() => setIsEditing(true)} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
