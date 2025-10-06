@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { List, Grid3x3, Plus, Search, Briefcase } from "lucide-react";
+import { List, Grid3x3, Search, Briefcase, Building2, MapPin, CalendarDays, ExternalLink } from "lucide-react";
+import Loading from "./loading";
 
 interface Job {
   title: string;
@@ -46,10 +47,8 @@ const MyApplicationPage: React.FC = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-lg font-medium text-muted-foreground">Loading your applications...</p>
-      </div>
-    );
+      <Loading />
+    )
   }
 
   // Filtered jobs
@@ -126,39 +125,55 @@ const MyApplicationPage: React.FC = () => {
             No jobs found matching your criteria.
           </p>
         ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredJobs.map((job: Job, index: number) => (
-              <Card
-                key={index}
-                className="rounded-xl shadow-md hover:shadow-lg transition-all border border-border"
-              >
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold">{job.title}</CardTitle>
-                  <CardDescription className="text-muted-foreground">{job.company}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-sm text-muted-foreground">{job.location}</p>
-                  <p className="text-sm">
-                    <span className="font-medium">Type:</span> {job.type}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium">Posted:</span>{" "}
-                    {new Date(job.date).toLocaleDateString()}
-                  </p>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    asChild
-                    className="mt-2 w-full"
-                  >
-                    <a href={job.url} target="_blank" rel="noopener noreferrer">
-                      View Job
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {filteredJobs.map((job : Job, index : number) => (
+        <Card
+          key={index}
+          className="group relative rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
+          
+
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-blue-500" />
+              {job.title}
+            </CardTitle>
+            <CardDescription className="flex items-center gap-2 text-muted-foreground">
+              <Building2 className="w-4 h-4 text-gray-400" />
+              {job.company}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-blue-500" />
+              <span>{job.location}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-blue-500" />
+              <span>Type: {job.type}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <CalendarDays className="w-4 h-4 text-blue-500" />
+              <span>Posted: {new Date(job.date).toLocaleDateString()}</span>
+            </div>
+
+            <Button
+              asChild
+              size="sm"
+              className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.02]"
+            >
+              <a href={job.url} target="_blank" rel="noopener noreferrer">
+                View Job
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border shadow-sm">
             <table className="w-full text-sm">
