@@ -195,7 +195,7 @@ const Navbar = () => {
                         alt="Guide Logo"
                         width={140}
                         height={45}
-                        className="w-28 sm:w-32 dark:invert dark:brightness-90"
+                        className="w-28 sm:w-32"
                       />
                     </SheetTitle>
                   </SheetHeader>

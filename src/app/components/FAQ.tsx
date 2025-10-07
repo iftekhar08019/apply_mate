@@ -43,7 +43,7 @@ export default function FAQSection() {
                 <div
                   key={idx}
                   className={cn(
-                    "rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/60 shadow-lg backdrop-blur-xl transition-all",
+                    "rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-800 shadow-lg backdrop-blur-xl transition-all",
                     "hover:shadow-xl hover:border-gray-300 dark:hover:border-gray-700"
                   )}
                 >

@@ -49,30 +49,30 @@ export default function ContactPage() {
             <div className="space-y-8">
               {/* Email */}
               <div className="flex items-start gap-4">
-                <Mail className="w-6 h-6 flex-shrink-0 text-cyan-600 dark:text-cyan-400 mt-1" />
+                <Mail className="w-6 h-6 flex-shrink-0 text-blue-600 dark:text-blue-400 mt-1" />
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">
                     Email Us
                   </h4>
                   <a
                     href="mailto:support@graphytracker.com"
-                    className="text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                    className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
-                    support@graphytracker.com
+                    apply.mate04@gmail.com
                   </a>
                 </div>
               </div>
 
               {/* Phone */}
               <div className="flex items-start gap-4">
-                <Phone className="w-6 h-6 flex-shrink-0 text-cyan-600 dark:text-cyan-400 mt-1" />
+                <Phone className="w-6 h-6 flex-shrink-0 text-blue-600 dark:text-blue-400 mt-1" />
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">
                     Call Us
                   </h4>
                   <a
                     href="tel:+8801234567890"
-                    className="text-gray-600 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                    className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
                     +880 1234 567 890
                   </a>
@@ -81,7 +81,7 @@ export default function ContactPage() {
 
               {/* Office/Location */}
               <div className="flex items-start gap-4">
-                <MapPin className="w-6 h-6 flex-shrink-0 text-cyan-600 dark:text-cyan-400 mt-1" />
+                <MapPin className="w-6 h-6 flex-shrink-0 text-blue-600 dark:text-blue-400 mt-1" />
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">
                     Our Hub
@@ -164,10 +164,10 @@ export default function ContactPage() {
               <Button
                 type="submit"
                 // Using a darker, more premium blue/cyan for the button, and slightly adjusting the hover
-                className="w-full flex items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-500 dark:hover:bg-cyan-600 text-white py-6 text-base font-semibold transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-6 text-base font-semibold transition-colors"
               >
+                Submit
                 <Send className="w-4 h-4" />
-                Submit Inquiry
               </Button>
             </form>
           </motion.div>
