@@ -85,7 +85,9 @@ const Navbar = () => {
                           <Image
                             src={session.user.image || "/user.jpg"}
                             alt={session.user.name || "User"}
-                            onError={(e) => (e.currentTarget.src = "/default.jpg")}
+                            onError={(e) =>
+                              (e.currentTarget.src = "/default.jpg")
+                            }
                             width={40}
                             height={40}
                             className="rounded-full border border-blue-600 cursor-pointer"
@@ -247,3 +249,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
