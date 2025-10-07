@@ -101,7 +101,6 @@ export default function ContactPage() {
               </p>
             </div>
           </motion.div>
-
           {/* Right Side: Contact Form (Occupies 3/5 columns on large screens) */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}

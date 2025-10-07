@@ -63,44 +63,53 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
 
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "google" || account?.provider === "github") {
-        const { db } = await connectToDatabase();
+ callbacks: {
+  async signIn({ user, account }) {
+    const { db } = await connectToDatabase();
 
-        const existingUser = await db
-          .collection(collectionName.USERS)
-          .findOne({ email: user.email });
+    // Handle OAuth logins
+    if (account?.provider === "google" || account?.provider === "github") {
+      const existingUser = await db
+        .collection(collectionName.USERS)
+        .findOne({ email: user.email });
 
-        if (!existingUser) {
-          await db.collection(collectionName.USERS).insertOne({
-            name: user.name,
-            email: user.email,
-            image: user.image || DEFAULT_AVATAR,
-            provider: account.provider,
-            createdAt: new Date(),
-          });
-        }
+      if (!existingUser) {
+        const insertResult = await db.collection(collectionName.USERS).insertOne({
+          name: user.name,
+          email: user.email,
+          image: user.image || DEFAULT_AVATAR,
+          provider: account.provider,
+          createdAt: new Date(),
+        });
+
+        // ✅ Assign the newly created _id to user.id
+        user.id = insertResult.insertedId.toString();
+      } else {
+        // ✅ Ensure user.id always exists
+        user.id = existingUser._id.toString();
       }
-      return true; 
-    },
+    }
 
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = (user as AuthUser).id || token.id;
-        token.image = user.image || token.image;
-      }
-      return token;
-    },
-
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.image = token.image as string;
-      }
-      return session;
-    },
+    return true;
   },
+
+  async jwt({ token, user }) {
+    if (user) {
+      token.id = (user as AuthUser).id || token.id;
+      token.image = user.image || token.image;
+    }
+    return token;
+  },
+
+  async session({ session, token }) {
+    if (session.user) {
+      session.user.id = token.id as string;
+      session.user.image = token.image as string;
+    }
+    return session;
+  },
+},
+
 
   secret: process.env.NEXTAUTH_SECRET,
 };
