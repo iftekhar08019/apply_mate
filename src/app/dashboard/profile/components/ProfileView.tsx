@@ -10,6 +10,7 @@ interface Props {
 }
 
 export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
+
   return (
     <div>
       <div className="rounded-xl overflow-hidden">
@@ -44,7 +45,7 @@ export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
             </div>
 
             {/* Action Buttons */}
-            <div>
+            <div className="flex gap-2">
               <button
                 onClick={onEditClick}
                 className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors"

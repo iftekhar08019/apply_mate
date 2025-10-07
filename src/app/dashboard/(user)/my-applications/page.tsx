@@ -10,6 +10,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { List, Grid3x3, Search, Briefcase, Building2, MapPin, CalendarDays, ExternalLink } from "lucide-react";
 import Loading from "./loading";
+import { GmailIntegration } from "./components/GmailIntegration";
+import { Toaster } from "sonner";
 
 interface Job {
   title: string;
@@ -62,6 +64,7 @@ const MyApplicationPage: React.FC = () => {
 
   return (
     <TooltipProvider>
+      <Toaster position="top-center" />
       <div className="min-h-screen p-6 bg-background">
         {/* Header Section */}
         <div className="text-center mb-8">
@@ -71,8 +74,13 @@ const MyApplicationPage: React.FC = () => {
           </div>
           <h1 className="text-4xl font-bold mt-3">Track Your Job Journey</h1>
           <p className="text-muted-foreground text-lg mt-1 max-w-2xl mx-auto">
-            Stay on top of all the jobs you’ve applied for and easily track your progress.
+            Stay on top of all the jobs you&apos;ve applied for and easily track your progress.
           </p>
+        </div>
+
+        {/* Gmail Integration Section */}
+        <div className="mb-8 max-w-4xl mx-auto">
+          <GmailIntegration userEmail={email} />
         </div>
 
         {/* Search & Filters */}

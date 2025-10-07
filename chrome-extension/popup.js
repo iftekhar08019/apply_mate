@@ -127,13 +127,20 @@ document.addEventListener('DOMContentLoaded', function() {
               scrapeJobBtn.textContent = 'Processing with AI...';
               
               try {
-                const jobData = await processWithAI(response.pageContent, GROQ_API_KEY);
+                const result = await processWithAI(response.pageContent, GROQ_API_KEY);
                 
                 scrapeJobBtn.disabled = false;
                 scrapeJobBtn.textContent = 'Scrape Current Job';
                 
-                // Send data to Next.js API
-                await sendJobToAPI(email, jobData);
+                // Check if it's not a job page
+                if (result.isJobPage === false) {
+                  showStatus(result.message, 'warning');
+                  return;
+                }
+                
+                // If it is a job page, send data to Next.js API
+                await sendJobToAPI(email, result);
+                showStatus(`Job saved successfully!`, 'success');
               } catch (error) {
                 scrapeJobBtn.disabled = false;
                 scrapeJobBtn.textContent = 'Scrape Current Job';
@@ -243,42 +250,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // If structured data exists, prioritize it
     if (structuredData) {
-      return `You are a helpful assistant that extracts structured job information from web pages. Always respond with valid JSON only, no additional text.
-
-You are analyzing a job posting page. Extract the job information accurately.
+      return `You are a helpful assistant that analyzes web pages to determine if they contain job postings. Always respond with valid JSON only.
 
 **Structured Data (JSON-LD):**
 ${structuredData}
 
 **Page Title:** ${title}
+**Page Content:** ${content.substring(0, 3000)}
 
-**Page Content:**
-${content.substring(0, 3000)}
+**Instructions:**
+1. First, determine if this page contains a job posting by looking for job-related content
+2. If it's NOT a job page, respond with: {"isJobPage": false, "message": "This page does not appear to contain a job posting"}
+3. If it IS a job page, extract the information and respond with: {"isJobPage": true, "title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}
 
-Extract and provide ONLY a JSON response in this exact format:
-{"title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}`;
+Provide ONLY a JSON response in this exact format (no other text):`;
     }
     
-    return `You are a helpful assistant that extracts structured job information from web pages. Always respond with valid JSON only, no additional text.
-
-You are analyzing a job posting page. Extract the job information accurately from the content below.
+    return `You are a helpful assistant that analyzes web pages to determine if they contain job postings. Always respond with valid JSON only.
 
 **Page Title:** ${title}
 ${ogTitle ? `**OG Title:** ${ogTitle}` : ''}
 ${ogDescription ? `**Meta Description:** ${ogDescription}` : ''}
 
-**Page Content:**
-${content.substring(0, 4000)}
+**Page Content:** ${content.substring(0, 4000)}
 
 **Instructions:**
-1. Find the job title (usually a prominent heading)
-2. Identify the company name
-3. Extract the location (city, state, country, or "Remote")
-4. Determine job type: "remote", "hybrid", or "onsite"
-5. Summarize the job description in 2-3 sentences
+1. First, determine if this page contains a job posting
+2. Look for indicators like: job titles, company names, job descriptions, requirements, "apply now", "job posting", hiring, employment, etc.
+3. If it's NOT a job page (e.g., homepage, blog, about page, search results, etc.), respond with: {"isJobPage": false, "message": "This page does not appear to contain a job posting"}
+4. If it IS a job page, extract the information and respond with: {"isJobPage": true, "title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}
 
-Provide ONLY a JSON response in this exact format (no other text):
-{"title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}`;
+Provide ONLY a JSON response in this exact format (no other text):`;
   }
 
   // Helper function to parse Groq response
@@ -305,8 +307,18 @@ Provide ONLY a JSON response in this exact format (no other text):
         const jsonString = jsonMatch[1] || jsonMatch[0];
         const jsonData = JSON.parse(jsonString);
         
-        // Validate and clean the data
+        // Check if it's not a job page
+        if (jsonData.isJobPage === false) {
+          return {
+            isJobPage: false,
+            message: jsonData.message || "This page does not appear to contain a job posting",
+            url: pageContent.url
+          };
+        }
+        
+        // If it is a job page, validate and clean the data
         return {
+          isJobPage: true,
           title: jsonData.title?.trim() || 'Job Title Not Found',
           company: jsonData.company?.trim() || 'Company Not Found',
           location: jsonData.location?.trim() || 'Location Not Specified',
@@ -322,8 +334,9 @@ Provide ONLY a JSON response in this exact format (no other text):
     } catch (error) {
       console.error('Error parsing AI response:', error);
       
-      // Return fallback data
+      // Return fallback data - assume it's a job page with limited data
       return {
+        isJobPage: true,
         title: pageContent.ogTitle || pageContent.title || 'Job Title Not Found',
         company: 'Company Not Found',
         location: 'Location Not Specified',
