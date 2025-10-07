@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,69 +13,41 @@ import {
   MapPin,
   Calendar,
   Award,
-  XCircle
+  XCircle,
+  Loader2
 } from "lucide-react";
 
-const dashboardData = {
-  totalApplications: 12,
+interface DashboardData {
+  totalApplications: number;
   statusSummary: {
-    applied: 5,
-    interview: 3,
-    offer: 2,
-    rejected: 2
+    applied: number;
+    interview: number;
+    offer: number;
+    rejected: number;
+  };
+  recentApplications: Array<{
+    id: number;
+    company: string;
+    role: string;
+    status: string;
+    appliedDate: string;
+    location: string;
+    jobType: string;
+    url?: string;
+  }>;
+  responseRate: number;
+}
+
+const defaultDashboardData: DashboardData = {
+  totalApplications: 0,
+  statusSummary: {
+    applied: 0,
+    interview: 0,
+    offer: 0,
+    rejected: 0
   },
-  recentApplications: [
-    {
-      id: 1,
-      company: "Google",
-      role: "Frontend Developer",
-      status: "Interview",
-      appliedDate: "2025-09-15",
-      location: "California, USA",
-      experience: "2-3 years",
-      jobType: "Full-time"
-    },
-    {
-      id: 2,
-      company: "Microsoft",
-      role: "Full Stack Developer",
-      status: "Applied",
-      appliedDate: "2025-09-12",
-      location: "Redmond, USA",
-      experience: "3-5 years",
-      jobType: "Full-time"
-    },
-    {
-      id: 3,
-      company: "Amazon",
-      role: "Backend Engineer",
-      status: "Rejected",
-      appliedDate: "2025-09-10",
-      location: "Seattle, USA",
-      experience: "1-2 years",
-      jobType: "Internship"
-    },
-    {
-      id: 4,
-      company: "Meta",
-      role: "UI/UX Designer",
-      status: "Offer",
-      appliedDate: "2025-09-08",
-      location: "Menlo Park, USA",
-      experience: "2-4 years",
-      jobType: "Full-time"
-    },
-    {
-      id: 5,
-      company: "Tesla",
-      role: "Software Engineer",
-      status: "Applied",
-      appliedDate: "2025-09-05",
-      location: "California, USA",
-      experience: "0-2 years",
-      jobType: "Internship"
-    }
-  ]
+  recentApplications: [],
+  responseRate: 0
 };
 
 const getStatusIcon = (status: string) => {
@@ -107,6 +81,55 @@ const getStatusBadge = (status: string) => {
 };
 
 export default function JobTrackerDashboard() {
+  const [dashboardData, setDashboardData] = useState<DashboardData>(defaultDashboardData);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/dashboard/stats');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch dashboard data');
+        }
+        
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching dashboard data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-white dark:bg-gray-900">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <p className="text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-white dark:bg-gray-900">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 mb-4">Error: {error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
       {/* Header */}
@@ -182,9 +205,9 @@ export default function JobTrackerDashboard() {
               <TrendingUp className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">58%</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{dashboardData.responseRate}%</div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                +12% from last month
+                Based on {dashboardData.totalApplications} applications
               </p>
             </CardContent>
           </Card>
@@ -201,7 +224,7 @@ export default function JobTrackerDashboard() {
                 </CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1 bg-blue-600 hover:bg-blue-700 text-white">
-                <a href="#">
+                <a href="/dashboard/my-applications">
                   View All
                   <TrendingUp className="h-4 w-4" />
                 </a>
@@ -209,37 +232,44 @@ export default function JobTrackerDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {dashboardData.recentApplications.map((application) => (
-                  <div key={application.id} className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0 last:pb-0">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                        {getStatusIcon(application.status)}
+                {dashboardData.recentApplications.length > 0 ? (
+                  dashboardData.recentApplications.map((application) => (
+                    <div key={application.id} className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0 last:pb-0">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                          {getStatusIcon(application.status)}
+                        </div>
+                        <div className="grid gap-1">
+                          <p className="text-sm font-medium leading-none text-gray-900 dark:text-white">
+                            {application.company} - {application.role}
+                          </p>
+                          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                            <div className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {application.location}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {application.appliedDate}
+                            </div>
+                            <div>{application.jobType}</div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium leading-none text-gray-900 dark:text-white">
-                          {application.company} - {application.role}
-                        </p>
-                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                          <div className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {application.location}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {application.appliedDate}
-                          </div>
-                          <div>{application.jobType}</div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right text-sm">
+                          {getStatusBadge(application.status)}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right text-sm">
-                        <div className="font-medium text-gray-600 dark:text-gray-300">{application.experience}</div>
-                        {getStatusBadge(application.status)}
-                      </div>
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <Briefcase className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-500 dark:text-gray-400 mb-2">No applications yet</p>
+                    <p className="text-sm text-gray-400 dark:text-gray-500">Start by adding your first job application</p>
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>

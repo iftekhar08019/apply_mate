@@ -1,7 +1,7 @@
 // Popup script for ApplyMate Job Scraper
 
-// Google Gemini API key will be fetched from backend
-let GEMINI_API_KEY = null;
+// Groq API key will be fetched from backend
+let GROQ_API_KEY = null;
 
 document.addEventListener('DOMContentLoaded', function() {
   const emailInput = document.getElementById('email');
@@ -56,21 +56,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Initialize extension by fetching Google Gemini API key
+  // Initialize extension by fetching Groq API key
   async function initializeExtension() {
     try {
-      const token = await fetchGeminiApiKey();
-      GEMINI_API_KEY = token;
-      console.log('Google Gemini API key loaded successfully');
+      const token = await fetchGroqApiKey();
+      GROQ_API_KEY = token;
+      console.log('Groq API key loaded successfully');
     } catch (error) {
-      console.error('Failed to load Google Gemini API key:', error);
+      console.error('Failed to load Groq API key:', error);
       showStatus('Failed to initialize AI service. Please check your connection.', 'error');
     }
   }
 
-  // Fetch Google Gemini API key from backend
-  async function fetchGeminiApiKey() {
-    const apiUrl = 'http://localhost:3000/api/gemini-token';
+  // Fetch Groq API key from backend
+  async function fetchGroqApiKey() {
+    const apiUrl = 'http://localhost:3000/api/ai-token';
     
     const response = await fetch(apiUrl, {
       method: 'GET',
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      if (!GEMINI_API_KEY) {
+      if (!GROQ_API_KEY) {
         showStatus('AI service not initialized. Please refresh and try again.', 'error');
         return;
       }
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
               scrapeJobBtn.textContent = 'Processing with AI...';
               
               try {
-                const jobData = await processWithAI(response.pageContent, GEMINI_API_KEY);
+                const jobData = await processWithAI(response.pageContent, GROQ_API_KEY);
                 
                 scrapeJobBtn.disabled = false;
                 scrapeJobBtn.textContent = 'Scrape Current Job';
@@ -191,30 +191,30 @@ document.addEventListener('DOMContentLoaded', function() {
   // Helper function to process job data with AI
   async function processWithAI(pageContent, apiKey) {
     try {
-      console.log('Processing with AI using Google Gemini 2.0 Flash...');
+      console.log('Processing with AI using Groq Llama 3.1 8B...');
       
-      // Prepare the prompt for Gemini API
-      const prompt = createGeminiPrompt(pageContent);
+      // Prepare the prompt for Groq API
+      const prompt = createGroqPrompt(pageContent);
       
-      // Call Google Gemini API
+      // Call Groq API
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+        'https://api.groq.com/openai/v1/chat/completions',
         {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
-            'X-goog-api-key': apiKey,
           },
           body: JSON.stringify({
-            contents: [
+            model: 'llama-3.1-8b-instant',
+            messages: [
               {
-                parts: [
-                  {
-                    text: prompt
-                  }
-                ]
+                role: 'user',
+                content: prompt
               }
-            ]
+            ],
+            max_tokens: 1000,
+            temperature: 0.1
           })
         }
       );
@@ -227,8 +227,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const result = await response.json();
       console.log('AI Response:', result);
       
-      // Parse the Gemini response
-      const jobData = parseGeminiResponse(result, pageContent);
+      // Parse the Groq response
+      const jobData = parseGroqResponse(result, pageContent);
       
       return jobData;
     } catch (error) {
@@ -237,8 +237,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Helper function to create Gemini extraction prompt
-  function createGeminiPrompt(pageContent) {
+  // Helper function to create Groq extraction prompt
+  function createGroqPrompt(pageContent) {
     const { title, content, ogTitle, ogDescription, structuredData } = pageContent;
     
     // If structured data exists, prioritize it
@@ -281,16 +281,16 @@ Provide ONLY a JSON response in this exact format (no other text):
 {"title":"job title","company":"company name","location":"location","type":"remote/hybrid/onsite","description":"brief job summary"}`;
   }
 
-  // Helper function to parse Gemini response
-  function parseGeminiResponse(aiResponse, pageContent) {
+  // Helper function to parse Groq response
+  function parseGroqResponse(aiResponse, pageContent) {
     try {
-      // Extract content from Gemini response
+      // Extract content from Groq response
       let text = '';
       
-      if (aiResponse.candidates && aiResponse.candidates.length > 0) {
-        const candidate = aiResponse.candidates[0];
-        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
-          text = candidate.content.parts[0].text || '';
+      if (aiResponse.choices && aiResponse.choices.length > 0) {
+        const choice = aiResponse.choices[0];
+        if (choice.message && choice.message.content) {
+          text = choice.message.content || '';
         }
       }
       
