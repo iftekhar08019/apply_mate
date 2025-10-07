@@ -54,17 +54,17 @@ export default function ProfilePage() {
   return (
     <>
       <Toaster position="top-center" />
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-2xl mx-auto">
+      <div className="p-4 sm:p-6 lg:p-8">
+        <div>
           {isEditing ? (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div className="rounded-xl shadow-lg p-6">
               <div className="mb-6 border-b border-gray-200 dark:border-gray-700">
                 <nav className="-mb-px flex space-x-6" aria-label="Tabs">
                   <button
                     onClick={() => setActiveTab("profile")}
                     className={`${
                       activeTab === "profile"
-                        ? "border-indigo-500 text-indigo-600"
+                        ? "border-blue-500 text-blue-600"
                         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                     } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                   >
@@ -74,7 +74,7 @@ export default function ProfilePage() {
                     onClick={() => setActiveTab("password")}
                     className={`${
                       activeTab === "password"
-                        ? "border-indigo-500 text-indigo-600"
+                        ? "border-blue-500 text-blue-600"
                         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                     } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                   >
