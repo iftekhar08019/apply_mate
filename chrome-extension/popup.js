@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Fetch Groq API key from backend
   async function fetchGroqApiKey() {
-    const apiUrl = 'http://localhost:3000/api/gemini-token';
+    const apiUrl = 'http://localhost:3000/api/ai-token';
     
     const response = await fetch(apiUrl, {
       method: 'GET',
