@@ -6,5 +6,8 @@ export interface User {
   image?: string; 
   coverImage?: string; 
   bio?: string;
-  institute?: string; 
+  institute?: string;
+  gmailConnected?: boolean;
+  gmailConnectedAt?: Date;
+  lastGmailSync?: Date;
 }
