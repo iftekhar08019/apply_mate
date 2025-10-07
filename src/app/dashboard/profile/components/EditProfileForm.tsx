@@ -1,7 +1,6 @@
 "use client";
 import axiosSecure from "@/hooks/useAxiosSecure";
 import React, { useState } from "react";
-
 import { toast } from "sonner";
 import { User } from "../types/types";
 
@@ -19,26 +18,29 @@ export const EditProfileForm: React.FC<Props> = ({ user, onUpdateSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       let imageUrl = user.image;
 
+      // Upload new image if selected
       if (image) {
         const formData = new FormData();
         formData.append("avatar", image);
 
-        const res = await fetch("/profile/upload-avatar", {
-          method: "POST",
-          body: formData,
+        const uploadRes = await axiosSecure.post("/profile/upload-avatar", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        const data = await res.json();
-        imageUrl = data.avatarUrl;
+
+        imageUrl = uploadRes.data.avatarUrl;
       }
 
-      const res = await axiosSecure.patch("/profile/update", {
+      // Update profile
+      await axiosSecure.patch("/profile/update", {
         name,
         bio,
         image: imageUrl,
       });
+
       toast.success("Profile updated successfully!");
       onUpdateSuccess();
     } catch (error) {
@@ -73,7 +75,7 @@ export const EditProfileForm: React.FC<Props> = ({ user, onUpdateSuccess }) => {
       <button
         type="submit"
         disabled={loading}
-        className="px-4 py-2 bg-indigo-600 text-white rounded"
+        className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
       >
         {loading ? "Updating..." : "Update Profile"}
       </button>

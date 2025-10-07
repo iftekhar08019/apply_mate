@@ -12,16 +12,25 @@ export async function PATCH(request: NextRequest) {
   }
 
   try {
-    const { name, bio } = await request.json();
-    const userId = session.user.id;
-
+    const userId = session?.user?.id;
+    const userEmail = session?.user?.email;
+    const {name, bio, image}=await request.json()
     const { db } = await connectToDatabase();
+    let filter = {};
+    if (userId) {
+      filter = {_id: new ObjectId(userId)}
 
-    const result = await db.collection(collectionName.USERS).findOneAndUpdate(
-      { _id: new ObjectId(userId) },
-      { $set: { name, bio } },
-      { returnDocument: "after" }
-    );
+    } else if(userEmail) {
+      filter= {email : userEmail}
+    } else {
+      return NextResponse.json({status: 404})
+    }
+   const result = await db.collection(collectionName.USERS).findOneAndUpdate(
+  filter,
+  { $set: { name, bio, image } },
+  { returnDocument: "after" }
+);
+    console.log(result);
 
 
     if (!result || !result.value) {

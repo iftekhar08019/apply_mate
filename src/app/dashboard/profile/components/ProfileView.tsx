@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React from "react";
 import { User } from "../types/types";
-import { Mail, MailCheck, User2 } from "lucide-react";
+import { MailCheck, User2 } from "lucide-react";
 
 interface Props {
   user: User;

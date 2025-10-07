@@ -7,7 +7,6 @@ export const useUserJobs = (email?: string) => {
     queryFn: async () => {
       if (!email) return [];
       const { data } = await axiosSecure.get(`/jobs?email=${email}`);
-      console.log("Fetched user jobs:", data);
       return data?.data?.jobs || [];
     },
     enabled: !!email, 
