@@ -159,19 +159,25 @@ export default function AllJobs() {
               {filteredJobs.map((job: Job, index: number) => (
                 <Card
                   key={index}
-                  className="group relative rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group relative overflow-hidden rounded-3xl border border-gray-200 shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.03]"
                 >
-                  <CardHeader>
+                  {/* Decorative top shape */}
+                  <div className="absolute top-0 left-0 w-full h-16 bg-blue-400 rounded-b-full opacity-30 -z-10"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-lg font-semibold flex items-center gap-2">
                       <Briefcase className="w-5 h-5 text-blue-500" />
-                        <span className="truncate block max-w-[200px]">{job.title}</span>
+                      <span className="truncate block max-w-[200px] dark:text-white">
+                        {job.title}
+                      </span>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-muted-foreground">
+
+                  <CardContent className="space-y-3 text-sm text-muted-foreground relative z-10">
                     <CardDescription className="flex items-center gap-2 text-muted-foreground">
                       <Building2 className="w-4 h-4 text-blue-500" />
                       {job.company}
                     </CardDescription>
+
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-blue-500" />
                       <span>{job.location}</span>
@@ -192,7 +198,7 @@ export default function AllJobs() {
                     <Button
                       asChild
                       size="sm"
-                      className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.02]"
+                      className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.05]"
                     >
                       <a
                         href={job.url}
