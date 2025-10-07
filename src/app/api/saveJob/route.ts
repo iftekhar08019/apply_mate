@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/libs/mongodb';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Create job object to add to user's jobs array
     const jobData = {
+      uid: uuidv4(),
       title: job.title,
       company: job.company,
       location: job.location || 'Not specified',

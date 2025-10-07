@@ -1,11 +1,10 @@
 "use client";
-
 import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
-import type { Session } from "next-auth";
 import { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Session } from "next-auth";
 
-interface sessionProps {
+export interface sessionProps {
   children: ReactNode;
   session?: Session | null;
 }
