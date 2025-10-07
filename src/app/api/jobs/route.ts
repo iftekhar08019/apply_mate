@@ -60,7 +60,7 @@ export async function PATCH(req: Request) {
     const { email, jobId, updates } = body;
     if (!email || !jobId || !updates) return NextResponse.json({ message: "Missing fields" }, { status: 400 });
 
-    // Build $set payload to update only provided fields inside the matched array element
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const setObj: Record<string, any> = {};
     Object.entries(updates).forEach(([k, v]) => {

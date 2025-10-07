@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 
-const DEFAULT_AVATAR = "https://i.imgur.com/vIbJZdx.jpeg";
+const DEFAULT_AVATAR = "https://i.imgur.com/YxEP0Zh.png";
 
 export async function POST(req: NextRequest) {
   const { name, email, password } = await req.json();

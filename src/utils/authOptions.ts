@@ -5,7 +5,7 @@ import { connectToDatabase, collectionName } from "@/libs/mongodb";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 
-const DEFAULT_AVATAR = "https://i.imgur.com/vIbJZdx.jpeg"; 
+const DEFAULT_AVATAR = "https://i.imgur.com/YxEP0Zh.png"; 
 
 interface AuthUser extends User {
   id: string;
