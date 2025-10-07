@@ -189,3 +189,15 @@
   box-sizing: border-box;
   animation: animloader 6s linear infinite;
 }
+@keyframes underlineExpand {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-\[underlineExpand_0\.8s\] {
+  animation: underlineExpand 0.8s forwards;
+}

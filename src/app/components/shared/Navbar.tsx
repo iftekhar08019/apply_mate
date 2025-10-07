@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const menus = [
     { label: "Home", path: "/" },
-    { label: "Job Details", path: "/jobs" },
+    { label: "Job Listings", path: "/jobs" },
     { label: "Resume Builder", path: "/resume" },
     { label: "About Us", path: "/about" },
   ];
@@ -60,15 +60,23 @@ const Navbar = () => {
 
           {/* Center Menu (Desktop) */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8 bg-white dark:bg-gray-900 px-6 xl:px-10 py-3 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800">
-            {menus.map((menu, idx) => (
-              <Link
-                key={idx}
-                href={menu.path}
-                className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap"
-              >
-                {menu.label}
-              </Link>
-            ))}
+            {menus.map((menu, idx) => {
+              const isActive = pathName === menu.path; 
+              return (
+                <Link
+                  key={idx}
+                  href={menu.path}
+                  className={"relative text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap"}
+                >
+                  {menu.label}
+
+                  {/* Custom underline */}
+                  {isActive && (
+                    <span className="absolute left-0 bottom-0 w-full h-1 rounded-full bg-blue-600 animate-[underlineExpand_0.8s]"></span>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right Side */}
@@ -249,5 +257,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
