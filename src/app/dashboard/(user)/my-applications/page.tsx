@@ -62,11 +62,11 @@ const MyApplicationPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [deletingUid, setDeletingUid] = useState<string | null>(null);
   //Delete Job Mutation
   const deleteMutation = useMutation({
     mutationFn: async (uid: string) => {
-      // await axiosSecure.delete(`/jobs?email=${email}&uid=${uid}`);
+      setDeletingUid(uid); // set current deleting id
       await axiosSecure.delete(`/jobs?email=${email}&uid=${uid}`);
     },
     onSuccess: () => {
@@ -75,6 +75,9 @@ const MyApplicationPage: React.FC = () => {
     },
     onError: () => {
       toast.error("Failed to delete job");
+    },
+    onSettled: () => {
+      setDeletingUid(null); // reset after done
     },
   });
 
@@ -228,10 +231,10 @@ const MyApplicationPage: React.FC = () => {
                     <Button
                       variant="destructive"
                       size="sm"
-                      disabled={deleteMutation.isPending}
+                      disabled={deletingUid === job.uid}
                       onClick={() => deleteMutation.mutate(job.uid)}
                     >
-                      {deleteMutation.isPending ? (
+                      {deletingUid === job.uid ? (
                         "Deleting..."
                       ) : (
                         <>
@@ -240,8 +243,6 @@ const MyApplicationPage: React.FC = () => {
                       )}
                     </Button>
                   </div>
-
-            
                 </CardContent>
               </Card>
             ))}
@@ -249,7 +250,6 @@ const MyApplicationPage: React.FC = () => {
         ) : null}
       </div>
 
-     
       {selectedJob && (
         <EditModal
           open={isModalOpen}

@@ -49,3 +49,31 @@ export async function POST(req: Request) {
   }
 }
 
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get("email");
+    const uid = searchParams.get("uid");
+
+    if (!email || !uid) {
+      return NextResponse.json({ message: "Email and uid required" }, { status: 400 });
+    }
+
+    const { db } = await connectToDatabase();
+
+    const result = await db.collection(collectionName.JOBS).updateOne(
+      { email },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { $pull: { jobs: { uid } } as any }
+    );
+
+    if (result.modifiedCount === 0) {
+      return NextResponse.json({ message: "Job not found or already deleted" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, message: "Job deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting job:", error);
+    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+  }
+}
