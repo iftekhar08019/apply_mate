@@ -8,12 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { List, Grid3x3, Search, Briefcase, Building2, MapPin, CalendarDays, ExternalLink } from "lucide-react";
+import { List, Grid3x3, Search, Briefcase, Building2, MapPin, CalendarDays, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import Loading from "./loading";
 import { GmailIntegration } from "./components/GmailIntegration";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { EditModal } from "./components/edit-modal";
+import axiosSecure from "@/hooks/useAxiosSecure";
 
 interface Job {
+  uid: string;
   title: string;
   company: string;
   location: string;
@@ -26,6 +30,7 @@ interface Job {
 const MyApplicationPage: React.FC = () => {
   const { data: session } = useSession();
   const email = session?.user?.email ?? undefined;
+  const queryClient = useQueryClient();
 
   // Fetch user-specific jobs
   const { data: jobs = [], isLoading } = useUserJobs(email);
@@ -33,6 +38,22 @@ const MyApplicationPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [jobTypeFilter, setJobTypeFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Delete Mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (uid: string) => {
+      await axiosSecure.delete(`/jobs?email=${email}&uid=${uid}`);
+    },
+    onSuccess: () => {
+      toast.success("Job deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["userJobs", email] });
+    },
+    onError: () => {
+      toast.error("Failed to delete job");
+    },
+  });
 
   // Not logged in
   if (!session) {
@@ -48,9 +69,7 @@ const MyApplicationPage: React.FC = () => {
 
   // Loading
   if (isLoading) {
-    return (
-      <Loading />
-    )
+    return <Loading />;
   }
 
   // Filtered jobs
@@ -133,93 +152,86 @@ const MyApplicationPage: React.FC = () => {
             No jobs found matching your criteria.
           </p>
         ) : viewMode === "grid" ? (
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredJobs.map((job : Job, index : number) => (
-        <Card
-          key={index}
-          className="group relative rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-        >
-          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredJobs.map((job: Job) => (
+              <Card
+                key={job.uid}
+                className="group relative rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                    <Briefcase className="w-5 h-5 text-blue-500" />
+                    {job.title}
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-2 text-muted-foreground">
+                    <Building2 className="w-4 h-4 text-gray-400" />
+                    {job.company}
+                  </CardDescription>
+                </CardHeader>
 
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-blue-500" />
-              {job.title}
-            </CardTitle>
-            <CardDescription className="flex items-center gap-2 text-muted-foreground">
-              <Building2 className="w-4 h-4 text-gray-400" />
-              {job.company}
-            </CardDescription>
-          </CardHeader>
+                <CardContent className="space-y-3 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-blue-500" />
+                    <span>{job.location}</span>
+                  </div>
 
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-blue-500" />
-              <span>{job.location}</span>
-            </div>
+                  <div className="flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-blue-500" />
+                    <span>Type: {job.type}</span>
+                  </div>
 
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-blue-500" />
-              <span>Type: {job.type}</span>
-            </div>
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4 text-blue-500" />
+                    <span>Posted: {new Date(job.date).toLocaleDateString()}</span>
+                  </div>
 
-            <div className="flex items-center gap-2">
-              <CalendarDays className="w-4 h-4 text-blue-500" />
-              <span>Posted: {new Date(job.date).toLocaleDateString()}</span>
-            </div>
+                  <div className="flex gap-2 mt-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedJob(job);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      <Pencil className="w-4 h-4 mr-1" /> Edit
+                    </Button>
 
-            <Button
-              asChild
-              size="sm"
-              className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.02]"
-            >
-              <a href={job.url} target="_blank" rel="noopener noreferrer">
-                View Job
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-        ) : (
-          <div className="overflow-x-auto rounded-lg border border-border shadow-sm">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50 text-left">
-                <tr>
-                  <th className="p-3 font-medium">Title</th>
-                  <th className="p-3 font-medium">Company</th>
-                  <th className="p-3 font-medium">Location</th>
-                  <th className="p-3 font-medium">Type</th>
-                  <th className="p-3 font-medium">Posted</th>
-                  <th className="p-3 font-medium">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredJobs.map((job: Job, index: number) => (
-                  <tr key={index} className="border-t hover:bg-muted/30 transition">
-                    <td className="p-3">{job.title}</td>
-                    <td className="p-3">{job.company}</td>
-                    <td className="p-3">{job.location}</td>
-                    <td className="p-3 capitalize">{job.type}</td>
-                    <td className="p-3">{new Date(job.date).toLocaleDateString()}</td>
-                    <td className="p-3">
-                      <a
-                        href={job.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        View
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => deleteMutation.mutate(job.uid)}
+                    >
+                      <Trash2 className="w-4 h-4 mr-1" /> Delete
+                    </Button>
+                  </div>
+
+                  <Button
+                    asChild
+                    size="sm"
+                    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.02]"
+                  >
+                    <a href={job.url} target="_blank" rel="noopener noreferrer">
+                      View Job
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        )}
+        ) : null}
       </div>
+
+      {/* Edit Modal */}
+      {selectedJob && (
+        <EditModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          job={selectedJob}
+          email={email!}
+        />
+      )}
     </TooltipProvider>
   );
 };

@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/libs/mongodb";
+import { collectionName, connectToDatabase } from "@/libs/mongodb";
 import { NextResponse } from "next/server";
 
 export async function PUT(req: Request) {
@@ -12,7 +12,7 @@ export async function PUT(req: Request) {
     }
 
     // Update specific job using positional $ operator
-    const result = await db.collection("your_collection_name").updateOne(
+    const result = await db.collection(collectionName.JOBS).updateOne(
       { email, "jobs.uid": uid },
       { $set: { "jobs.$": { ...updatedJob, uid } } }
     );

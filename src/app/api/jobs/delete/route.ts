@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/libs/mongodb";
+import { collectionName, connectToDatabase } from "@/libs/mongodb";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req: Request) {
@@ -12,7 +12,7 @@ export async function DELETE(req: Request) {
     }
 
     // Pull the job with matching uid from the jobs array
-    const result = await db.collection("your_collection_name").updateOne(
+    const result = await db.collection(collectionName.JOBS).updateOne(
       { email },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       { $pull: { jobs: { uid } } as any }

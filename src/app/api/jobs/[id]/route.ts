@@ -16,7 +16,7 @@ export async function PATCH(req: Request) {
 
     const result = await db.collection(collectionName.JOBS).updateOne(
       { email, "jobs.jobId": jobId },
-      { $set: { "jobs.$": updates } }
+{ $set: { "jobs.$": { ...updates, jobId } } }
     );
 
     if (result.modifiedCount === 0) {
@@ -45,7 +45,8 @@ export async function DELETE(req: Request) {
 
     const result = await db.collection(collectionName.JOBS).updateOne(
       { email },
-      { $pull: { jobs: { jobId } } }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { $pull: { jobs: { jobId } } as any }
     );
 
     if (result.modifiedCount === 0) {
