@@ -31,7 +31,7 @@ export default function DownloadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-12">
@@ -46,7 +46,7 @@ export default function DownloadPage() {
         {/* Download Section */}
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* Extension Info */}
-          <Card className="bg-white dark:bg-gray-800 shadow-lg">
+          <Card className="bg-white dark:bg-gray-800 shadow-lg  dark:text-white">
             <CardHeader>
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
@@ -81,7 +81,7 @@ export default function DownloadPage() {
           {/* Download Button */}
           <Card className="bg-white dark:bg-gray-800 shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2  dark:text-white">
                 <Download className="h-6 w-6" />
                 Download Extension
               </CardTitle>
@@ -118,7 +118,7 @@ export default function DownloadPage() {
         </div>
 
         {/* Installation Instructions */}
-        <Card className="bg-white dark:bg-gray-800 shadow-lg mb-8">
+        <Card className="bg-white dark:bg-gray-800 shadow-lg mb-8 dark:text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-6 w-6" />

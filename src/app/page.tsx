@@ -16,8 +16,6 @@ export default function Home() {
         <HowItWorks />
         <PromotionalSection />
         <DemoSection />
-        {/* <FAQSection /> */}
-        {/* <Testimonials /> */}
         <FAQSection />
         <Testimonials />
         <ContactUs/>

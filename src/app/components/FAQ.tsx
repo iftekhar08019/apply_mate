@@ -25,7 +25,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = React.useState<number | null>(null)
 
   return (
-    <section className="relative py-24 bg-gray-100 dark:bg-gray-900">
+    <section className="relative py-24 overflow-hidden">
       <div className="container mx-auto lg:px-4 px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Side - Accordion */}
         <div>
