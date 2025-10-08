@@ -44,7 +44,7 @@ export default function AllJobs() {
 
   // Fetch user-specific jobs
   const { data: jobs = [] } = useUserJobs(email);
-
+  console.log(jobs);
   const [searchTerm, setSearchTerm] = useState("");
   const [jobTypeFilter, setJobTypeFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");

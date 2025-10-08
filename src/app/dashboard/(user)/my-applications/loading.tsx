@@ -1,10 +1,10 @@
-// app/dashboard/(user)/my-applications/loading.tsx
-"use client";
 import React from "react";
 
-export default function Loading() {
+const Loading: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="spinner mb-8"></div>
+    <div className="min-h-screen flex flex-col items-center justify-center" suppressHydrationWarning>
       <span className="loader" aria-hidden="true"></span>
         <p className="text-lg font-medium text-muted-foreground">Loading your applications...</p>
       <style jsx global>{`
@@ -21,21 +21,9 @@ export default function Loading() {
           animation: shadowPulse 2s linear infinite;
         }
 
-        @keyframes shadowPulse {
-          33% {
-            background: #002fff;
-            box-shadow: -24px 0 #fff, 24px 0 #002fff;
-          }
-          66% {
-            background: #fff;
-            box-shadow: -24px 0 #002fff, 24px 0 #fff;
-          }
-          100% {
-            background: #002fff;
-            box-shadow: -24px 0 #002fff, 24px 0 #fff;
-          }
-        }
-      `}</style>
+      <div className="loader-text">ApplyMate</div>
     </div>
   );
-}
+};
+
+export default Loading;

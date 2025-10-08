@@ -35,7 +35,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions)
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${outfit.variable} antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
         <SessionProvider session={session}>
             <ThemeProvider
           attribute="class"

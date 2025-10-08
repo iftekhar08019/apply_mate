@@ -15,7 +15,6 @@ export function ModeToggle() {
   }, []);
 
   if (!mounted) {
-    // সার্ভার-রেন্ডার মিসম্যাচ এড়াতে কিছুই রেন্ডার করব না যতক্ষণ না ক্লায়েন্ট লোড হয়
     return (
       <Button variant="outline" size="icon" disabled>
         <Sun className="h-[1.2rem] w-[1.2rem]" />
@@ -34,7 +33,7 @@ export function ModeToggle() {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="relative overflow-hidden transition-all cursor-pointer"
+      className="relative overflow-hidden transition-all cursor-pointer rounded-full"
     >
       <AnimatePresence mode="wait" initial={false}>
         {currentTheme === "dark" ? (

@@ -24,8 +24,10 @@ export default function LoginForm() {
 
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // 👈 loading state
 
   const onSubmit = async (data: FormValues) => {
+    setLoading(true); // 👈 start loading
     const res = await signIn("credentials", {
       redirect: false,
       email: data.email,
@@ -34,33 +36,38 @@ export default function LoginForm() {
 
     if (res?.error) {
       toast.error("Invalid email or password");
+      setLoading(false);
     } else {
       toast.success("Welcome Back");
       router.push("/");
     }
   };
 
-  //  Google Login
-    const handleGoogleLogin = async () => {
-      const res = await signIn("google", { redirect: false });
-      if (res?.error) {
-        toast.error("Google login failed");
-      } else {
-        toast.success("Logged in with Google");
-        router.push("/");
-      }
-    };
-  
-    // GitHub Login
-    const handleGitHubLogin = async () => {
-      const res = await signIn("github", { redirect: false });
-      if (res?.error) {
-        toast.error("GitHub login failed");
-      } else {
-        toast.success("Logged in with GitHub");
-        router.push("/");
-      }
-    };
+  // Google Login
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    const res = await signIn("google", { redirect: false });
+    if (res?.error) {
+      toast.error("Google login failed");
+      setLoading(false);
+    } else {
+      toast.success("Logged in with Google");
+      router.push("/");
+    }
+  };
+
+  // GitHub Login
+  const handleGitHubLogin = async () => {
+    setLoading(true);
+    const res = await signIn("github", { redirect: false });
+    if (res?.error) {
+      toast.error("GitHub login failed");
+      setLoading(false);
+    } else {
+      toast.success("Logged in with GitHub");
+      router.push("/");
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -84,6 +91,7 @@ export default function LoginForm() {
                 ? "border-red-500 focus:ring-red-500"
                 : "focus:ring-blue-500"
             }`}
+            disabled={loading}
           />
         </div>
         {errors.email && (
@@ -105,10 +113,13 @@ export default function LoginForm() {
                 ? "border-red-500 focus:ring-red-500"
                 : "focus:ring-blue-500"
             }`}
+            disabled={loading}
           />
           <button
+            type="button"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
             onClick={() => setShowPassword(!showPassword)}
+            disabled={loading}
           >
             {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
           </button>
@@ -125,6 +136,7 @@ export default function LoginForm() {
             type="checkbox"
             {...register("remember")}
             className="accent-blue-600"
+            disabled={loading}
           />
           Remember me
         </label>
@@ -136,9 +148,12 @@ export default function LoginForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+        disabled={loading}
+        className={`w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6] ${
+          loading ? "opacity-70 cursor-not-allowed" : ""
+        }`}
       >
-        Login
+        {loading ? "Processing..." : "Login"}
       </button>
 
       {/* Or Divider */}
@@ -153,7 +168,8 @@ export default function LoginForm() {
         <button
           onClick={handleGoogleLogin}
           type="button"
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100  dark:hover:bg-gray-800 transition"
+          disabled={loading}
+          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-60"
         >
           <FcGoogle />
           Google
@@ -161,7 +177,8 @@ export default function LoginForm() {
         <button
           onClick={handleGitHubLogin}
           type="button"
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          disabled={loading}
+          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-60"
         >
           <FaGithub />
           GitHub

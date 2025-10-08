@@ -8,17 +8,22 @@ import {
   Settings,
   FileText,
   LogOut,
-  HelpCircle,
+  
   House,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export default function SidebarMenu({}) {
   const pathname = usePathname();
   const {data: session} = useSession();
   const userId = session?.user?.id;
+   const handleLogOutButton = () => {
+      signOut({ callbackUrl: "/" });
+      toast.success("LogOut successfully.!!");
+    };
 
   const menuItems = [
     { name: "Home", href: "/", icon: House },
@@ -58,18 +63,12 @@ export default function SidebarMenu({}) {
 
       {/* Bottom Actions */}
       <div className="border-t px-3 py-4 space-y-2 dark:border-gray-800">
-        <Button
-          variant="outline"
-          className="w-full flex items-center gap-2 dark:border-gray-700 dark:text-gray-200"
-        >
-          <HelpCircle className="h-4 w-4" />
-          Support
-        </Button>
+        
         <Button
           variant="destructive"
           className="w-full flex items-center gap-2"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut onClick={handleLogOutButton} className="h-4 w-4" />
           Logout
         </Button>
       </div>
