@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -26,7 +32,12 @@ interface EditModalProps {
   email: string;
 }
 
-export const EditModal: React.FC<EditModalProps> = ({ open, onOpenChange, job, email }) => {
+export const EditModal: React.FC<EditModalProps> = ({
+  open,
+  onOpenChange,
+  job,
+  email,
+}) => {
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
@@ -58,7 +69,9 @@ export const EditModal: React.FC<EditModalProps> = ({ open, onOpenChange, job, e
     },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -75,19 +88,67 @@ export const EditModal: React.FC<EditModalProps> = ({ open, onOpenChange, job, e
         </DialogHeader>
 
         <form onSubmit={handleUpdate} className="space-y-4">
-          <Input name="title" value={formData.title} onChange={handleChange} placeholder="Job Title" />
-          <Input name="company" value={formData.company} onChange={handleChange} placeholder="Company" />
-          <Input name="location" value={formData.location} onChange={handleChange} placeholder="Location" />
-          <Input name="type" value={formData.type} onChange={handleChange} placeholder="Type" />
-          <Input name="url" value={formData.url} onChange={handleChange} placeholder="Job URL" />
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Description"
-            className="w-full border rounded-md p-2"
-            rows={3}
-          />
+          <div>
+            <label className="block text-sm font-medium mb-1">Job Title</label>
+            <Input
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Enter job title"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Company</label>
+            <Input
+              name="company"
+              value={formData.company}
+              onChange={handleChange}
+              placeholder="Enter company name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Location</label>
+            <Input
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              placeholder="Enter job location"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Type</label>
+            <Input
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              placeholder="e.g. Remote, On-site, Hybrid"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Job URL</label>
+            <Input
+              name="url"
+              value={formData.url}
+              onChange={handleChange}
+              placeholder="Paste job link"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Write a short job description"
+              className="w-full border rounded-md p-2 text-sm"
+              rows={3}
+            />
+          </div>
 
           <DialogFooter className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, SquarePlus, Mail, BarChart } from "lucide-react";
+import {  SquarePlus, Mail, BarChart } from "lucide-react";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
 
@@ -69,7 +69,7 @@ export default function HowItWorks() {
           return (
             <motion.div
               key={step.id}  
-              className="relative flex items-center gap-4 rounded-lg border bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-5 shadow-sm transition-transform duration-200 hover:scale-[1.02] border-blue-600 border-l-8"
+              className="relative flex items-center gap-4 rounded-lg border bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/200 backdrop-blur-md p-5 shadow-sm transition-transform duration-200 hover:scale-[1.02] border-blue-600 border-l-8"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -86,12 +86,7 @@ export default function HowItWorks() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">{step.description}</p>
               </div>
 
-              {/* Arrow badge */}
-              {idx < STEPS.length - 1 && (
-                <div className="absolute -right-4 top-1/2 -translate-y-1/2 grid h-7 w-7 place-items-center border border-blue-600 rounded-md bg-white dark:bg-gray-700 shadow">
-                  <ArrowRight className="h-6 w-6 text-blue-400 rotate-90" />
-                </div>
-              )}
+             
             </motion.div>
           );
         })}
