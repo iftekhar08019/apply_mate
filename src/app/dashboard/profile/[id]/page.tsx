@@ -21,8 +21,19 @@ const getLoggedInUser = async (): Promise<User | null> => {
   }
 };
 
+// Fetch dashboard stats for application count
+const getDashboardStats = async () => {
+  try {
+    const res = await axiosSecure.get("/dashboard/stats");
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return { totalApplications: 0 };
+  }
+};
+
 export default function ProfilePage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
 
@@ -37,8 +48,17 @@ export default function ProfilePage() {
     enabled: status === "authenticated",
   });
 
+  const {
+    data: stats,
+  } = useQuery({
+    queryKey: ["dashboardStats"],
+    queryFn: getDashboardStats,
+    enabled: status === "authenticated",
+  });
+
   const handleProfileUpdate = () => {
     queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
+    queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
     setIsEditing(false);
   };
 
@@ -54,10 +74,10 @@ export default function ProfilePage() {
   return (
     <>
       <Toaster position="top-center" richColors />
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 p-4 sm:p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-6xl mx-auto">
           {isEditing ? (
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-800">
+            <div className="rounded-2xl shadow-xl p-6 sm:p-8">
               {/* Header */}
               <div className="mb-8">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -114,7 +134,11 @@ export default function ProfilePage() {
               </button>
             </div>
           ) : (
-            <ProfileView user={user} onEditClick={() => setIsEditing(true)} />
+            <ProfileView 
+              user={user} 
+              applicationCount={stats?.totalApplications || 0}
+              onEditClick={() => setIsEditing(true)} 
+            />
           )}
         </div>
       </div>

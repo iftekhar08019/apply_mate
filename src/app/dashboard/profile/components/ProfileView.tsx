@@ -7,17 +7,16 @@ import {
   User2, 
   Edit3, 
   Briefcase, 
-  Calendar,
-  MapPin,
-  Link as LinkIcon
+  Calendar
 } from "lucide-react";
 
 interface Props {
   user: User;
+  applicationCount: number;
   onEditClick: () => void;
 }
 
-export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
+export const ProfileView: React.FC<Props> = ({ user, applicationCount, onEditClick }) => {
   // Calculate account age
   const accountAge = user.createdAt 
     ? Math.floor((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24))
@@ -26,7 +25,7 @@ export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
   return (
     <div className="max-w-5xl mx-auto">
       {/* Main Card with Glass Effect */}
-      <div className="rounded-2xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+      <div className="rounded-2xl overflow-hidden">
         {/* Cover Image Section with Gradient Overlay */}
         <div className="relative h-64 sm:h-80">
           <Image
@@ -80,7 +79,7 @@ export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
                   <Briefcase size={20} className="text-blue-600 dark:text-blue-400" />
                   <div>
                     <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">Applications</p>
-                    <p className="text-lg font-bold text-blue-700 dark:text-blue-300">0</p>
+                    <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{applicationCount}</p>
                   </div>
                 </div>
               </div>
@@ -121,7 +120,7 @@ export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
             </div>
 
             {/* Bio Section */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+            <div>
               <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
                 About Me
               </h2>
@@ -132,40 +131,6 @@ export const ProfileView: React.FC<Props> = ({ user, onEditClick }) => {
                   </span>
                 )}
               </p>
-            </div>
-
-            {/* Additional Info Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Location Card */}
-              <div className="flex items-start gap-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-                <MapPin size={20} className="text-gray-400 dark:text-gray-500 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Location</p>
-                  <p className="text-gray-900 dark:text-white font-medium">
-                    {user.location || "Not specified"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Website Card */}
-              <div className="flex items-start gap-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-                <LinkIcon size={20} className="text-gray-400 dark:text-gray-500 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Website</p>
-                  {user.website ? (
-                    <a 
-                      href={user.website} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
-                    >
-                      {user.website}
-                    </a>
-                  ) : (
-                    <p className="text-gray-900 dark:text-white font-medium">Not specified</p>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
         </div>

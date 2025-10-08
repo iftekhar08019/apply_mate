@@ -14,7 +14,7 @@ export async function PATCH(request: NextRequest) {
   try {
     const userId = session?.user?.id;
     const userEmail = session?.user?.email;
-    const { name, bio, location, website, image } = await request.json();
+    const { name, bio, image } = await request.json();
     
     const { db } = await connectToDatabase();
     
@@ -28,9 +28,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Prepare update data (only include defined fields)
-    const updateData: any = { name, bio };
-    if (location !== undefined) updateData.location = location;
-    if (website !== undefined) updateData.website = website;
+    const updateData: Record<string, string> = { name, bio };
     if (image !== undefined) updateData.image = image;
 
     // Update the user document
@@ -55,7 +53,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Remove password from response
-    const { password, ...userWithoutPassword } = updatedUser as any;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = updatedUser as Record<string, unknown>;
 
     return NextResponse.json({
       message: "Profile updated successfully",
