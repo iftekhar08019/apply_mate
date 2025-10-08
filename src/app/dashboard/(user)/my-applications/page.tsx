@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useUserJobs } from "@/hooks/useUserJobs";
 import {
   Card,
@@ -30,13 +30,14 @@ import {
   CalendarDays,
   Pencil,
   Trash2,
+  Loader2,
 } from "lucide-react";
-import Loading from "./loading";
 import { GmailIntegration } from "./components/GmailIntegration";
 import { Toaster, toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditModal } from "./components/edit-modal";
 import axiosSecure from "@/hooks/useAxiosSecure";
+import Link from "next/link";
 
 interface Job {
   uid: string;
@@ -66,7 +67,7 @@ const MyApplicationPage: React.FC = () => {
   //Delete Job Mutation
   const deleteMutation = useMutation({
     mutationFn: async (uid: string) => {
-      setDeletingUid(uid); // set current deleting id
+      setDeletingUid(uid);
       await axiosSecure.delete(`/jobs?email=${email}&uid=${uid}`);
     },
     onSuccess: () => {
@@ -77,30 +78,40 @@ const MyApplicationPage: React.FC = () => {
       toast.error("Failed to delete job");
     },
     onSettled: () => {
-      setDeletingUid(null); // reset after done
+      setDeletingUid(null);
     },
   });
 
-  // ✅ If user not logged in
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-background to-muted/50 text-center">
         <h2 className="text-3xl font-semibold mb-4">
           Please sign in to view your job applications
         </h2>
-        <Button onClick={() => signIn("google")} className="px-6">
-          Sign in with Google
-        </Button>
+        <Link
+          href="/signup"
+          className=" border px-6 py-3 font-bold text-xl bg-blue-600 rounded-xl text-white"
+        >
+          SignUp
+        </Link>
       </div>
     );
   }
 
-  // ✅ Loading state
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-white dark:bg-gray-900">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading dashboard...
+          </p>
+        </div>
+      </div>
+    );
   }
 
-  // ✅ Filter Jobs
+  //  Filter Jobs
   const filteredJobs = jobs.filter((job: Job) => {
     const matchesSearch =
       job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -175,12 +186,14 @@ const MyApplicationPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Job Cards */}
+     
+        {/* Job Cards / Table View */}
         {filteredJobs.length === 0 ? (
           <p className="text-center text-muted-foreground mt-20 text-lg">
             No jobs found matching your criteria.
           </p>
         ) : viewMode === "grid" ? (
+          // GRID VIEW
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredJobs.map((job: Job) => (
               <Card
@@ -233,6 +246,7 @@ const MyApplicationPage: React.FC = () => {
                       size="sm"
                       disabled={deletingUid === job.uid}
                       onClick={() => deleteMutation.mutate(job.uid)}
+                      className="bg-red-700 text-white"
                     >
                       {deletingUid === job.uid ? (
                         "Deleting..."
@@ -247,7 +261,68 @@ const MyApplicationPage: React.FC = () => {
               </Card>
             ))}
           </div>
-        ) : null}
+        ) : (
+          // TABLE VIEW
+          <div className="overflow-x-auto rounded-lg border border-border bg-card shadow-sm">
+            <table className="min-w-full text-sm text-left">
+              <thead className="bg-muted/30 text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Title</th>
+                  <th className="px-4 py-3 font-medium">Company</th>
+                  <th className="px-4 py-3 font-medium">Location</th>
+                  <th className="px-4 py-3 font-medium">Type</th>
+                  <th className="px-4 py-3 font-medium">Date</th>
+                  <th className="px-4 py-3 font-medium text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredJobs.map((job: Job) => (
+                  <tr
+                    key={job.uid}
+                    className="border-t hover:bg-muted/10 transition-colors"
+                  >
+                    <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                      {job.title}
+                    </td>
+                    <td className="px-4 py-3">{job.company}</td>
+                    <td className="px-4 py-3">{job.location}</td>
+                    <td className="px-4 py-3 capitalize">{job.type}</td>
+                    <td className="px-4 py-3">
+                      {new Date(job.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3 flex flex-wrap gap-2 justify-center">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedJob(job);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        <Pencil className="w-4 h-4 mr-1" /> Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        disabled={deletingUid === job.uid}
+                        onClick={() => deleteMutation.mutate(job.uid)}
+                        className="bg-red-700 text-white"
+                      >
+                        {deletingUid === job.uid ? (
+                          "Deleting..."
+                        ) : (
+                          <>
+                            <Trash2 className="w-4 h-4 mr-1" /> Delete
+                          </>
+                        )}
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {selectedJob && (
