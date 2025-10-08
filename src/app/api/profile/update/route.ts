@@ -14,7 +14,7 @@ export async function PATCH(request: NextRequest) {
   try {
     const userId = session?.user?.id;
     const userEmail = session?.user?.email;
-    const { name, bio, image } = await request.json();
+    const { name, bio, location, website, image } = await request.json();
     
     const { db } = await connectToDatabase();
     
@@ -27,10 +27,16 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ message: "No user identifier found" }, { status: 400 });
     }
 
+    // Prepare update data (only include defined fields)
+    const updateData: any = { name, bio };
+    if (location !== undefined) updateData.location = location;
+    if (website !== undefined) updateData.website = website;
+    if (image !== undefined) updateData.image = image;
+
     // Update the user document
     const result = await db.collection(collectionName.USERS).findOneAndUpdate(
       filter,
-      { $set: { name, bio, image } },
+      { $set: updateData },
       { returnDocument: "after" }
     );
 

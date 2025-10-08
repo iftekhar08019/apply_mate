@@ -14,6 +14,8 @@ interface Props {
 export const EditProfileForm: React.FC<Props> = ({ user, onUpdateSuccess }) => {
   const [name, setName] = useState(user.name);
   const [bio, setBio] = useState(user.bio || "");
+  const [location, setLocation] = useState(user.location || "");
+  const [website, setWebsite] = useState(user.website || "");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -56,6 +58,8 @@ export const EditProfileForm: React.FC<Props> = ({ user, onUpdateSuccess }) => {
       await axiosSecure.patch("/profile/update", {
         name,
         bio,
+        location,
+        website,
         image: imageUrl,
       });
 
@@ -132,11 +136,40 @@ export const EditProfileForm: React.FC<Props> = ({ user, onUpdateSuccess }) => {
           onChange={(e) => setBio(e.target.value)}
           placeholder="Tell us about yourself..."
           rows={4}
+          maxLength={500}
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 resize-none"
         />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
           {bio.length}/500 characters
         </p>
+      </div>
+
+      {/* Location Input */}
+      <div>
+        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          Location
+        </label>
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="e.g., San Francisco, CA"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        />
+      </div>
+
+      {/* Website Input */}
+      <div>
+        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          Website
+        </label>
+        <input
+          type="url"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          placeholder="https://yourwebsite.com"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        />
       </div>
 
       {/* Submit Button */}
