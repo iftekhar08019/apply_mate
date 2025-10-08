@@ -237,7 +237,7 @@ export default function PromotionalSection() {
 
           {/* Clarity & Control */}
           <motion.div 
-            className="group relative bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-900/20 dark:to-green-800/20 rounded-3xl p-8 border border-emerald-200/50 dark:border-emerald-700/50 overflow-hidden"
+            className="group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-3xl p-8 border border-blue-200/50 dark:border-blue-700/50 overflow-hidden"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
@@ -245,12 +245,12 @@ export default function PromotionalSection() {
             whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3, ease: "easeOut" } }}
           >
             {/* Background decoration */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl"></div>
-            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-green-400/5 rounded-full blur-2xl"></div>
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-400/5 rounded-full blur-2xl"></div>
             
             <div className="relative z-10">
               <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
                   <BarChart3 className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Clarity & Control</h3>
@@ -261,15 +261,15 @@ export default function PromotionalSection() {
               
               <div className="space-y-3">
                 <div className="flex items-center gap-3 p-3 bg-white/50 dark:bg-white/5 rounded-xl">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Clear progress view</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white/50 dark:bg-white/5 rounded-xl">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Visual analytics</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white/50 dark:bg-white/5 rounded-xl">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Know where you stand</span>
                 </div>
               </div>
@@ -286,14 +286,14 @@ export default function PromotionalSection() {
           viewport={{ once: true }}
         >
           <motion.div 
-            className="bg-purple-50 dark:bg-purple-900/20 rounded-2xl p-6 max-w-2xl mx-auto"
+            className="bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-800/20 rounded-2xl p-6 max-w-2xl mx-auto border border-amber-200/50 dark:border-amber-700/50"
             initial={{ scale: 0.95 }}
             whileInView={{ scale: 1 }}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
             viewport={{ once: true }}
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
           >
-            <p className="text-lg text-purple-800 dark:text-purple-200 font-medium">
+            <p className="text-lg text-amber-800 dark:text-amber-200 font-medium ">
               <span className="font-bold">What You&apos;ll Love:</span> Stress-free tracking, smart reminders, clear insights.
             </p>
           </motion.div>
