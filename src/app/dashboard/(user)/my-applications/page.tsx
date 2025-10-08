@@ -3,12 +3,34 @@
 import React, { useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useUserJobs } from "@/hooks/useUserJobs";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { List, Grid3x3, Search, Briefcase, Building2, MapPin, CalendarDays, ExternalLink, Pencil, Trash2 } from "lucide-react";
+import {
+  List,
+  Grid3x3,
+  Search,
+  Briefcase,
+  Building2,
+  MapPin,
+  CalendarDays,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import Loading from "./loading";
 import { GmailIntegration } from "./components/GmailIntegration";
 import { Toaster, toast } from "sonner";
@@ -41,9 +63,10 @@ const MyApplicationPage: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Delete Mutation
+  //Delete Job Mutation
   const deleteMutation = useMutation({
     mutationFn: async (uid: string) => {
+      // await axiosSecure.delete(`/jobs?email=${email}&uid=${uid}`);
       await axiosSecure.delete(`/jobs?email=${email}&uid=${uid}`);
     },
     onSuccess: () => {
@@ -55,11 +78,13 @@ const MyApplicationPage: React.FC = () => {
     },
   });
 
-  // Not logged in
+  // ✅ If user not logged in
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-background to-muted/50 text-center">
-        <h2 className="text-3xl font-semibold mb-4">Please sign in to view your job applications</h2>
+        <h2 className="text-3xl font-semibold mb-4">
+          Please sign in to view your job applications
+        </h2>
         <Button onClick={() => signIn("google")} className="px-6">
           Sign in with Google
         </Button>
@@ -67,12 +92,12 @@ const MyApplicationPage: React.FC = () => {
     );
   }
 
-  // Loading
+  // ✅ Loading state
   if (isLoading) {
     return <Loading />;
   }
 
-  // Filtered jobs
+  // ✅ Filter Jobs
   const filteredJobs = jobs.filter((job: Job) => {
     const matchesSearch =
       job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -93,11 +118,12 @@ const MyApplicationPage: React.FC = () => {
           </div>
           <h1 className="text-4xl font-bold mt-3">Track Your Job Journey</h1>
           <p className="text-muted-foreground text-lg mt-1 max-w-2xl mx-auto">
-            Stay on top of all the jobs you&apos;ve applied for and easily track your progress.
+            Stay on top of all the jobs you&apos;ve applied for and easily track
+            your progress.
           </p>
         </div>
 
-        {/* Gmail Integration Section */}
+        {/* Gmail Integration */}
         <div className="mb-8 max-w-4xl mx-auto">
           <GmailIntegration userEmail={email} />
         </div>
@@ -146,7 +172,7 @@ const MyApplicationPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Job Data Display */}
+        {/* Job Cards */}
         {filteredJobs.length === 0 ? (
           <p className="text-center text-muted-foreground mt-20 text-lg">
             No jobs found matching your criteria.
@@ -182,7 +208,9 @@ const MyApplicationPage: React.FC = () => {
 
                   <div className="flex items-center gap-2">
                     <CalendarDays className="w-4 h-4 text-blue-500" />
-                    <span>Posted: {new Date(job.date).toLocaleDateString()}</span>
+                    <span>
+                      Posted: {new Date(job.date).toLocaleDateString()}
+                    </span>
                   </div>
 
                   <div className="flex gap-2 mt-3">
@@ -200,22 +228,20 @@ const MyApplicationPage: React.FC = () => {
                     <Button
                       variant="destructive"
                       size="sm"
+                      disabled={deleteMutation.isPending}
                       onClick={() => deleteMutation.mutate(job.uid)}
                     >
-                      <Trash2 className="w-4 h-4 mr-1" /> Delete
+                      {deleteMutation.isPending ? (
+                        "Deleting..."
+                      ) : (
+                        <>
+                          <Trash2 className="w-4 h-4 mr-1" /> Delete
+                        </>
+                      )}
                     </Button>
                   </div>
 
-                  <Button
-                    asChild
-                    size="sm"
-                    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.02]"
-                  >
-                    <a href={job.url} target="_blank" rel="noopener noreferrer">
-                      View Job
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
-                  </Button>
+            
                 </CardContent>
               </Card>
             ))}
@@ -223,7 +249,7 @@ const MyApplicationPage: React.FC = () => {
         ) : null}
       </div>
 
-      {/* Edit Modal */}
+     
       {selectedJob && (
         <EditModal
           open={isModalOpen}

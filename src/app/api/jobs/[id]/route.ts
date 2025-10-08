@@ -30,23 +30,23 @@ export async function PATCH(req: Request) {
   }
 }
 
-
-// Delete a specific job
 export async function DELETE(req: Request) {
   try {
-    const body = await req.json();
-    const { email, jobId } = body;
+    const { db } = await connectToDatabase();
+
+    // URL theke jobId niye asho
+    const url = new URL(req.url);
+    const jobId = url.pathname.split("/").pop(); // last part = jobId
+    const email = url.searchParams.get("email"); // query param
 
     if (!email || !jobId) {
       return NextResponse.json({ message: "Email and jobId required" }, { status: 400 });
     }
 
-    const { db } = await connectToDatabase();
-
     const result = await db.collection(collectionName.JOBS).updateOne(
       { email },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      { $pull: { jobs: { jobId } } as any }
+      { $pull: { jobs: { jobId } } as any } // remove job from jobs array
     );
 
     if (result.modifiedCount === 0) {

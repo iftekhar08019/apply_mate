@@ -8,16 +8,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axiosSecure from "@/hooks/useAxiosSecure";
 
+interface Job {
+  uid: string;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  description: string;
+  url: string;
+  date: string;
+}
+
 interface EditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  job: any;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  job: Job;
   email: string;
 }
 
-export const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, job, email }) => {
+export const EditModal: React.FC<EditModalProps> = ({ open, onOpenChange, job, email }) => {
   const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     title: job?.title || "",
     company: job?.company || "",
@@ -27,6 +38,7 @@ export const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, job, emai
     url: job?.url || "",
   });
 
+  // Update Mutation
   const updateMutation = useMutation({
     mutationFn: async () => {
       const { data } = await axiosSecure.put("/jobs/update", {
@@ -38,8 +50,8 @@ export const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, job, emai
     },
     onSuccess: () => {
       toast.success("Job updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["userJobs"] });
-      onClose();
+      queryClient.invalidateQueries({ queryKey: ["userJobs", email] });
+      onOpenChange(false);
     },
     onError: () => {
       toast.error("Failed to update job");
@@ -56,7 +68,7 @@ export const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, job, emai
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Edit Job</DialogTitle>
@@ -77,8 +89,8 @@ export const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, job, emai
             rows={3}
           />
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
             <Button type="submit" disabled={updateMutation.isPending}>
