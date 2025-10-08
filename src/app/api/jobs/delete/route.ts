@@ -14,7 +14,8 @@ export async function DELETE(req: Request) {
     // Pull the job with matching uid from the jobs array
     const result = await db.collection("your_collection_name").updateOne(
       { email },
-      { $pull: { jobs: { uid } } }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { $pull: { jobs: { uid } } as any }
     );
 
     if (result.modifiedCount === 0) {
