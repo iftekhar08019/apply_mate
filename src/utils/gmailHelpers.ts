@@ -22,14 +22,14 @@ export function createOAuth2Client(tokens: GmailTokens) {
 
 export async function fetchRecentEmails(
   oauth2Client: ReturnType<typeof createOAuth2Client>,
-  maxResults: number = 50
+  maxResults: number = 10
 ) {
   const gmail = google.gmail({ version: "v1", auth: oauth2Client });
 
   const response = await gmail.users.messages.list({
     userId: "me",
     maxResults,
-    q: "newer_than:7d", // Last 7 days
+    q: "newer_than:1d", // Last 24 hours (1 day)
   });
 
   const messages = response.data.messages || [];
@@ -412,6 +412,7 @@ export function mergeJobApplications(
 
 /**
  * Update existing job status if a newer email is found
+ * Priority: Status priority > Date (always prefer higher status regardless of date)
  */
 export function shouldUpdateJobStatus(
   existingJob: { status: string; date: string },
@@ -422,31 +423,38 @@ export function shouldUpdateJobStatus(
     new: newEmail
   });
   
-  const existingDate = new Date(existingJob.date);
-  const newDate = new Date(newEmail.date);
+  const existingPriority = STATUS_PRIORITY[existingJob.status as keyof typeof STATUS_PRIORITY] || 0;
+  const newPriority = STATUS_PRIORITY[newEmail.status as keyof typeof STATUS_PRIORITY] || 0;
 
-  // If new email is more recent, update
-  if (newDate > existingDate) {
-    console.log(`✅ [UPDATE CHECK] Yes - newer date (${newEmail.date} > ${existingJob.date})`);
+  console.log(`🔍 [UPDATE CHECK] Priority comparison:`, {
+    existingStatus: existingJob.status,
+    existingPriority,
+    newStatus: newEmail.status,
+    newPriority
+  });
+
+  // PRIORITY FIRST: If new status has higher priority, always update (regardless of date)
+  if (newPriority > existingPriority) {
+    console.log(`✅ [UPDATE CHECK] Yes - higher priority status (${newEmail.status} > ${existingJob.status})`);
     return true;
   }
 
-  // If same date, check status priority
-  if (newDate.getTime() === existingDate.getTime()) {
-    const existingPriority = STATUS_PRIORITY[existingJob.status as keyof typeof STATUS_PRIORITY] || 0;
-    const newPriority = STATUS_PRIORITY[newEmail.status as keyof typeof STATUS_PRIORITY] || 0;
-    const shouldUpdate = newPriority > existingPriority;
+  // If same priority, check date
+  if (newPriority === existingPriority) {
+    const existingDate = new Date(existingJob.date);
+    const newDate = new Date(newEmail.date);
+
+    if (newDate > existingDate) {
+      console.log(`✅ [UPDATE CHECK] Yes - same priority but newer date (${newEmail.date} > ${existingJob.date})`);
+      return true;
+    }
     
-    console.log(`🔍 [UPDATE CHECK] Same date - priority check:`, {
-      existingPriority,
-      newPriority,
-      shouldUpdate
-    });
-    
-    return shouldUpdate;
+    console.log(`❌ [UPDATE CHECK] No - same priority but older or same date`);
+    return false;
   }
 
-  console.log(`❌ [UPDATE CHECK] No - existing is newer or same priority`);
+  // New status has lower priority - don't downgrade
+  console.log(`❌ [UPDATE CHECK] No - lower priority status (${newEmail.status} < ${existingJob.status})`);
   return false;
 }
 

@@ -44,9 +44,9 @@ export async function POST() {
     // Create OAuth2 client
     const oauth2Client = createOAuth2Client(user.gmailTokens as GmailTokens);
 
-    // Fetch recent emails
-    console.log("🟢 [API] Fetching emails from Gmail...");
-    const emails = await fetchRecentEmails(oauth2Client, 50);
+    // Fetch recent emails (last 24 hours, max 10 emails)
+    console.log("🟢 [API] Fetching emails from Gmail (last 24 hours, max 10)...");
+    const emails = await fetchRecentEmails(oauth2Client, 10);
     console.log(`🟢 [API] Fetched ${emails.length} emails from Gmail`);
 
     interface ApplicationUpdate {
