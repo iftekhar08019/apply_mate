@@ -25,14 +25,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "No file provided" }, { status: 400 });
     }
 
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ message: "File size must be less than 5MB" }, { status: 400 });
+    }
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json({ message: "File must be an image" }, { status: 400 });
+    }
+
     // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Upload to Cloudinary
+    // Upload to Cloudinary with optimizations
     const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        { resource_type: "image" },
+        { 
+          resource_type: "image",
+          folder: "apply_mate/avatars",
+          transformation: [
+            { width: 400, height: 400, crop: "fill", gravity: "face" },
+            { quality: "auto" },
+            { fetch_format: "auto" }
+          ]
+        },
         (error, result) => {
           if (error) return reject(error);
           resolve(result as { secure_url: string });
@@ -42,12 +60,13 @@ export async function POST(request: NextRequest) {
 
     const { secure_url } = uploadResult;
 
-    // Update user's avatar in MongoDB
-    const { db } = await connectToDatabase();
-    await db.collection(collectionName.USERS).updateOne(
-      { _id: new ObjectId(session.user.id) },
-      { $set: { image: secure_url } }
-    );
+    // Update user's avatar in MongoDB (NOT updating here, just in the profile update)
+    // This way the EditProfileForm can handle the final update
+    // const { db } = await connectToDatabase();
+    // await db.collection(collectionName.USERS).updateOne(
+    //   { _id: new ObjectId(session.user.id) },
+    //   { $set: { image: secure_url } }
+    // );
 
     return NextResponse.json({
       message: "Avatar uploaded successfully",
@@ -56,6 +75,9 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error("Error uploading avatar:", error);
-    return NextResponse.json({ message: "Failed to upload avatar" }, { status: 500 });
+    return NextResponse.json({ 
+      message: "Failed to upload avatar",
+      error: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 });
   }
 }

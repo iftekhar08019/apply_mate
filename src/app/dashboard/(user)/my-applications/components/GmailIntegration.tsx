@@ -110,12 +110,24 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
 
   const handleGmailSync = async () => {
     try {
+      console.log("🔵 [SYNC START] Gmail sync button clicked");
       setSyncing(true);
       toast.info("Syncing emails...");
 
+      console.log("🔵 [SYNC] Sending POST request to /gmail/sync");
       const response = await axiosSecure.post("/gmail/sync");
+      
+      console.log("🔵 [SYNC RESPONSE] Received response:", response.data);
 
       if (response.data.success) {
+        console.log("✅ [SYNC SUCCESS]", {
+          emailsProcessed: response.data.emailsProcessed,
+          updatesFound: response.data.updatesFound,
+          jobsAfterMerge: response.data.jobsAfterMerge,
+          applicationsUpdated: response.data.applicationsUpdated,
+          updates: response.data.updates
+        });
+        
         toast.success(
           `Sync completed! ${response.data.applicationsUpdated} application(s) updated from ${response.data.emailsProcessed} emails.`
         );
@@ -127,7 +139,7 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
         }, 2000);
       }
     } catch (error) {
-      console.error("Error syncing Gmail:", error);
+      console.error("❌ [SYNC ERROR]", error);
       const errorMessage =
         error instanceof Error && "response" in error
           ? (error as { response?: { data?: { error?: string } } }).response?.data
@@ -136,6 +148,7 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
       toast.error(errorMessage);
     } finally {
       setSyncing(false);
+      console.log("🔵 [SYNC END] Gmail sync completed");
     }
   };
 

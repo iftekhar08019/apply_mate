@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Loading() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center" suppressHydrationWarning>
       <span className="loader" aria-hidden="true"></span>
         <p className="text-lg font-medium text-muted-foreground">Loading your applications...</p>
       <style jsx global>{`

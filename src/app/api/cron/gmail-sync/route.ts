@@ -5,6 +5,9 @@ import {
   fetchRecentEmails,
   analyzeEmailWithAI,
   GmailTokens,
+  isSameJob,
+  shouldUpdateJobStatus,
+  mergeJobApplications,
 } from "@/utils/gmailHelpers";
 
 // This endpoint can be called by Vercel Cron or an external cron service
@@ -33,104 +36,92 @@ export async function GET(request: NextRequest) {
         // Create OAuth2 client
         const oauth2Client = createOAuth2Client(user.gmailTokens as GmailTokens);
 
-        // Fetch recent emails
-        const emails = await fetchRecentEmails(oauth2Client, 50);
+        // Fetch recent emails (last 24 hours, max 10)
+        const emails = await fetchRecentEmails(oauth2Client, 10);
 
         let updatesCount = 0;
 
+        // First, analyze all emails and collect matches
+        const analyzedEmails: Array<{
+          company: string;
+          position: string;
+          status: "Applied" | "Interview" | "Offer" | "Rejected";
+          date: string;
+        }> = [];
+
         // Analyze each email with AI
         for (const email of emails) {
-          const emailData = {
-            id: email.id || undefined,
-            subject: email.subject,
-            from: email.from,
-            date: email.date,
-            body: email.body,
-          };
-          const analysis = await analyzeEmailWithAI(emailData);
+          try {
+            const emailData = {
+              id: email.id || undefined,
+              subject: email.subject,
+              from: email.from,
+              date: email.date,
+              body: email.body,
+            };
+            const analysis = await analyzeEmailWithAI(emailData);
 
-          if (analysis && analysis.confidence > 60) {
-            // Find user's jobs document
-            const userJobs = await db
-              .collection(collectionName.JOBS)
-              .findOne({ email: user.email });
+            if (analysis) {
+              analyzedEmails.push({
+                ...analysis,
+                date: email.date,
+              });
+            }
+          } catch (error) {
+            console.error(`Error analyzing email for ${user.email}:`, error);
+            continue;
+          }
+        }
 
-            if (userJobs && userJobs.jobs) {
-              // Find matching job in the jobs array
-              const matchingJobIndex = userJobs.jobs.findIndex(
-                (job: { title: string; company: string }) =>
-                  job.company.toLowerCase().includes(analysis.company.toLowerCase()) ||
-                  analysis.company.toLowerCase().includes(job.company.toLowerCase()) ||
-                  job.title.toLowerCase().includes(analysis.position.toLowerCase()) ||
-                  analysis.position.toLowerCase().includes(job.title.toLowerCase())
+        // Merge duplicate emails - keep only the latest status for each job
+        const mergedApplications = mergeJobApplications(analyzedEmails);
+
+        // Process merged applications (only update existing jobs)
+        for (const application of mergedApplications) {
+          const userJobs = await db
+            .collection(collectionName.JOBS)
+            .findOne({ email: user.email });
+
+          if (userJobs && userJobs.jobs) {
+            // Find matching job using fuzzy matching
+            const matchingJobIndex = userJobs.jobs.findIndex(
+              (job: { title: string; company: string }) =>
+                isSameJob(
+                  { company: job.company, position: job.title },
+                  { company: application.company, position: application.position }
+                )
+            );
+
+            if (matchingJobIndex !== -1) {
+              // Job found - check if we should update
+              const existingJob = userJobs.jobs[matchingJobIndex];
+              const shouldUpdate = shouldUpdateJobStatus(
+                {
+                  status: existingJob.status || "Applied",
+                  date: existingJob.lastEmailDate || existingJob.date || new Date().toISOString(),
+                },
+                {
+                  status: application.status,
+                  date: application.date,
+                }
               );
 
-              if (matchingJobIndex !== -1) {
-                // Job found - update its status
+              if (shouldUpdate) {
                 await db.collection(collectionName.JOBS).updateOne(
                   { email: user.email },
                   {
                     $set: {
-                      [`jobs.${matchingJobIndex}.status`]: analysis.status,
+                      [`jobs.${matchingJobIndex}.status`]: application.status,
                       [`jobs.${matchingJobIndex}.aiUpdated`]: true,
-                      [`jobs.${matchingJobIndex}.aiReasoning`]: analysis.reasoning,
+                      [`jobs.${matchingJobIndex}.lastEmailDate`]: application.date,
                       updatedAt: new Date(),
                     },
                   }
                 );
                 updatesCount++;
-              } else {
-                // Job not found - add new job to array
-                const newJob = {
-                  title: analysis.position,
-                  company: analysis.company,
-                  location: "Not specified",
-                  type: "unknown",
-                  description: "",
-                  status: analysis.status,
-                  url: "",
-                  date: new Date().toISOString().split("T")[0],
-                  source: "gmail-auto",
-                  aiCreated: true,
-                  aiReasoning: analysis.reasoning,
-                };
-
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await (db.collection(collectionName.JOBS) as any).updateOne(
-                  { email: user.email },
-                  {
-                    $push: { jobs: newJob },
-                    $set: { updatedAt: new Date() },
-                  }
-                );
-                updatesCount++;
               }
-            } else {
-              // User doesn't have jobs document yet - create one
-              const newUserJobs = {
-                email: user.email,
-                jobs: [
-                  {
-                    title: analysis.position,
-                    company: analysis.company,
-                    location: "Not specified",
-                    type: "unknown",
-                    description: "",
-                    status: analysis.status,
-                    url: "",
-                    date: new Date().toISOString().split("T")[0],
-                    source: "gmail-auto",
-                    aiCreated: true,
-                    aiReasoning: analysis.reasoning,
-                  },
-                ],
-                createdAt: new Date(),
-                updatedAt: new Date(),
-              };
-
-              await db.collection(collectionName.JOBS).insertOne(newUserJobs);
-              updatesCount++;
             }
+            // If no match, skip (only update existing jobs)
           }
         }
 
