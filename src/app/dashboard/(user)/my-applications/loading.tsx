@@ -1,4 +1,4 @@
-// app/dashboard/(user)/my-applications/loading.tsx
+
 "use client";
 import React from "react";
 
