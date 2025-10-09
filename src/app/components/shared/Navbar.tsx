@@ -17,6 +17,8 @@ import { ModeToggle } from "../mode-toggle";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { Home, Briefcase, FileText, Download, Info } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,13 +32,14 @@ const Navbar = () => {
   const { data: session } = useSession();
   const pathName = usePathname();
 
-  // Show "My Jobs" only when user is logged in
   const menus = [
-    { label: "Home", path: "/" },
-    ...(session?.user ? [{ label: "My Jobs", path: "/jobs" }] : []),
-    { label: "Resume Builder", path: "/resume" },
-    { label: "Download Extension", path: "/download" },
-    { label: "About Us", path: "/about" },
+    { label: "Home", path: "/", icon: Home },
+    ...(session?.user
+      ? [{ label: "My Jobs", path: "/jobs", icon: Briefcase }]
+      : []),
+    { label: "Resume Builder", path: "/resume", icon: FileText },
+    { label: "Download Extension", path: "/download", icon: Download },
+    { label: "About Us", path: "/about", icon: Info },
   ];
 
   const handleLogOutButton = () => {
@@ -68,13 +71,16 @@ const Navbar = () => {
         <section className="hidden lg:flex items-center gap-6 xl:gap-8 bg-white dark:bg-gray-900 px-6 xl:px-10 py-3 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800">
           {menus.map((menu, idx) => {
             const isActive = pathName === menu.path;
+            const Icon = menu.icon;
             return (
               <Link
                 key={idx}
                 href={menu.path}
-                className="relative text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap"
+                className="relative text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap flex items-center gap-1"
               >
+                <Icon size={18} />
                 {menu.label}
+
                 {isActive && (
                   <span className="absolute left-0 -bottom-1 w-full h-1 rounded-full bg-blue-600 animate-[underlineExpand_0.8s]" />
                 )}
