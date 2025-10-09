@@ -3,428 +3,337 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Users, Zap, Brain, Shield, Rocket, Target, TrendingUp, CheckCircle2, ArrowRight, Globe, Lock, BarChart3 } from "lucide-react";
-import Link from "next/link";
+import { CheckCircle2, Linkedin, Github, Globe } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+
+// ✅ Import team images
+import rimiImg from "../../../public/Team-assets/rimi.png";
+import MohammadImg from "../../../public/Team-assets/Mohammad.png";
+import joyImg from "../../../public/Team-assets/joy.png";
 
 export default function AboutPage() {
-  const stats = [
-    { label: "Active Users", value: "10K+", icon: <Users className="h-8 w-8" /> },
-    { label: "Applications Tracked", value: "150K+", icon: <BarChart3 className="h-8 w-8" /> },
-    { label: "Success Rate", value: "87%", icon: <TrendingUp className="h-8 w-8" /> },
-  ];
-
-  const coreValues = [
+  const teamMembers = [
     {
-      title: "Simplicity First",
-      description: "We believe job hunting should be straightforward, not overwhelming. Our interface is designed for clarity and ease of use.",
-      icon: <Target className="h-8 w-8" />,
+      name: "Sanjida Rimi",
+      role: "Frontend Developer",
+      description:
+        "Designs elegant interfaces and handles UI components for a smooth and polished experience.",
+      img: rimiImg,
+      links: [
+        { icon: Github, href: "https://github.com/sanjidaRimi023", label: "GitHub" },
+        { icon: Linkedin, href: "https://www.linkedin.com/in/sanjida-akter-rimi711909/", label: "LinkedIn" },
+        { icon: Globe, href: "https://sanjidarimi.vercel.app/", label: "Portfolio" },
+      ],
     },
     {
-      title: "Data Security",
-      description: "Your job search data is sensitive. We implement industry-standard encryption and never share your information.",
-      icon: <Lock className="h-8 w-8" />,
+      name: "Md Iftekharul Alam",
+      role: "Chrome Extension Developer",
+      description:
+        "Develops and maintains the Chrome Extension to extract job details seamlessly from LinkedIn and Indeed.",
+      img: joyImg,
+      links: [
+        { icon: Github, href: "https://github.com/iftekhar08019", label: "GitHub" },
+        { icon: Linkedin, href: "https://www.linkedin.com/in/mdiftekharulalam21/", label: "LinkedIn" },
+        { icon: Globe, href: "https://iftekhar-web.web.app/", label: "Portfolio" },
+      ],
     },
     {
-      title: "Continuous Innovation",
-      description: "We constantly evolve based on user feedback, adding features that genuinely improve your job search experience.",
-      icon: <Rocket className="h-8 w-8" />,
+      name: "Mafikul Islam",
+      role: "Empty",
+      description: "No description",
+      img: "",
+      links: [
+        { icon: Github, href: "https://github.com", label: "GitHub" },
+        { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+        { icon: Globe, href: "https://portfolio.com", label: "Portfolio" },
+      ],
     },
     {
-      title: "User-Centric Design",
-      description: "Every feature is built with job seekers in mind, ensuring efficiency and reducing application management stress.",
-      icon: <Users className="h-8 w-8" />,
-    },
-  ];
-
-  const teamRoles = [
-    {
-      title: "Frontend Architecture",
-      description: "Designing and implementing responsive, accessible interfaces with Next.js, TypeScript, and modern UI frameworks for seamless user experiences.",
-      icon: <Zap className="h-6 w-6" />,
-      color: "blue",
-    },
-    {
-      title: "Backend Engineering",
-      description: "Building scalable API infrastructure, optimizing database queries, and ensuring robust data management with MongoDB and serverless architecture.",
-      icon: <Brain className="h-6 w-6" />,
-      color: "purple",
-    },
-    {
-      title: "Extension Development",
-      description: "Creating powerful browser extensions that integrate seamlessly with job platforms, enabling one-click data capture and synchronization.",
-      icon: <Globe className="h-6 w-6" />,
-      color: "green",
-    },
-    {
-      title: "Integration Specialist",
-      description: "Implementing third-party API integrations, automation workflows, and ensuring smooth deployment pipelines for continuous delivery.",
-      icon: <Shield className="h-6 w-6" />,
-      color: "orange",
+      name: "Mohammad",
+      role: "Frontend Developer",
+      description:
+        "Focused on building responsive and interactive UIs with Next.js, TypeScript, and Tailwind CSS.",
+      img: MohammadImg,
+      links: [
+        { icon: Github, href: "https://github.com/Mohammad7558/", label: "GitHub" },
+        { icon: Linkedin, href: "https://www.linkedin.com/in/mohammod-bin-amin-b051a0244/", label: "LinkedIn" },
+        { icon: Globe, href: "https://iam-mohammad.vercel.app/", label: "Portfolio" },
+      ],
     },
   ];
 
-  const milestones = [
+  const features = [
     {
-      year: "Q1 2024",
-      title: "Project Inception",
-      description: "Identified the problem space and began architecting the solution with initial prototype development.",
+      title: "Smart Tracking",
+      description: "Automatically captures job applications from your emails and browsing",
     },
     {
-      year: "Q2 2024",
-      title: "Beta Launch",
-      description: "Released MVP to early adopters, gathering critical feedback and refining core functionality.",
+      title: "Progress Analytics",
+      description: "Visualize your application success rates and identify patterns",
     },
     {
-      year: "Q3 2024",
-      title: "Chrome Extension",
-      description: "Launched browser extension, enabling seamless job data extraction from major job platforms.",
+      title: "Follow-up Reminders",
+      description: "Never miss an interview or follow-up deadline again",
     },
     {
-      year: "Q4 2024",
-      title: "AI Integration",
-      description: "Implemented AI-powered status prediction and automated email parsing for intelligent tracking.",
+      title: "Multi-platform Sync",
+      description: "Works across LinkedIn, Indeed, and direct company applications",
     },
-  ];
-
-  const techStack = [
-    { name: "Next.js 14", category: "Framework", color: "blue" },
-    { name: "TypeScript", category: "Language", color: "blue" },
-    { name: "Tailwind CSS", category: "Styling", color: "cyan" },
-    { name: "shadcn/ui", category: "Components", color: "slate" },
-    { name: "MongoDB", category: "Database", color: "green" },
-    { name: "Chrome API", category: "Extension", color: "yellow" },
-    { name: "Gmail API", category: "Integration", color: "red" },
-    { name: "Vercel", category: "Infrastructure", color: "black" },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden dark:bg-gray-800 bg-blue-600 text-white py-20 sm:py-28">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
+      {/* ---------- Hero Section ---------- */}
+      <section className="w-full mx-auto bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-gray-800 dark:to-gray-800 py-20 sm:py-28 lg:py-32 overflow-hidden relative">
+        <div className="absolute inset-0 bg-grid-white/[0.05]" />
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-center space-y-8"
+            transition={{ duration: 0.6 }}
+            className="space-y-6 max-w-4xl mx-auto"
           >
-            <Badge variant="outline" className="border-white/30 bg-white/10 text-white backdrop-blur-sm px-4 py-1.5">
+            <Badge
+              variant="outline"
+              className="border-white/30 bg-gray-200 text-black px-4 py-1.5 backdrop-blur-sm hover:bg-white/20 transition-colors"
+            >
               About Application Tracker
             </Badge>
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
-              Your Job Search,<br />
-              <span className="text-white">Simplified & Organized</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight">
+              Revolutionize Your Job Search
             </h1>
-            <p className="text-xl sm:text-2xl text-white max-w-3xl mx-auto leading-relaxed">
-              A comprehensive platform built by developers who understand the chaos of job hunting. Were transforming how professionals track and manage their career opportunities.
+            <p className="text-lg sm:text-xl lg:text-2xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl">
+              Built by developers who understand the chaos of job hunting. Track,
+              analyze, and optimize your applications in one powerful platform.
             </p>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto pt-8">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1 + 0.3 }}
-                  className="text-center bg-white dark:bg-transparent dark:text-white text-black backdrop-blur-md rounded-xl p-6 border border-white/20 w-full"
-                >
-                  <div className="flex justify-center mb-4 text-blue-600">{stat.icon}</div>
-                  <div className="text-3xl font-bold">{stat.value}</div>
-                  <div className="text-black mt-2 dark:text-white">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl space-y-20 py-20">
-        {/* Mission Statement */}
-        <motion.section
+      {/* ---------- Story / Mission ---------- */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-0 py-16 lg:py-20">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid md:grid-cols-2 gap-12 items-center w-full"
+          transition={{ duration: 0.6 }}
+          className="grid lg:grid-cols-2 gap-12 items-center"
         >
-          <div className="space-y-6 w-full">
-            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0">
+          <div className="space-y-6 mr-10">
+            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0 px-4 py-1.5">
               Our Mission
             </Badge>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Empowering Job Seekers Through Technology
+            <h2 className="text-3xl sm:text-4xl font-bold leading-tight">
+              From Chaos to Control in Your Job Search
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              {`We've experienced the frustration firsthand—scattered spreadsheets, missed follow-ups, and the mental burden of tracking dozens of applications. Thats why we built Application Tracker.`}
-            </p>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              Our mission is to eliminate the administrative overhead of job searching, allowing you to focus on what truly matters: preparing for interviews and landing your ideal role.
-            </p>
+            <div className="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed">
+              <p className="text-lg">
+                We experienced firsthand how overwhelming job hunting can be—
+                scattered spreadsheets, missed follow-ups, and forgotten
+                applications. Thats why we built Application Tracker to bring
+                order to the chaos.
+              </p>
+              <p className="text-lg">
+                Our platform automatically organizes your job search, provides
+                actionable insights, and helps you stay on top of every
+                opportunity from application to offer.
+              </p>
+            </div>
           </div>
-          <Card className="border-gray-200 dark:border-gray-800 shadow-xl bg-white dark:bg-gray-800 w-full">
-            <CardContent className="p-8 space-y-6">
+
+          <Card className="shadow-xl bg-white dark:bg-gray-800 border-0 overflow-hidden ml-10">
+            <CardContent className="p-6 lg:px-8 space-y-5">
               {[
-                "Centralize all applications in one place",
-                "Automate status tracking via email",
-                "Never miss a follow-up or deadline",
-                "Gain insights with analytics",
-                "Reduce job search stress significantly"
+                "Centralize all applications in one intelligent dashboard",
+                "Automatically detect status updates from your Gmail",
+                "One-click job saving from LinkedIn and Indeed",
+                "Smart analytics to track your interview conversion rates",
+                "Automated follow-up reminders and scheduling",
               ].map((point, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-blue-600 dark:text-blue-500 shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">{point}</span>
-                </div>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex gap-3 items-start group"
+                >
+                  <CheckCircle2 className="h-6 w-6 text-blue-600 dark:text-blue-500 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                  <span className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                    {point}
+                  </span>
+                </motion.div>
               ))}
             </CardContent>
           </Card>
-        </motion.section>
+        </motion.div>
+      </section>
 
-        {/* Core Values */}
-        <section className="w-full py-20 lg:py-0 lg:my-40">
+      {/* ---------- Features Grid ---------- */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center space-y-6 mb-12"
+        >
+          <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0 px-4 py-1.5">
+            Why Choose Us
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold">
+            Everything You Need for Job Search Success
+          </h2>
+        </motion.div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow"
+            >
+              <h3 className="font-semibold text-lg mb-3 text-gray-900 dark:text-white">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                {feature.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------- Team Section ---------- */}
+      <section className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16 space-y-4 w-full"
+            transition={{ duration: 0.6 }}
+            className="text-center space-y-6"
           >
-            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0">
-              Core Values
+            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0 px-4 py-1.5">
+              The Team
             </Badge>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              What Drives Us
+            <h2 className="text-3xl sm:text-4xl font-bold">
+              Built by Job Seekers, for Job Seekers
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Our principles guide every decision we make, from feature development to user support.
+              {`We've been in your shoes. Our multidisciplinary team combined their job search frustrations to build the solution we all needed.`}
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-            {coreValues.map((value, i) => (
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {teamMembers.map((member, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="w-full"
+                transition={{ delay: i * 0.1, duration: 0.5 }}
               >
-                <Card className="h-full border-gray-200 dark:border-gray-800 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white dark:bg-gray-800 group w-full">
-                  <CardHeader>
-                    <div className="w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-950 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4 group-hover:scale-110 transition-transform">
-                      {value.icon}
+                <Card className="bg-white dark:bg-gray-800 hover:shadow-xl border-0 transition-all duration-300 group h-full flex flex-col">
+                  <CardHeader className="pb-4 flex flex-col items-center text-center flex-1">
+                    <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-2 border-blue-500 group-hover:border-blue-600 transition-colors shadow-md mb-4 bg-gray-100 dark:bg-gray-300 flex items-center justify-center">
+                      {member.img ? (
+                        <Image
+                          src={member.img}
+                          alt={member.name}
+                          className="w-full h-full object-contain object-center"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-white font-semibold text-xl bg-gradient-to-br from-blue-500 to-blue-600">
+                          {member.name.charAt(0)}
+                        </div>
+                      )}
                     </div>
-                    <CardTitle className="text-xl text-gray-900 dark:text-white">{value.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                      {value.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
 
-        {/* Team Roles */}
-        <section className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-3xl p-4 sm:p-12 shadow-inner w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16 space-y-4 w-full"
-          >
-            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0">
-              The Team
-            </Badge>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Expertise Across the Stack
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Four specialized developers bringing diverse skills to create a seamless experience.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-6 w-full">
-            {teamRoles.map((role, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="w-full"
-              >
-                <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:shadow-xl transition-all duration-300 h-full w-full">
-                  <CardHeader>
-                    <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-xl bg-${role.color}-100 dark:bg-${role.color}-950 text-${role.color}-600 dark:text-${role.color}-400 shrink-0`}>
-                        {role.icon}
-                      </div>
-                      <div>
-                        <CardTitle className="text-xl mb-2 text-gray-900 dark:text-white">{role.title}</CardTitle>
-                        <CardDescription className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                          {role.description}
-                        </CardDescription>
-                      </div>
+                    <div className="space-y-2 flex-1">
+                      <CardTitle className="text-lg font-semibold dark:text-white transition-colors">
+                        {member.name}
+                      </CardTitle>
+                      <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                        {member.role}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mt-2">
+                        {member.description}
+                      </p>
                     </div>
                   </CardHeader>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
 
-        {/* Technology Stack */}
-        <section className="w-full my-40">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16 space-y-4 w-full"
-          >
-            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0">
-              Technology
-            </Badge>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Built With Modern Tools
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              We leverage cutting-edge technologies to deliver a fast, reliable, and scalable platform.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
-            {techStack.map((tech, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="w-full"
-              >
-                <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full w-full">
-                  <CardContent className="p-4 text-center space-y-2">
-                    <div className="font-bold text-lg text-gray-900 dark:text-white">{tech.name}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{tech.category}</div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* Timeline */}
-        <section className="w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16 space-y-4 w-full"
-          >
-            <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0">
-              Our Journey
-            </Badge>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Development Milestones
-            </h2>
-          </motion.div>
-
-          <div className="space-y-8 relative before:absolute before:left-8 before:top-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-blue-600 before:to-blue-300 dark:before:from-blue-500 dark:before:to-blue-800 w-full">
-            {milestones.map((milestone, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative pl-20 w-full"
-              >
-                <div className="absolute left-5 top-6 w-7 h-7 rounded-full bg-blue-600 dark:bg-blue-500 border-4 border-white dark:border-gray-900 shadow-lg"></div>
-                <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-shadow w-full">
-                  <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                      <div className="space-y-2">
-                        <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0">
-                          {milestone.year}
-                        </Badge>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{milestone.title}</h3>
-                        <p className="text-gray-600 dark:text-gray-400">{milestone.description}</p>
-                      </div>
+                  <CardContent className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <div className="flex justify-center space-x-4">
+                      {member.links.map((link, linkIndex) => (
+                        <a
+                          key={linkIndex}
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg"
+                          aria-label={link.label}
+                        >
+                          <link.icon className="h-5 w-5" />
+                        </a>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA Section */}
-        <motion.section
+      {/* ---------- Vision Section ---------- */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 text-center">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden rounded-3xl w-full"
+          transition={{ duration: 0.6 }}
+          className="space-y-6 max-w-4xl mx-auto"
         >
-          <Card className="border-0 bg-blue-600 dark:bg-gray-800 text-white w-full">
-            <CardContent className="p-12 sm:p-16 text-center space-y-8">
-              <div className="space-y-4">
-                <h2 className="text-4xl sm:text-5xl font-bold">
-                  Ready to Transform Your Job Search?
-                </h2>
-                <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-                  {`Join thousands of professionals who've simplified their application tracking and landed their dream jobs faster.`}
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-white text-blue-600 hover:bg-blue-50 shadow-lg hover:shadow-xl transition-all group px-8 py-6 text-lg"
-                >
-                  <Link href="/signup" className="flex items-center gap-2">
-                    Start Free Today
-                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-white text-white bg-transparent hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg hover:text-white"
-                >
-                  <Link href="/features">Explore Features</Link>
-                </Button>
-              </div>
-
-              <div className="pt-8 flex flex-wrap justify-center gap-6 text-sm text-blue-200">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span>No credit card required</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span>Free forever plan</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span>Cancel anytime</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.section>
-      </div>
+          <Badge className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-0 px-4 py-1.5">
+            Future Vision
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold">
+            The Future of Intelligent Job Hunting
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            {`We're evolving Application Tracker into an AI-powered career companion. Soon, you'll get personalized resume optimization, predictive interview analytics, and smart job matching based on your success patterns and career goals.`}
+          </p>
+          <div className="grid sm:grid-cols-3 gap-6 mt-8 text-left">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+              <h3 className="font-semibold text-lg mb-2">AI Resume Tailoring</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Automatic resume optimization for each job application
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+              <h3 className="font-semibold text-lg mb-2">Predictive Analytics</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Forecast your chances and get personalized recommendations
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+              <h3 className="font-semibold text-lg mb-2">Smart Job Matching</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Discover opportunities that match your profile and preferences
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </section>
     </div>
   );
 }

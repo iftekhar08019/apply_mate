@@ -29,13 +29,13 @@ export default function TermsAndConditionsPage() {
       title: "Introduction",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             Welcome to{" "}
-            <span className="font-semibold text-foreground">
+            <span className="font-semibold text-gray-900 dark:text-white">
               Application Tracker
-            </span>
-            . By using our website, Chrome Extension, or related services
-            (including Gmail integration), you agree to these Terms & Conditions.
+            </span>.
+            By using our website, Chrome Extension, or related services (including
+            Gmail integration), you agree to these Terms & Conditions.
           </p>
         </div>
       ),
@@ -45,7 +45,7 @@ export default function TermsAndConditionsPage() {
       title: "Services Overview",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             Application Tracker helps you record and manage job applications in
             one place. Features include manual entry, one-click job capture via
             Chrome Extension, and automatic updates by scanning Gmail.
@@ -65,10 +65,10 @@ export default function TermsAndConditionsPage() {
           ].map((text, i) => (
             <div
               key={i}
-              className="flex items-start gap-3 p-3 rounded-lg border"
+              className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
             >
-              <CheckCircle2 className="w-5 h-5 text-foreground mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-muted-foreground">{text}</p>
+              <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <p className="text-gray-700 dark:text-gray-300 text-sm">{text}</p>
             </div>
           ))}
         </div>
@@ -79,15 +79,14 @@ export default function TermsAndConditionsPage() {
       title: "Gmail Integration & Data Handling",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             If you connect your Gmail account, we use OAuth 2.0 with limited,
-            read-only scopes to detect job-related messages. We do not share
-            your email content with third parties and only store minimal
-            metadata.
+            read-only scopes to detect job-related messages. We do not share your
+            email content with third parties and only store minimal metadata.
           </p>
-          <div className="flex items-start gap-3 p-4 rounded-lg border">
-            <Info className="w-5 h-5 mt-0.5 flex-shrink-0" />
-            <p className="text-sm text-muted-foreground">
+          <div className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <Info className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-500" />
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
               For full details, please review our Privacy Policy.
             </p>
           </div>
@@ -99,7 +98,7 @@ export default function TermsAndConditionsPage() {
       title: "Chrome Extension",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             The Chrome Extension reads publicly available page content on job
             boards to pre-fill application fields.
           </p>
@@ -111,7 +110,7 @@ export default function TermsAndConditionsPage() {
       title: "Acceptable Use",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             You must not use the Service to engage in illegal activities, send
             spam, distribute malware, or scrape data unlawfully.
           </p>
@@ -123,9 +122,9 @@ export default function TermsAndConditionsPage() {
       title: "Limitations of Liability",
       content: (
         <div className="space-y-4">
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50 border border-border">
-            <AlertTriangle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-            <p className="text-sm text-muted-foreground">
+          <div className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <AlertTriangle className="w-5 h-5 mt-0.5 flex-shrink-0 text-red-500" />
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
               The Service is provided as is. We do not guarantee uninterrupted
               operation or perfect accuracy.
             </p>
@@ -138,7 +137,7 @@ export default function TermsAndConditionsPage() {
       title: "Intellectual Property",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             All content, branding, and code are property of Application Tracker.
           </p>
         </div>
@@ -149,7 +148,7 @@ export default function TermsAndConditionsPage() {
       title: "Changes to Terms",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             We reserve the right to modify these Terms. Continued use after
             changes means you accept the updated Terms.
           </p>
@@ -161,7 +160,7 @@ export default function TermsAndConditionsPage() {
       title: "Termination",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-gray-700 dark:text-gray-300">
             We may suspend or terminate access if a user violates these Terms.
           </p>
         </div>
@@ -172,9 +171,8 @@ export default function TermsAndConditionsPage() {
       title: "Governing Law & Dispute Resolution",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
-            These Terms are governed by the laws of the country where you
-            reside.
+          <p className="text-gray-700 dark:text-gray-300">
+            These Terms are governed by the laws of the country where you reside.
           </p>
         </div>
       ),
@@ -184,16 +182,14 @@ export default function TermsAndConditionsPage() {
       title: "Contact Information",
       content: (
         <div className="space-y-4">
-          <p className="text-muted-foreground">
-            For questions, contact us at:
-          </p>
-          <div className="p-4 rounded-lg border">
+          <p className="text-gray-700 dark:text-gray-300">For questions, contact us at:</p>
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <a
-              href="mailto:support@applicationtracker.com"
-              className="text-foreground font-medium hover:underline inline-flex items-center gap-2"
+              href="mailto:apply.mate04@gmail.com"
+              className="text-gray-900 dark:text-white font-medium hover:underline inline-flex items-center gap-2"
             >
               <Mail className="w-4 h-4" />
-              support@applicationtracker.com
+              apply.mate04@gmail.com  
             </a>
           </div>
         </div>
@@ -220,19 +216,22 @@ export default function TermsAndConditionsPage() {
   };
 
   return (
-    <div className="min-h-screen dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <div className="border-b bg-gray-100 dark:bg-gray-900">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="max-w-3xl">
-            <Badge variant="outline" className="mb-4">
+            <Badge
+              variant="outline"
+              className="mb-4 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-700"
+            >
               <FileText className="w-3 h-3 mr-1" />
               Legal Document
             </Badge>
-            <h1 className="text-4xl font-bold tracking-tight mb-3">
+            <h1 className="text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-white">
               Terms & Conditions
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-gray-700 dark:text-gray-300">
               Last updated:{" "}
               {new Date().toLocaleDateString("en-US", {
                 year: "numeric",
@@ -249,9 +248,11 @@ export default function TermsAndConditionsPage() {
           {/* Sidebar */}
           <aside className="lg:col-span-3">
             <div className="sticky top-[120px]">
-              <Card className="dark:bg-gray-900">
+              <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                 <CardHeader>
-                  <CardTitle className="text-base">Contents</CardTitle>
+                  <CardTitle className="text-base text-gray-900 dark:text-white">
+                    Contents
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <nav className="space-y-1 p-2">
@@ -261,8 +262,8 @@ export default function TermsAndConditionsPage() {
                         onClick={() => scrollToSection(section.id)}
                         className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors cursor-pointer ${
                           activeSection === section.id
-                            ? "bg-muted dark:bg-blue-600/50 font-medium text-foreground"
-                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                            ? "bg-blue-600 text-white font-medium"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
                         }`}
                       >
                         {index + 1}. {section.title}
@@ -276,22 +277,26 @@ export default function TermsAndConditionsPage() {
 
           {/* Main Content */}
           <main className="lg:col-span-9">
-            <Card className="dark:bg-gray-900">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <CardContent className="p-8 lg:p-12">
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                   <div className="space-y-16">
                     {termsSections.map((section, index) => (
-                      <section key={section.id} id={section.id} className="scroll-mt-28">
+                      <section
+                        key={section.id}
+                        id={section.id}
+                        className="scroll-mt-28"
+                      >
                         <div className="space-y-4">
                           <div className="flex items-baseline gap-3">
                             <span className="text-3xl font-bold text-blue-600/70">
                               {String(index + 1).padStart(2, "0")}
                             </span>
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
                               {section.title}
                             </h2>
                           </div>
-                          <Separator />
+                          <Separator className="border-gray-200 dark:border-gray-700" />
                           <div className="pt-2">{section.content}</div>
                         </div>
                       </section>
@@ -300,16 +305,23 @@ export default function TermsAndConditionsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-16 pt-8 border-t">
+                <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
                       This document does not constitute legal advice.
                     </p>
                     <div className="flex gap-3">
-                      <Button variant="outline" onClick={() => window.history.back()}>
+                      <Button
+                        variant="outline"
+                        onClick={() => window.history.back()}
+                        className="border-gray-400 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                      >
                         Go Back
                       </Button>
-                      <Button onClick={scrollToTop} className="gap-2 text-white">
+                      <Button
+                        onClick={scrollToTop}
+                        className="gap-2 text-white bg-blue-600 hover:bg-blue-700"
+                      >
                         <ArrowUp className="w-4 h-4" />
                         Back to Top
                       </Button>

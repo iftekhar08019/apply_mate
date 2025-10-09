@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Link from "next/link";
 import logo from "../../../../public/assets/Logo.png";
 import { Github, LinkedinIcon, Mail } from "lucide-react";
@@ -7,12 +7,11 @@ import { usePathname } from "next/navigation";
 
 const Footer = () => {
   const socialIcons = [
-    { icon: Github, href: "#", label: "GitHub" },
-    { icon: LinkedinIcon, href: "#", label: "LinkedIn" },
-    { icon: Mail, href: "#", label: "Email" },
+    { icon: Github, href: "https://github.com/", label: "GitHub" },
+    { icon: LinkedinIcon, href: "https://www.linkedin.com/", label: "LinkedIn" },
+    { icon: Mail, href: "mailto:apply.mate04@gmail.com", label: "Email" },
   ];
 
-  // ✅ Updated Menu Items
   const menus = [
     { label: "Home", path: "/" },
     { label: "Job Details", path: "/jobs" },
@@ -29,13 +28,14 @@ const Footer = () => {
           {/* Main footer content */}
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-10 mb-10 lg:items-center">
             {/* Left: Logo + text */}
-            <div className="flex-1 text-center md:text-left">
-              <Link href='/'>
-              <Image src={logo} alt="Footer-Logo" width={150} priority />
+            <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
+              <Link href="/" className="flex justify-center md:justify-start">
+                <Image src={logo} alt="Footer-Logo" width={150} priority />
               </Link>
-              <p className="mt-4 text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-md mx-auto md:mx-0">
-                Graphy empowers teams to transform raw data into clear, compelling
-                visuals — making insights easier to share, understand, and act on.
+              <p className="mt-4 text-gray-600 dark:text-white text-sm leading-relaxed max-w-md mx-auto md:mx-0">
+                Application Tracker helps job seekers organize and manage all their
+                applications in one place — track progress, sync with Gmail, and stay
+                on top of every opportunity effortlessly.
               </p>
             </div>
 
@@ -46,7 +46,7 @@ const Footer = () => {
                   <li key={menu.path}>
                     <Link
                       href={menu.path}
-                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                      className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white transition-colors"
                     >
                       {menu.label}
                     </Link>
@@ -65,12 +65,14 @@ const Footer = () => {
                   <div key={social.label} className="flex flex-col items-center">
                     <Link
                       href={social.href}
-                      className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors dark:text-white"
                       aria-label={social.label}
                     >
                       <social.icon className="w-5 h-5" />
                     </Link>
-                    <span className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                    <span className="mt-2 text-xs text-gray-600 dark:text-white">
                       {social.label}
                     </span>
                   </div>
@@ -81,15 +83,14 @@ const Footer = () => {
 
           {/* Bottom section */}
           <div className="pt-6 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center md:text-left">
-              © 2025 Graphy. All rights reserved.
+            <p className="text-sm text-gray-600 dark:text-white text-center md:text-left">
+              © 2025 Application Tracker. All rights reserved.
             </p>
 
-            {/* ✅ Updated Bottom Links */}
             <div className="flex flex-wrap justify-center md:justify-end gap-6 text-sm">
               <Link
                 href="/terms"
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                className="text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white transition-colors"
               >
                 Terms & Condition
               </Link>
