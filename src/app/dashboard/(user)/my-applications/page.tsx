@@ -186,7 +186,6 @@ const MyApplicationPage: React.FC = () => {
           </div>
         </div>
 
-     
         {/* Job Cards / Table View */}
         {filteredJobs.length === 0 ? (
           <p className="text-center text-muted-foreground mt-20 text-lg">
@@ -202,16 +201,18 @@ const MyApplicationPage: React.FC = () => {
               >
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <Briefcase className="w-5 h-5 text-blue-500" />
-                    {job.title}
+                    <Briefcase className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                    <span className="truncate block max-w-[200px]">
+                      {job.title}
+                    </span>
                   </CardTitle>
+                </CardHeader>
+
+                <CardContent className="space-y-3 text-sm text-muted-foreground">
                   <CardDescription className="flex items-center gap-2 text-muted-foreground">
                     <Building2 className="w-4 h-4 text-gray-400" />
                     {job.company}
                   </CardDescription>
-                </CardHeader>
-
-                <CardContent className="space-y-3 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-blue-500" />
                     <span>{job.location}</span>

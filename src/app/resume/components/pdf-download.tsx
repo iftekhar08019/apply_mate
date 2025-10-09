@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef } from 'react';
-import toast from 'react-hot-toast';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Download } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
 
 interface PDFDownloadProps {
   fileName?: string;
@@ -12,8 +13,12 @@ interface PDFDownloadProps {
 
 export default function PDFDownload({ fileName = 'resume' }: PDFDownloadProps) {
   const resumeRef = useRef<HTMLDivElement>(null);
-
+ const { data: session } = useSession();
   const downloadPDF = async () => {
+     if (!session?.user) {
+      toast.error("Please login first to download your resume.");
+      return;
+    }
     const element = document.getElementById('resume-content');
     if (!element) {
       console.error('Resume content element not found');

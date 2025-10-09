@@ -17,6 +17,8 @@ import { ModeToggle } from "../mode-toggle";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { Home, Briefcase, FileText, Download, Info } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,11 +33,13 @@ const Navbar = () => {
   const pathName = usePathname();
 
   const menus = [
-    { label: "Home", path: "/" },
-    { label: "Job Listings", path: "/jobs" },
-    { label: "Resume Builder", path: "/resume" },
-    { label: "Download Extension", path: "/download" },
-    { label: "About Us", path: "/about" },
+    { label: "Home", path: "/", icon: Home },
+    ...(session?.user
+      ? [{ label: "My Jobs", path: "/jobs", icon: Briefcase }]
+      : []),
+    { label: "Resume Builder", path: "/resume", icon: FileText },
+    { label: "Download Extension", path: "/download", icon: Download },
+    { label: "About Us", path: "/about", icon: Info },
   ];
 
   const handleLogOutButton = () => {
@@ -64,23 +68,26 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 bg-white dark:bg-gray-900 px-6 xl:px-10 py-3 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800">
+        <section className="hidden lg:flex items-center gap-6 xl:gap-8 bg-white dark:bg-gray-900 px-6 xl:px-10 py-3 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800">
           {menus.map((menu, idx) => {
             const isActive = pathName === menu.path;
+            const Icon = menu.icon;
             return (
               <Link
                 key={idx}
                 href={menu.path}
-                className="relative text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap"
+                className="relative text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition whitespace-nowrap flex items-center gap-1"
               >
+                <Icon size={18} />
                 {menu.label}
+
                 {isActive && (
-                  <span className="absolute left-0 bottom-0 w-full h-1 rounded-full bg-blue-600 animate-[underlineExpand_0.8s]" />
+                  <span className="absolute left-0 -bottom-1 w-full h-1 rounded-full bg-blue-600 animate-[underlineExpand_0.8s]" />
                 )}
               </Link>
             );
           })}
-        </nav>
+        </section>
 
         {/* Right Side */}
         <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
@@ -91,7 +98,7 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex items-center gap-2 focus:outline-non"
+                    className="flex items-center gap-2 focus:outline-none"
                     aria-label="Open user menu"
                   >
                     <Image
@@ -154,12 +161,20 @@ const Navbar = () => {
           <div className="hidden md:flex lg:hidden items-center gap-3">
             <ModeToggle />
             {session?.user ? (
-              <button
-                onClick={handleLogOutButton}
-                className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
-              >
-                Logout
-              </button>
+              <>
+                <Link
+                  href="/dashboard"
+                  className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogOutButton}
+                  className="bg-gradient-to-r from-red-600 to-red-800 text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-red-600 hover:to-red-700"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <>
                 <Link
@@ -228,6 +243,20 @@ const Navbar = () => {
                     );
                   })}
 
+                  {/* Dashboard link for mobile */}
+                  {session?.user && (
+                    <Link
+                      href="/dashboard"
+                      className={`text-base sm:text-lg font-semibold ${
+                        pathName === "/dashboard"
+                          ? "text-blue-600"
+                          : "text-gray-700 dark:text-gray-300"
+                      } hover:text-black dark:hover:text-white transition w-full text-center py-2`}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+
                   <hr className="my-2 w-full border-gray-200 dark:border-gray-800" />
                   <div className="w-full flex justify-center">
                     <ModeToggle />
@@ -236,7 +265,7 @@ const Navbar = () => {
                   {session?.user ? (
                     <button
                       onClick={handleLogOutButton}
-                      className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                      className="bg-gradient-to-r from-red-600 to-red-800 text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-red-600 hover:to-red-700"
                     >
                       Logout
                     </button>
