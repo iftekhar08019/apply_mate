@@ -31,6 +31,8 @@ import {
   Pencil,
   Trash2,
   Loader2,
+  ExternalLink,
+  Clock,
 } from "lucide-react";
 import { GmailIntegration } from "./components/GmailIntegration";
 import { Toaster, toast } from "sonner";

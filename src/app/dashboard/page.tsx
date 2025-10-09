@@ -338,57 +338,6 @@ export default function JobTrackerDashboard() {
           </Card>
         </div>
 
-        {/* Bottom Section */}
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          {/* Application Progress */}
-          <Card className="xl:col-span-2 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white">Application Progress</CardTitle>
-              <CardDescription className="text-gray-500 dark:text-gray-400">
-                Your job search activity over the last 30 days.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <div className="h-60 w-full flex items-center justify-center bg-gray-50 dark:bg-gray-700/20 rounded-lg border border-gray-200 dark:border-gray-600">
-                <div className="text-center text-gray-500 dark:text-gray-400">
-                  <TrendingUp className="h-12 w-12 mx-auto mb-2" />
-                  <p>Application Trends</p>
-                  <p className="text-sm">Weekly application chart would appear here</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white">Quick Actions</CardTitle>
-              <CardDescription className="text-gray-500 dark:text-gray-400">
-                Manage your job applications
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Button className="w-full justify-start gap-2 bg-blue-600 hover:bg-blue-700 text-white">
-                  <Briefcase className="h-4 w-4" />
-                  Add New Application
-                </Button>
-                <Button variant="outline" className="w-full justify-start gap-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <FileText className="h-4 w-4" />
-                  Update Status
-                </Button>
-                <Button variant="outline" className="w-full justify-start gap-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <Calendar className="h-4 w-4" />
-                  Schedule Interview
-                </Button>
-                <Button variant="outline" className="w-full justify-start gap-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <Download className="h-4 w-4" />
-                  Export Applications
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </main>
     </div>
   );
