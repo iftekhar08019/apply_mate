@@ -199,40 +199,73 @@ const MyApplicationPage: React.FC = () => {
             {filteredJobs.map((job: Job) => (
               <Card
                 key={job.uid}
-                className="group relative rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className="group relative rounded-2xl border border-blue-200/50 dark:border-blue-700/50 bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 backdrop-blur-md shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
               >
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <Briefcase className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                    <span className="truncate block max-w-[200px]">
-                      {job.title}
-                    </span>
-                  </CardTitle>
+                {/* Decorative gradient overlay */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl -z-10 group-hover:scale-150 transition-transform duration-500" />
+                
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex items-start gap-2 flex-1 min-w-0">
+                      <div className="w-10 h-10 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                        <Briefcase className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-lg font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                          {job.title}
+                        </CardTitle>
+                      </div>
+                    </div>
+                    {job.url && (
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex-shrink-0"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
+                  
+                  <CardDescription className="flex items-center gap-2 text-gray-700 dark:text-gray-300 font-medium">
+                    <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{job.company}</span>
+                  </CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-3 text-sm text-muted-foreground">
-                  <CardDescription className="flex items-center gap-2 text-muted-foreground">
-                    <Building2 className="w-4 h-4 text-gray-400" />
-                    {job.company}
-                  </CardDescription>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-blue-500" />
-                    <span>{job.location}</span>
+                <CardContent className="space-y-3 pt-0">
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{job.location}</span>
                   </div>
 
+                  {/* Job Type Badge */}
                   <div className="flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-blue-500" />
-                    <span>Type: {job.type}</span>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-medium">
+                      <Clock className="w-3 h-3" />
+                      {job.type}
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <CalendarDays className="w-4 h-4 text-blue-500" />
-                    <span>
-                      Posted: {new Date(job.date).toLocaleDateString()}
-                    </span>
+                  {/* Date */}
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <CalendarDays className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <span>Applied: {new Date(job.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                   </div>
 
-                  <div className="flex gap-2 mt-3">
+                  {/* Description Preview */}
+                  {job.description && (
+                    <div className="pt-2 border-t border-blue-200/50 dark:border-blue-700/50">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                        {job.description}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-3">
                     <Button
                       variant="outline"
                       size="sm"
@@ -240,6 +273,7 @@ const MyApplicationPage: React.FC = () => {
                         setSelectedJob(job);
                         setIsModalOpen(true);
                       }}
+                      className="flex-1 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 transition-colors"
                     >
                       <Pencil className="w-4 h-4 mr-1" /> Edit
                     </Button>
@@ -249,10 +283,13 @@ const MyApplicationPage: React.FC = () => {
                       size="sm"
                       disabled={deletingUid === job.uid}
                       onClick={() => deleteMutation.mutate(job.uid)}
-                      className="bg-red-700 text-white"
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white"
                     >
                       {deletingUid === job.uid ? (
-                        "Deleting..."
+                        <>
+                          <Loader2 className="w-4 h-4 mr-1 animate-spin" /> 
+                          Deleting...
+                        </>
                       ) : (
                         <>
                           <Trash2 className="w-4 h-4 mr-1" /> Delete
