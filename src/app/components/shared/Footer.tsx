@@ -30,7 +30,13 @@ const Footer = () => {
             {/* Left: Logo + text */}
             <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
               <Link href="/" className="flex justify-center md:justify-start">
-                <Image src={logo} alt="Footer-Logo" width={150} priority />
+                <Image 
+                  src={logo} 
+                  alt="Footer-Logo" 
+                  width={150} 
+                  className="dark:invert dark:brightness-0 dark:contrast-200"
+                  priority 
+                />
               </Link>
               <p className="mt-4 text-gray-600 dark:text-white text-sm leading-relaxed max-w-md mx-auto md:mx-0">
                 Application Tracker helps job seekers organize and manage all their

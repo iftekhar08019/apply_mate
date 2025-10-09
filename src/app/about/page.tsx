@@ -100,14 +100,14 @@ export default function AboutPage() {
       <div className="fixed -z-10 bottom-20 left-1/4 h-96 w-96 rounded-full bg-blue-400/10 blur-3xl" />
       
       {/* ---------- Hero Section ---------- */}
-      <section className="relative w-full py-20 sm:py-28 lg:py-32">
-
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+      <section className="relative w-full py-16 sm:py-20 lg:py-24">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-6 max-w-4xl mx-auto"
+            className="text-center space-y-6 mb-16"
           >
             <motion.p
               className="relative inline-block w-fit px-4 py-2 rounded-md text-sm uppercase tracking-wide font-medium text-white bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 bg-[length:200%_100%] border border-blue-600"
@@ -121,12 +121,65 @@ export default function AboutPage() {
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight">
               AI-Powered Job Application{" "}
-              <span className="text-blue-600 dark:text-blue-400">Tracking</span>
+              <span className="text-blue-600 dark:text-blue-400">Tracking Platform</span>
             </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl">
-              Built by developers who experienced the chaos of job hunting. We leverage AI to track, analyze, and optimize your applications automatically.
+            <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              The intelligent solution for modern job seekers. Track, manage, and optimize your entire job search journey with cutting-edge AI technology.
             </p>
           </motion.div>
+
+          {/* Detailed Information Grid */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
+            {/* Left Column - What is Apply Mate */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 rounded-2xl p-8 shadow-lg backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  What is Apply Mate?
+                </h2>
+              </div>
+              <div className="space-y-4 text-gray-700 dark:text-gray-300">
+                <p className="leading-relaxed">
+                  Apply Mate is a comprehensive job application tracking platform designed to eliminate the chaos of modern job hunting. We combine powerful automation with intelligent AI to help you manage every aspect of your job search in one centralized dashboard.
+                </p>
+                <p className="leading-relaxed">
+                  From the moment you discover a job posting to the final offer negotiation, Apply Mate keeps you organized, informed, and in control. No more scattered spreadsheets, missed deadlines, or forgotten follow-ups.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Right Column - Why We Built It */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 rounded-2xl p-8 shadow-lg backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Why We Built It
+                </h2>
+              </div>
+              <div className="space-y-4 text-gray-700 dark:text-gray-300">
+                <p className="leading-relaxed">
+                  As developers who&apos;ve experienced the overwhelming nature of job hunting firsthand, we understood the pain points: tracking dozens of applications across multiple platforms, manually updating spreadsheets, missing important emails, and losing track of interview dates.
+                </p>
+                <p className="leading-relaxed">
+                  We built Apply Mate to solve these exact problems using AI and automation, creating a tool that does the heavy lifting so you can focus on what matters—preparing for interviews and landing your dream job.
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

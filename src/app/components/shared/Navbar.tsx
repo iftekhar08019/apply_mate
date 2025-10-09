@@ -62,7 +62,7 @@ const Navbar = () => {
             alt="Guide Logo"
             width={150}
             height={50}
-            className="w-32 sm:w-36 lg:w-40"
+            className="w-32 sm:w-36 lg:w-40 dark:invert dark:brightness-0 dark:contrast-200"
             priority
           />
         </Link>
@@ -220,7 +220,7 @@ const Navbar = () => {
                       alt="Guide Logo"
                       width={140}
                       height={45}
-                      className="w-28 sm:w-32"
+                      className="w-28 sm:w-32 dark:invert dark:brightness-0 dark:contrast-200"
                     />
                   </SheetTitle>
                 </SheetHeader>
