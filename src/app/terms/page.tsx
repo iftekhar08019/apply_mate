@@ -185,11 +185,11 @@ export default function TermsAndConditionsPage() {
           <p className="text-gray-700 dark:text-gray-300">For questions, contact us at:</p>
           <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <a
-              href="mailto:support@applicationtracker.com"
+              href="mailto:apply.mate04@gmail.com"
               className="text-gray-900 dark:text-white font-medium hover:underline inline-flex items-center gap-2"
             >
               <Mail className="w-4 h-4" />
-              support@applicationtracker.com
+              apply.mate04@gmail.com  
             </a>
           </div>
         </div>
