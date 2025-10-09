@@ -95,16 +95,7 @@ export default function ResumeBuilder() {
     if (isHydrated && typeof window !== 'undefined') {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
-        // Only show toast after initial load (not on first mount)
-        const isInitialLoad = sessionStorage.getItem('resume_initial_load');
-        if (isInitialLoad) {
-          toast.success('Changes saved', {
-            duration: 1000,
-            icon: '💾',
-          });
-        } else {
-          sessionStorage.setItem('resume_initial_load', 'true');
-        }
+        // Changes are saved automatically without toast notification
       } catch (error) {
         console.error('Error saving resume data to localStorage:', error);
         toast.error('Failed to save changes');
