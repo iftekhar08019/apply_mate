@@ -131,7 +131,7 @@ export default function JobTrackerDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+    <div className="flex min-h-screen w-full flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors overflow-hidden">
       {/* Header */}
       <header className="sticky top-0 z-30 flex justify-between h-14 items-center gap-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-5 mb-10 lg:pb-0 pb-6">
         <div className="relative md:grow-0">
