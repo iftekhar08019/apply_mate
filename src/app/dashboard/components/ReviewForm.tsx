@@ -56,7 +56,7 @@ export default function ReviewForm() {
         toast.error(data.message || "Failed to submit review");
       }
     } catch (error) {
-      console.error("Error submitting review:", error);
+      // console.error("Error submitting review:", error);
       toast.error("An error occurred. Please try again.");
     } finally {
       setLoading(false);

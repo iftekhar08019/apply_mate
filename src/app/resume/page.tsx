@@ -83,7 +83,7 @@ export default function ResumeBuilder() {
           setSelectedSection(storedSection);
         }
       } catch (error) {
-        console.error('Error loading data from localStorage:', error);
+        // console.error('Error loading data from localStorage:', error);
       }
       
       setIsHydrated(true);
@@ -97,7 +97,7 @@ export default function ResumeBuilder() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
         // Changes are saved automatically without toast notification
       } catch (error) {
-        console.error('Error saving resume data to localStorage:', error);
+        // console.error('Error saving resume data to localStorage:', error);
         toast.error('Failed to save changes');
       }
     }
@@ -109,7 +109,7 @@ export default function ResumeBuilder() {
       try {
         localStorage.setItem(STORAGE_KEY_VISIBILITY, JSON.stringify(sectionVisibility));
       } catch (error) {
-        console.error('Error saving visibility data to localStorage:', error);
+        // console.error('Error saving visibility data to localStorage:', error);
       }
     }
   }, [sectionVisibility, isHydrated]);
@@ -120,7 +120,7 @@ export default function ResumeBuilder() {
       try {
         localStorage.setItem(STORAGE_KEY_SELECTED_SECTION, selectedSection);
       } catch (error) {
-        console.error('Error saving selected section to localStorage:', error);
+        // console.error('Error saving selected section to localStorage:', error);
       }
     }
   }, [selectedSection, isHydrated]);
@@ -276,7 +276,7 @@ export default function ResumeBuilder() {
                   localStorage.removeItem(STORAGE_KEY_VISIBILITY);
                   localStorage.removeItem(STORAGE_KEY_SELECTED_SECTION);
                 } catch (error) {
-                  console.error('Error clearing localStorage:', error);
+                  // console.error('Error clearing localStorage:', error);
                   toast.error('Failed to clear data');
                   toast.dismiss(t.id);
                   return;

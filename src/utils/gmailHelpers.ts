@@ -68,7 +68,7 @@ export async function fetchRecentEmails(
         body: body.substring(0, 2000), // Limit body length
       });
     } catch (error) {
-      console.error(`Error fetching message ${message.id}:`, error);
+      // console.error(`Error fetching message ${message.id}:`, error);
     }
   }
 
@@ -93,10 +93,10 @@ export async function analyzeEmailWithAI(
   email: EmailData
 ): Promise<ApplicationUpdate | null> {
   try {
-    console.log("🤖 [AI] Analyzing email:", {
-      subject: email.subject.substring(0, 80),
-      from: email.from
-    });
+    // console.log("🤖 [AI] Analyzing email:", {
+    //   subject: email.subject.substring(0, 80),
+    //   from: email.from
+    // });
     
     const ai = new GoogleGenAI({
       apiKey: process.env.GOOGLE_GEMINI_API_KEY!,
@@ -117,7 +117,7 @@ Return ONLY JSON, no explanation:
 
 JSON:`;
 
-    console.log("🤖 [AI] Sending prompt to Gemini (tokens: ~" + Math.ceil(prompt.length / 4) + ")");
+    // console.log("🤖 [AI] Sending prompt to Gemini (tokens: ~" + Math.ceil(prompt.length / 4) + ")");
     
     const contents = [
       {
@@ -136,7 +136,7 @@ JSON:`;
     });
 
     const text = response.text || "";
-    console.log("🤖 [AI] Raw AI response:", text);
+    // console.log("🤖 [AI] Raw AI response:", text);
 
     // Extract JSON from response (handle markdown code blocks)
     let jsonText = text.trim();
@@ -146,27 +146,27 @@ JSON:`;
       jsonText = jsonText.replace(/```\n?/g, "");
     }
 
-    console.log("🤖 [AI] Cleaned text:", jsonText);
+    // console.log("🤖 [AI] Cleaned text:", jsonText);
 
     // Try to find JSON object in the response
     const jsonMatch = jsonText.match(/\{[^}]+\}/);
     if (!jsonMatch) {
-      console.log("⚠️ [AI] No valid JSON found in response");
+      // console.log("⚠️ [AI] No valid JSON found in response");
       return null;
     }
 
-    console.log("🤖 [AI] Extracted JSON:", jsonMatch[0]);
+    // console.log("🤖 [AI] Extracted JSON:", jsonMatch[0]);
 
     const parsed = JSON.parse(jsonMatch[0]);
-    console.log("🤖 [AI] Parsed object:", parsed);
+    // console.log("🤖 [AI] Parsed object:", parsed);
 
     // Validate required fields
     if (!parsed.company || parsed.company === null || !parsed.position || !parsed.status) {
-      console.log("⚠️ [AI] Invalid response - missing required fields:", {
-        hasCompany: !!parsed.company,
-        hasPosition: !!parsed.position,
-        hasStatus: !!parsed.status
-      });
+      // console.log("⚠️ [AI] Invalid response - missing required fields:", {
+      //   hasCompany: !!parsed.company,
+      //   hasPosition: !!parsed.position,
+      //   hasStatus: !!parsed.status
+      // });
       return null;
     }
 
@@ -176,24 +176,24 @@ JSON:`;
     const positionLower = parsed.position.toLowerCase().trim();
     
     if (invalidValues.includes(companyLower) || invalidValues.includes(positionLower)) {
-      console.log("⚠️ [AI] Rejected - template/placeholder values detected:", {
-        company: parsed.company,
-        position: parsed.position
-      });
+      // console.log("⚠️ [AI] Rejected - template/placeholder values detected:", {
+      //   company: parsed.company,
+      //   position: parsed.position
+      // });
       return null;
     }
 
     // Validate status is a single valid value (not the template format)
     const validStatuses = ['Applied', 'Interview', 'Offer', 'Rejected'];
     if (!validStatuses.includes(parsed.status)) {
-      console.log("⚠️ [AI] Invalid status value:", parsed.status);
+      // console.log("⚠️ [AI] Invalid status value:", parsed.status);
       return null;
     }
 
-    console.log("✅ [AI] Valid job application detected:", parsed);
+    // console.log("✅ [AI] Valid job application detected:", parsed);
     return parsed as ApplicationUpdate;
   } catch (error) {
-    console.error("❌ [AI] Error analyzing email with AI:", error);
+    // console.error("❌ [AI] Error analyzing email with AI:", error);
     return null;
   }
 }
@@ -281,29 +281,29 @@ export function isSameJob(
     company2.includes(company1);
 
   if (!companyMatch) {
-    console.log("🔍 [MATCH] Companies don't match:", {
-      job1Company: company1,
-      job2Company: company2
-    });
+    // console.log("🔍 [MATCH] Companies don't match:", {
+    //   job1Company: company1,
+    //   job2Company: company2
+    // });
     return false;
   }
 
   // Position matching - more flexible
   // Check if exact match
   if (position1 === position2) {
-    console.log("🔍 [MATCH] ✅ Exact match:", {
-      job1: { company: company1, position: position1 },
-      job2: { company: company2, position: position2 }
-    });
+    // console.log("🔍 [MATCH] ✅ Exact match:", {
+    //   job1: { company: company1, position: position1 },
+    //   job2: { company: company2, position: position2 }
+    // });
     return true;
   }
 
   // Check if one contains the other (handles "Software Engineer" vs "Senior Software Engineer (m/w/d)")
   if (position1.includes(position2) || position2.includes(position1)) {
-    console.log("🔍 [MATCH] ✅ Partial match (contains):", {
-      job1: { company: company1, position: position1 },
-      job2: { company: company2, position: position2 }
-    });
+    // console.log("🔍 [MATCH] ✅ Partial match (contains):", {
+    //   job1: { company: company1, position: position1 },
+    //   job2: { company: company2, position: position2 }
+    // });
     return true;
   }
 
@@ -320,15 +320,15 @@ export function isSameJob(
 
   const isFuzzyMatch = overlapPercentage >= 60;
 
-  console.log("🔍 [MATCH] Fuzzy matching:", {
-    job1: { company: company1, position: position1 },
-    job2: { company: company2, position: position2 },
-    words1,
-    words2,
-    commonWords,
-    overlapPercentage: Math.round(overlapPercentage) + '%',
-    isMatch: isFuzzyMatch
-  });
+  // console.log("🔍 [MATCH] Fuzzy matching:", {
+  //   job1: { company: company1, position: position1 },
+  //   job2: { company: company2, position: position2 },
+  //   words1,
+  //   words2,
+  //   commonWords,
+  //   overlapPercentage: Math.round(overlapPercentage) + '%',
+  //   isMatch: isFuzzyMatch
+  // });
 
   return isFuzzyMatch;
 }
@@ -349,13 +349,13 @@ const STATUS_PRIORITY = {
 export function mergeJobApplications(
   applications: Array<ApplicationUpdate & { date: string }>
 ): Array<ApplicationUpdate & { date: string }> {
-  console.log(`🔀 [MERGE] Starting merge of ${applications.length} applications`);
+  // console.log(`🔀 [MERGE] Starting merge of ${applications.length} applications`);
   const jobMap = new Map<string, ApplicationUpdate & { date: string }>();
 
   for (const app of applications) {
     // Skip invalid applications
     if (!app.company || !app.position || !app.status) {
-      console.log("⚠️ [MERGE] Skipping invalid application:", app);
+      // console.log("⚠️ [MERGE] Skipping invalid application:", app);
       continue;
     }
 
@@ -363,7 +363,7 @@ export function mergeJobApplications(
     
     // Skip if key is empty (both company and position normalized to empty)
     if (!key || key === "_") {
-      console.log("⚠️ [MERGE] Skipping application with empty key");
+      // console.log("⚠️ [MERGE] Skipping application with empty key");
       continue;
     }
 
@@ -371,21 +371,21 @@ export function mergeJobApplications(
 
     if (!existing) {
       // First occurrence of this job
-      console.log(`➕ [MERGE] New job added:`, { key, app });
+      // console.log(`➕ [MERGE] New job added:`, { key, app });
       jobMap.set(key, app);
     } else {
       // Duplicate found - compare dates and status priority
       const existingDate = new Date(existing.date);
       const newDate = new Date(app.date);
 
-      console.log(`🔄 [MERGE] Duplicate found for key "${key}":`, {
-        existing: { date: existing.date, status: existing.status },
-        new: { date: app.date, status: app.status }
-      });
+      // console.log(`🔄 [MERGE] Duplicate found for key "${key}":`, {
+      //   existing: { date: existing.date, status: existing.status },
+      //   new: { date: app.date, status: app.status }
+      // });
 
       // If new email is more recent, update
       if (newDate > existingDate) {
-        console.log(`✅ [MERGE] Keeping newer email (${app.date} > ${existing.date})`);
+        // console.log(`✅ [MERGE] Keeping newer email (${app.date} > ${existing.date})`);
         jobMap.set(key, app);
       } else if (newDate.getTime() === existingDate.getTime()) {
         // Same date - use status priority
@@ -393,20 +393,20 @@ export function mergeJobApplications(
         const newPriority = STATUS_PRIORITY[app.status] || 0;
 
         if (newPriority >= existingPriority) {
-          console.log(`✅ [MERGE] Keeping higher priority status (${app.status} >= ${existing.status})`);
+          // console.log(`✅ [MERGE] Keeping higher priority status (${app.status} >= ${existing.status})`);
           jobMap.set(key, app);
         } else {
-          console.log(`⏭️ [MERGE] Keeping existing higher priority status`);
+          // console.log(`⏭️ [MERGE] Keeping existing higher priority status`);
         }
       } else {
-        console.log(`⏭️ [MERGE] Keeping existing (newer date)`);
+        // console.log(`⏭️ [MERGE] Keeping existing (newer date)`);
       }
       // If new email is older, keep existing
     }
   }
 
   const result = Array.from(jobMap.values());
-  console.log(`✅ [MERGE] Merge complete: ${applications.length} → ${result.length} unique jobs`);
+  // console.log(`✅ [MERGE] Merge complete: ${applications.length} → ${result.length} unique jobs`);
   return result;
 }
 
@@ -418,24 +418,24 @@ export function shouldUpdateJobStatus(
   existingJob: { status: string; date: string },
   newEmail: { status: string; date: string }
 ): boolean {
-  console.log("🔍 [UPDATE CHECK] Checking if should update:", {
-    existing: existingJob,
-    new: newEmail
-  });
+  // console.log("🔍 [UPDATE CHECK] Checking if should update:", {
+  //   existing: existingJob,
+  //   new: newEmail
+  // });
   
   const existingPriority = STATUS_PRIORITY[existingJob.status as keyof typeof STATUS_PRIORITY] || 0;
   const newPriority = STATUS_PRIORITY[newEmail.status as keyof typeof STATUS_PRIORITY] || 0;
 
-  console.log(`🔍 [UPDATE CHECK] Priority comparison:`, {
-    existingStatus: existingJob.status,
-    existingPriority,
-    newStatus: newEmail.status,
-    newPriority
-  });
+  // console.log(`🔍 [UPDATE CHECK] Priority comparison:`, {
+  //   existingStatus: existingJob.status,
+  //   existingPriority,
+  //   newStatus: newEmail.status,
+  //   newPriority
+  // });
 
   // PRIORITY FIRST: If new status has higher priority, always update (regardless of date)
   if (newPriority > existingPriority) {
-    console.log(`✅ [UPDATE CHECK] Yes - higher priority status (${newEmail.status} > ${existingJob.status})`);
+    // console.log(`✅ [UPDATE CHECK] Yes - higher priority status (${newEmail.status} > ${existingJob.status})`);
     return true;
   }
 
@@ -445,16 +445,16 @@ export function shouldUpdateJobStatus(
     const newDate = new Date(newEmail.date);
 
     if (newDate > existingDate) {
-      console.log(`✅ [UPDATE CHECK] Yes - same priority but newer date (${newEmail.date} > ${existingJob.date})`);
+      // console.log(`✅ [UPDATE CHECK] Yes - same priority but newer date (${newEmail.date} > ${existingJob.date})`);
       return true;
     }
     
-    console.log(`❌ [UPDATE CHECK] No - same priority but older or same date`);
+    // console.log(`❌ [UPDATE CHECK] No - same priority but older or same date`);
     return false;
   }
 
   // New status has lower priority - don't downgrade
-  console.log(`❌ [UPDATE CHECK] No - lower priority status (${newEmail.status} < ${existingJob.status})`);
+  // console.log(`❌ [UPDATE CHECK] No - lower priority status (${newEmail.status} < ${existingJob.status})`);
   return false;
 }
 

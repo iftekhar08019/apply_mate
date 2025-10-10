@@ -22,7 +22,7 @@ export async function GET() {
 
     return NextResponse.json({ url });
   } catch (error) {
-    console.error("Error generating Gmail auth URL:", error);
+    // console.error("Error generating Gmail auth URL:", error);
     return NextResponse.json(
       { error: "Failed to generate auth URL" },
       { status: 500 }

@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("Error in Gmail callback:", error);
+    // console.error("Error in Gmail callback:", error);
     // Return HTML with error message
     return new NextResponse(
       `

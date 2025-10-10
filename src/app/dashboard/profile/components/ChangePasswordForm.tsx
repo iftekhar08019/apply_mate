@@ -18,7 +18,7 @@ export const ChangePasswordForm: React.FC = () => {
       setNewPassword("");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
+      // console.error(error);
       toast.error(error?.response?.data?.message || "Failed to change password.");
     } finally {
       setLoading(false);

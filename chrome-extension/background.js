@@ -1,28 +1,33 @@
 // Background service worker for ApplyMate Job Scraper
 
+// ⚠️ IMPORTANT: Update this URL for production deployment!
+// Development: 'http://localhost:3000'
+// Production: 'https://your-actual-domain.com' (NO trailing slash)
+const API_BASE_URL = 'http://localhost:3000';
+
 // Extension installation/update handler
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    console.log('ApplyMate Job Scraper extension installed');
+    // console.log('ApplyMate Job Scraper extension installed');
     
     // Set default settings
     chrome.storage.local.set({
       extensionEnabled: true,
-      apiEndpoint: 'http://localhost:3000/api/saveJob'
+      apiEndpoint: `${API_BASE_URL}/api/saveJob`
     });
   } else if (details.reason === 'update') {
-    console.log('ApplyMate Job Scraper extension updated');
+    // console.log('ApplyMate Job Scraper extension updated');
   }
 });
 
 // Handle extension startup
 chrome.runtime.onStartup.addListener(() => {
-  console.log('ApplyMate Job Scraper extension started');
+  // console.log('ApplyMate Job Scraper extension started');
 });
 
 // Handle messages from content scripts or popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('Background received message:', request);
+  // console.log('Background received message:', request);
   
   switch (request.action) {
     case 'checkStatus':
@@ -59,19 +64,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Handle storage changes
 chrome.storage.onChanged.addListener((changes, namespace) => {
   if (namespace === 'local') {
-    console.log('Storage changed:', changes);
+    // console.log('Storage changed:', changes);
     
     if (changes.userEmail) {
-      console.log('User email updated:', changes.userEmail.newValue);
+      // console.log('User email updated:', changes.userEmail.newValue);
     }
     
     if (changes.extensionEnabled) {
-      console.log('Extension enabled status:', changes.extensionEnabled.newValue);
+      // console.log('Extension enabled status:', changes.extensionEnabled.newValue);
     }
   }
 });
 
 // Clean up when extension is disabled/uninstalled
 chrome.runtime.onSuspend.addListener(() => {
-  console.log('ApplyMate Job Scraper extension suspended');
+  // console.log('ApplyMate Job Scraper extension suspended');
 });

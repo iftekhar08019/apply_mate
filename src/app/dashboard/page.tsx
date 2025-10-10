@@ -105,7 +105,7 @@ export default function JobTrackerDashboard() {
         setDashboardData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching dashboard data:', err);
+        // console.error('Error fetching dashboard data:', err);
       } finally {
         setLoading(false);
       }

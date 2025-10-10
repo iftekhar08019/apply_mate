@@ -25,7 +25,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
@@ -55,7 +55,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

@@ -18,7 +18,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ data: userData });
   } catch (error) {
-    console.error("Error fetching user jobs:", error);
+    // console.error("Error fetching user jobs:", error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, data: job }, { status: 201 });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
@@ -73,7 +73,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ success: true, message: "Job deleted successfully" });
   } catch (error) {
-    console.error("Error deleting job:", error);
+    // console.error("Error deleting job:", error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
