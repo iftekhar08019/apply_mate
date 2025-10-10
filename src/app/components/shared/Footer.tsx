@@ -23,7 +23,7 @@ const Footer = () => {
 
   if (!pathName.includes("/dashboard")) {
     return (
-      <footer className="w-full bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+      <footer className="w-full bg-white dark:bg-gray-900/70 dark:backdrop-blur-xl border-t border-gray-200 dark:border-gray-700/50">
         <div className="container mx-auto px-4 py-12 lg:px-0">
           {/* Main footer content */}
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-10 mb-10 lg:items-center">

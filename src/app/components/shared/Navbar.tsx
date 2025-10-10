@@ -52,7 +52,7 @@ const Navbar = () => {
   }
 
   return (
-    <header className="w-full bg-white dark:bg-gray-950 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full bg-white dark:bg-gray-900/70 dark:backdrop-blur-xl shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700/50">
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -270,7 +270,7 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-80 sm:w-96 bg-white dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800"
+                className="w-80 sm:w-96 bg-white dark:bg-gray-900/95 dark:backdrop-blur-xl border-l border-gray-200 dark:border-gray-700/50"
               >
                 <SheetHeader>
                   <SheetTitle className="text-left">
