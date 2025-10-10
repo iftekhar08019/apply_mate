@@ -34,8 +34,9 @@ import {
   ExternalLink,
   Clock,
   CheckCircle,
+  Sparkles,
+  Filter,
 } from "lucide-react";
-import { GmailIntegration } from "./components/GmailIntegration";
 import { Toaster, toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditModal } from "./components/edit-modal";
@@ -152,74 +153,89 @@ const MyApplicationPage: React.FC = () => {
   return (
     <TooltipProvider>
       <Toaster position="top-center" />
-      <div className="min-h-screen p-6 bg-background">
+      <div className="min-h-screen p-4 sm:p-6 lg:p-8">
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full">
-            <Briefcase className="h-4 w-4" />
-            <span className="text-sm font-medium">My Job Applications</span>
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 text-white border border-blue-600 px-4 py-2 rounded-full shadow-lg mb-4">
+            <Sparkles className="h-4 w-4" />
+            <span className="text-sm font-medium uppercase tracking-wide">My Job Applications</span>
           </div>
-          <h1 className="text-4xl font-bold mt-3">Track Your Job Journey</h1>
-          <p className="text-muted-foreground text-lg mt-1 max-w-2xl mx-auto">
-            Stay on top of all the jobs you&apos;ve applied for and easily track
-            your progress.
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+            Track Your{" "}
+            <span className="text-blue-600 dark:text-blue-400">Job Journey</span>
+          </h1>
+          <p className="text-gray-700 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+            Manage all your job applications in one place with AI-powered tracking and insights
           </p>
         </div>
 
-        {/* Gmail Integration */}
-        <div className="mb-8 max-w-4xl mx-auto">
-          <GmailIntegration userEmail={email} />
-        </div>
+        {/* Search & Filters Card */}
+        <div className="bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-md rounded-2xl shadow-lg p-4 sm:p-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            {/* Search Bar */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400 h-5 w-5" />
+              <Input
+                placeholder="Search by company or title..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-12 h-12 bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-700 focus:border-blue-500 focus:ring-blue-500 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+              />
+            </div>
 
-        {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search by company or title..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+            {/* Filter and View Controls */}
+            <div className="flex items-center gap-3">
+              <Select value={jobTypeFilter} onValueChange={setJobTypeFilter}>
+                <SelectTrigger className="w-[160px] h-12 bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-700 rounded-xl">
+                  <Filter className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
+                  <SelectValue placeholder="Filter by Type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-700">
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="remote">Remote</SelectItem>
+                  <SelectItem value="onsite">Onsite</SelectItem>
+                  <SelectItem value="hybrid">Hybrid</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="flex gap-1 bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-700 rounded-xl p-1">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="icon"
+                  onClick={() => setViewMode("grid")}
+                  className={viewMode === "grid" ? "bg-blue-600 hover:bg-blue-700 text-white" : "hover:bg-blue-50 dark:hover:bg-blue-900/30"}
+                >
+                  <Grid3x3 className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "table" ? "default" : "ghost"}
+                  size="icon"
+                  onClick={() => setViewMode("table")}
+                  className={viewMode === "table" ? "bg-blue-600 hover:bg-blue-700 text-white" : "hover:bg-blue-50 dark:hover:bg-blue-900/30"}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Select value={jobTypeFilter} onValueChange={setJobTypeFilter}>
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="Filter by Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="remote">Remote</SelectItem>
-                <SelectItem value="onsite">Onsite</SelectItem>
-                <SelectItem value="hybrid">Hybrid</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="flex gap-1">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="icon"
-                onClick={() => setViewMode("grid")}
-              >
-                <Grid3x3 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "table" ? "default" : "ghost"}
-                size="icon"
-                onClick={() => setViewMode("table")}
-              >
-                <List className="h-4 w-4" />
-              </Button>
-            </div>
+          {/* Results Count */}
+          <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            Showing <span className="font-semibold text-blue-600 dark:text-blue-400">{filteredJobs.length}</span> of <span className="font-semibold text-blue-600 dark:text-blue-400">{jobs.length}</span> applications
           </div>
         </div>
 
         {/* Job Cards / Table View */}
         {filteredJobs.length === 0 ? (
-          <p className="text-center text-muted-foreground mt-20 text-lg">
-            No jobs found matching your criteria.
-          </p>
+          <div className="flex flex-col items-center justify-center mt-20 p-12 bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-md rounded-2xl shadow-lg">
+            <Briefcase className="w-20 h-20 text-blue-600 dark:text-blue-400 mb-4" />
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              No Jobs Found
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 text-center">
+              No jobs found matching your criteria. Try adjusting your filters or add new applications.
+            </p>
+          </div>
         ) : viewMode === "grid" ? (
           // GRID VIEW
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
