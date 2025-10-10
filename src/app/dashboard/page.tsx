@@ -219,7 +219,7 @@ export default function JobTrackerDashboard() {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
         {statCards.map((stat, index) => {
           const Icon = stat.icon;
           return (
@@ -231,7 +231,7 @@ export default function JobTrackerDashboard() {
             >
               <Card className={`bg-gradient-to-br ${stat.gradient} border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <CardTitle className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                     {stat.title}
                   </CardTitle>
                   <div className={`${stat.iconBg} rounded-lg p-2 shadow-md`}>
@@ -239,7 +239,7 @@ export default function JobTrackerDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1">
                     {stat.value}
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -253,7 +253,7 @@ export default function JobTrackerDashboard() {
       </div>
 
       {/* Content Grid */}
-      <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 lg:gap-8 grid-cols-1 xl:grid-cols-3">
         {/* Recent Applications */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -262,17 +262,17 @@ export default function JobTrackerDashboard() {
           className="xl:col-span-2"
         >
           <Card className="bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-md shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="space-y-1">
-                <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+                <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   Recent Applications
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                   Your latest job applications and their current status
                 </CardDescription>
               </div>
-              <Button asChild size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
-                <Link href="/dashboard/my-applications" className="flex items-center gap-2">
+              <Button asChild size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-md w-full sm:w-auto">
+                <Link href="/dashboard/my-applications" className="flex items-center justify-center gap-2">
                   View All
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -284,9 +284,9 @@ export default function JobTrackerDashboard() {
                   dashboardData.recentApplications.map((application) => (
                     <div 
                       key={application.id} 
-                      className="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30 hover:shadow-md transition-all"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30 hover:shadow-md transition-all"
                     >
-                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                         <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
                           application.status.toLowerCase() === 'applied' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' :
                           application.status.toLowerCase() === 'interview' ? 'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400' :
@@ -296,22 +296,22 @@ export default function JobTrackerDashboard() {
                           {getStatusIcon(application.status)}
                         </div>
                         <div className="grid gap-1 flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 leading-tight">
                             {application.company} - {application.role}
                           </p>
-                          <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400">
-                            <div className="flex items-center gap-1">
-                              <MapPin className="h-3 w-3" />
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-gray-600 dark:text-gray-400">
+                            <div className="flex items-center gap-1 min-w-0">
+                              <MapPin className="h-3 w-3 flex-shrink-0" />
                               <span className="truncate">{application.location}</span>
                             </div>
                             <div className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              {application.appliedDate}
+                              <Calendar className="h-3 w-3 flex-shrink-0" />
+                              <span className="whitespace-nowrap">{application.appliedDate}</span>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="ml-4">
+                      <div className="self-start sm:self-center">
                         {getStatusBadge(application.status)}
                       </div>
                     </div>
@@ -336,74 +336,74 @@ export default function JobTrackerDashboard() {
         >
           <Card className="bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-md shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+              <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                 Status Breakdown
               </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
+              <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 Your applications by current status
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6">
               {/* Applied */}
-              <div className="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                    <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-between p-3 sm:p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                    <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">Applied</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">Waiting for response</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Applied</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Waiting for response</p>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
                   {dashboardData.statusSummary.applied}
                 </div>
               </div>
               
               {/* Interview */}
-              <div className="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/30">
-                    <Clock className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+              <div className="flex items-center justify-between p-3 sm:p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/30">
+                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-600 dark:text-cyan-400" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">Interview</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">Scheduled meetings</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Interview</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Scheduled meetings</p>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
+                <div className="text-xl sm:text-2xl font-bold text-cyan-600 dark:text-cyan-400">
                   {dashboardData.statusSummary.interview}
                 </div>
               </div>
               
               {/* Offer */}
-              <div className="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
-                    <Award className="h-5 w-5 text-green-600 dark:text-green-400" />
+              <div className="flex items-center justify-between p-3 sm:p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
+                    <Award className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">Offer</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">Job offers received</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Offer</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Job offers received</p>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
                   {dashboardData.statusSummary.offer}
                 </div>
               </div>
               
               {/* Rejected */}
-              <div className="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
-                    <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
+              <div className="flex items-center justify-between p-3 sm:p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-blue-200/30 dark:border-blue-700/30">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
+                    <XCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 dark:text-red-400" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">Rejected</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">Applications declined</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Rejected</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Applications declined</p>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                <div className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">
                   {dashboardData.statusSummary.rejected}
                 </div>
               </div>
