@@ -23,7 +23,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -53,7 +52,7 @@ const Navbar = () => {
   }
 
   return (
-    <header className="w-full bg-white dark:bg-gray-950 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full bg-white dark:bg-gray-900/70 dark:backdrop-blur-xl shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700/50">
       <div className="container mx-auto flex items-center justify-between py-4 lg:py-6 px-4 sm:px-6 lg:px-0">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -62,7 +61,7 @@ const Navbar = () => {
             alt="Guide Logo"
             width={150}
             height={50}
-            className="w-32 sm:w-36 lg:w-40"
+            className="w-32 sm:w-36 lg:w-40 dark:invert dark:brightness-0 dark:contrast-200"
             priority
           />
         </Link>
@@ -98,43 +97,103 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex items-center gap-2 focus:outline-none"
+                    className="flex items-center gap-2 focus:outline-none group"
                     aria-label="Open user menu"
                   >
-                    <Image
-                      src={session.user.image || "/default.jpg"}
-                      alt={session.user.name || "User"}
-                      width={40}
-                      height={40}
-                      className="rounded-full border border-blue-600 cursor-pointer object-cover"
-                    />
+                    <div className="relative">
+                      <Image
+                        src={session.user.image || "/default.jpg"}
+                        alt={session.user.name || "User"}
+                        width={40}
+                        height={40}
+                        className="rounded-full border-2 border-blue-600 dark:border-blue-400 cursor-pointer object-cover transition-all group-hover:border-blue-700 dark:group-hover:border-blue-300 group-hover:shadow-lg"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-950 rounded-full"></div>
+                    </div>
                   </button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
                   align="end"
-                  className="w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md rounded-md space-y-2"
+                  className="w-64 sm:w-72 bg-gradient-to-br from-blue-50/95 to-cyan-50/95 dark:from-blue-900/95 dark:to-cyan-900/95 backdrop-blur-xl border border-blue-200/50 dark:border-blue-700/50 shadow-xl rounded-2xl p-2"
                 >
-                  <DropdownMenuLabel className="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {session.user.name || "User"}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  {/* User Info Header */}
+                  <div className="px-4 py-3 mb-2">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Image
+                        src={session.user.image || "/default.jpg"}
+                        alt={session.user.name || "User"}
+                        width={48}
+                        height={48}
+                        className="rounded-full border-2 border-blue-600 dark:border-blue-400 object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                          {session.user.name || "User"}
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                          {session.user.email}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuSeparator className="bg-blue-200/50 dark:bg-blue-700/50" />
+
+                  <DropdownMenuItem asChild className="p-0 focus:bg-transparent hover:bg-transparent">
                     <Link
                       href="/dashboard"
-                      className="block w-full text-left px-4 py-2 text-sm bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+                      className="flex items-center gap-3 w-full px-4 py-3 text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white hover:text-white rounded-xl font-medium transition-all duration-300 shadow-md hover:shadow-lg my-2"
                     >
-                      Dashboard
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        />
+                      </svg>
+                      <span className="text-white">Go to Dashboard</span>
+                      <svg
+                        className="w-4 h-4 ml-auto text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
                     </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuItem asChild className="p-0 focus:bg-transparent hover:bg-transparent">
                     <button
                       onClick={handleLogOutButton}
-                      className="w-full text-left px-4 py-2 text-sm bg-gradient-to-r from-red-600 to-red-800 text-white rounded-sm font-medium transition duration-300 hover:from-red-600 hover:to-red-700"
+                      className="flex items-center gap-3 w-full px-4 py-3 text-sm bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white hover:text-white rounded-xl font-medium transition-all duration-300 shadow-md hover:shadow-lg"
                     >
-                      Logout
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+                      </svg>
+                      <span className="text-white">Logout</span>
                     </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -211,7 +270,7 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-80 sm:w-96 bg-white dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800"
+                className="w-80 sm:w-96 bg-white dark:bg-gray-900/95 dark:backdrop-blur-xl border-l border-gray-200 dark:border-gray-700/50"
               >
                 <SheetHeader>
                   <SheetTitle className="text-left">
@@ -220,7 +279,7 @@ const Navbar = () => {
                       alt="Guide Logo"
                       width={140}
                       height={45}
-                      className="w-28 sm:w-32"
+                      className="w-28 sm:w-32 dark:invert dark:brightness-0 dark:contrast-200"
                     />
                   </SheetTitle>
                 </SheetHeader>

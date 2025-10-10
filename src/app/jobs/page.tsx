@@ -13,6 +13,8 @@ import {
   List,
   MapPin,
   Search,
+  Clock,
+  CheckCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -80,21 +82,22 @@ export default function AllJobs() {
   const getStatusBadge = (status?: string) => {
     if (!status)
       return (
-        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700">
+        <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 shadow-sm">
           Not Updated
         </span>
       );
 
     const statusMap: Record<string, string> = {
-      Applied: "bg-blue-100 text-blue-700",
-      Interview: "bg-yellow-100 text-yellow-700",
-      Selected: "bg-green-100 text-green-700",
-      Rejected: "bg-red-100 text-red-700",
+      Applied: "bg-blue-500 text-white shadow-blue-200 dark:shadow-blue-900",
+      Interview: "bg-cyan-400 text-white shadow-cyan-200 dark:shadow-cyan-900",
+      Selected: "bg-green-500 text-white shadow-green-200 dark:shadow-green-900",
+      Offer: "bg-green-500 text-white shadow-green-200 dark:shadow-green-900",
+      Rejected: "bg-red-500 text-white shadow-red-200 dark:shadow-red-900",
     };
 
-    const classes = statusMap[status] || "bg-gray-200 text-gray-700";
+    const classes = statusMap[status] || "bg-gray-500 text-white shadow-gray-200 dark:shadow-gray-900";
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${classes}`}>
+      <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${classes} shadow-md`}>
         {status}
       </span>
     );
@@ -178,58 +181,78 @@ export default function AllJobs() {
             </span>
           </p>
         ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredJobs.map((job: Job, index: number) => (
               <Card
                 key={index}
-                className="group relative overflow-hidden rounded-3xl border border-gray-200 shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.03]"
+                className="group relative rounded-2xl border border-blue-200/50 dark:border-blue-700/50 bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 backdrop-blur-md shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
               >
-                <div className="absolute top-0 left-0 w-full h-16 bg-blue-400 rounded-b-full opacity-30 -z-10"></div>
-                <CardHeader className="relative z-10">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <Briefcase className="w-5 h-5 text-blue-500" />
-                    <span className="truncate block max-w-[200px] dark:text-white">
-                      {job.title}
-                    </span>
-                  </CardTitle>
+                {/* Decorative gradient overlay */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl -z-10 group-hover:scale-150 transition-transform duration-500" />
+                
+                <CardHeader className="pb-3">
+                  <div className="flex items-start gap-2 mb-2">
+                    <div className="w-10 h-10 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                      <Briefcase className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                        {job.title}
+                      </CardTitle>
+                    </div>
+                  </div>
+                  
+                  <CardDescription className="flex items-center gap-2 text-gray-700 dark:text-gray-300 font-medium">
+                    <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{job.company}</span>
+                  </CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-3 text-sm text-muted-foreground relative z-10">
-                  <CardDescription className="flex items-center gap-2 text-muted-foreground">
-                    <Building2 className="w-4 h-4 text-blue-500" />
-                    {job.company}
-                  </CardDescription>
-
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-blue-500" />
-                    <span>{job.location}</span>
+                <CardContent className="space-y-3 pt-0">
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{job.location}</span>
                   </div>
 
+                  {/* Job Type Badge */}
                   <div className="flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-blue-500" />
-                    <span>Type: {job.type}</span>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-medium">
+                      <Clock className="w-3 h-3" />
+                      {job.type}
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <CalendarDays className="w-4 h-4 text-blue-500" />
-                    <span>
-                      Posted: {new Date(job.date).toLocaleDateString()}
-                    </span>
+                  {/* Date */}
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <CalendarDays className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    <span>Posted: {new Date(job.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                   </div>
 
+                  {/* Status Badge */}
                   <div className="flex items-center gap-2">
-                    <span>Status:</span>
+                    <CheckCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                     {getStatusBadge(job.status)}
                   </div>
 
+                  {/* Description Preview */}
+                  {job.description && (
+                    <div className="pt-2 border-t border-blue-200/50 dark:border-blue-700/50">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                        {job.description}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* View Job Button */}
                   <Button
                     asChild
                     size="sm"
-                    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-transform duration-300 hover:scale-[1.05]"
+                    className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all"
                   >
-                    <a href={job.url} target="_blank" rel="noopener noreferrer">
-                      View Job
-                      <ExternalLink className="w-4 h-4 ml-2" />
+                    <a href={job.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                      View Job Details
+                      <ExternalLink className="w-4 h-4" />
                     </a>
                   </Button>
                 </CardContent>

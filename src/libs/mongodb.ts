@@ -16,4 +16,5 @@ export const collectionName = {
   USERS: "users",
   APPLICATIONS: "applications",
   JOBS: "jobs",
+  REVIEWS: "reviews",
 };

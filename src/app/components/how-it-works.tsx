@@ -12,9 +12,24 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { id: "add", title: "Add jobs with one click", description: "Use the browser extension to add jobs instantly.", icon: SquarePlus },
-  { id: "sync", title: "Stay updated", description: "Gmail sync keeps interview invites and replies in one place.", icon: Mail },
-  { id: "track", title: "Track progress", description: "Monitor progress from the dashboard with analytics.", icon: BarChart },
+  { 
+    id: "add", 
+    title: "Scrape jobs with AI", 
+    description: "AI-powered Chrome extension extracts job details from any job board (LinkedIn, Indeed, etc.) and saves it to your dashboard instantly.", 
+    icon: SquarePlus 
+  },
+  { 
+    id: "sync", 
+    title: "Auto-update with AI", 
+    description: "Connect Gmail and let Gemini AI analyze your emails. It automatically detects job updates and changes status (Applied → Interview → Offer → Rejected).", 
+    icon: Mail 
+  },
+  { 
+    id: "track", 
+    title: "Track & analyze", 
+    description: "View all applications in one dashboard with real-time stats, status tracking, and visual analytics to monitor your job search progress.", 
+    icon: BarChart 
+  },
 ];
 
 export default function HowItWorks() {
@@ -28,7 +43,7 @@ export default function HowItWorks() {
         transition={{ duration: 0.8 }}
       >
         <motion.p
-          className="relative inline-block w-fit px-3 py-1 rounded-md text-sm uppercase tracking-wide font-medium text-white bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 bg-[length:200%_100%] border border-blue-600"
+          className="relative inline-block w-fit px-3 py-1 rounded-md text-sm uppercase tracking-wide font-medium text-white bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 bg-[length:200%_100%] border border-blue-600 mb-6"
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -39,9 +54,9 @@ export default function HowItWorks() {
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           <Typewriter
             words={[
-              "3 simple steps to manage applications",
-              "Add jobs, stay updated, track progress",
-              "Everything in one dashboard",
+              "3 AI-powered steps to job search success",
+              "Scrape jobs, auto-update, track progress",
+              "Let artificial intelligence work for you",
             ]}
             loop={0}
             cursor
@@ -58,7 +73,7 @@ export default function HowItWorks() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.8 }}
         >
-          Add roles with a click, get updates from Gmail, and track everything from one dashboard.
+          AI scrapes job details from any website, analyzes your Gmail for status updates, and organizes everything in one intelligent dashboard.
         </motion.p>
       </motion.div>
 
