@@ -144,14 +144,21 @@ const MyApplicationPage: React.FC = () => {
     );
   }
 
-  //  Filter Jobs
-  const filteredJobs = jobs.filter((job: Job) => {
-    const matchesSearch =
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = jobTypeFilter === "all" || job.type === jobTypeFilter;
-    return matchesSearch && matchesType;
-  });
+  //  Filter and Sort Jobs (latest first)
+  const filteredJobs = jobs
+    .filter((job: Job) => {
+      const matchesSearch =
+        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType = jobTypeFilter === "all" || job.type === jobTypeFilter;
+      return matchesSearch && matchesType;
+    })
+    .sort((a: Job, b: Job) => {
+      // Sort by date (latest first)
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA;
+    });
 
   return (
     <TooltipProvider>
