@@ -33,6 +33,7 @@ import {
   Loader2,
   ExternalLink,
   Clock,
+  CheckCircle,
 } from "lucide-react";
 import { GmailIntegration } from "./components/GmailIntegration";
 import { Toaster, toast } from "sonner";
@@ -50,6 +51,7 @@ interface Job {
   description: string;
   url: string;
   date: string;
+  status?: string;
 }
 
 const MyApplicationPage: React.FC = () => {
@@ -59,6 +61,31 @@ const MyApplicationPage: React.FC = () => {
 
   // Fetch user-specific jobs
   const { data: jobs = [], isLoading } = useUserJobs(email);
+
+  // Function to return status badge with color
+  const getStatusBadge = (status?: string) => {
+    if (!status)
+      return (
+        <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 shadow-sm">
+          Not Updated
+        </span>
+      );
+
+    const statusMap: Record<string, string> = {
+      Applied: "bg-blue-500 text-white shadow-blue-200 dark:shadow-blue-900",
+      Interview: "bg-cyan-400 text-white shadow-cyan-200 dark:shadow-cyan-900",
+      Selected: "bg-green-500 text-white shadow-green-200 dark:shadow-green-900",
+      Offer: "bg-green-500 text-white shadow-green-200 dark:shadow-green-900",
+      Rejected: "bg-red-500 text-white shadow-red-200 dark:shadow-red-900",
+    };
+
+    const classes = statusMap[status] || "bg-gray-500 text-white shadow-gray-200 dark:shadow-gray-900";
+    return (
+      <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${classes} shadow-md`}>
+        {status}
+      </span>
+    );
+  };
 
   const [searchTerm, setSearchTerm] = useState("");
   const [jobTypeFilter, setJobTypeFilter] = useState("all");
@@ -253,6 +280,12 @@ const MyApplicationPage: React.FC = () => {
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <CalendarDays className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                     <span>Applied: {new Date(job.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  </div>
+
+                  {/* Status Badge */}
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    {getStatusBadge(job.status)}
                   </div>
 
                   {/* Description Preview */}
