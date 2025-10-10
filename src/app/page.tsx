@@ -1,14 +1,23 @@
 import BannerSection from "./components/banner-section";
-import { ModeToggle } from "./components/mode-toggle";
-import ProblemStrip from "./components/feature-section";
+import FeatureSection from "./components/feature-section";
+import HowItWorks from "./components/how-it-works";
+import PromotionalSection from "./components/promotional-section";
+import DemoSection from "./components/demo-section";
+import FAQSection from "@/app/components/FAQ";
+import Testimonials from "./components/Testimonials";
 
 export default function Home() {
   return (
     <>
-      <ModeToggle/>
-      <BannerSection />
-      <ProblemStrip/>
+      <section className="bg-gray-100 dark:bg-gray-900">
+        <BannerSection />
+        <FeatureSection />
+        <HowItWorks />
+        <PromotionalSection />
+        <DemoSection />
+        <FAQSection />
+        <Testimonials />
+      </section>
     </>
-
   );
 }

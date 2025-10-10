@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 
 export default function BannerSection() {
   const [animationData, setAnimationData] = useState(null);
@@ -14,7 +15,8 @@ export default function BannerSection() {
 
   return (
     <section className="bg-gray-100 dark:bg-gray-900">
-      <div className="container mx-auto flex flex-col md:flex-row items-center gap-10">
+      <div className="container mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
+
         {/* Left Text Section */}
         <div className="flex-1 text-center md:text-left space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
@@ -26,10 +28,10 @@ export default function BannerSection() {
             <span className="font-semibold">Apply Mate</span> helps you track,
             manage, and stay ahead in your job search.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
+          <div className="flex flex-col items-center md:items-start my-2 sm:flex-row gap-4 justify-center md:justify-start ">
+            <Link href="/login" className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
 
