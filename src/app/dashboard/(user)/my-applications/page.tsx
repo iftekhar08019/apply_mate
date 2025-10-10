@@ -36,12 +36,14 @@ import {
   CheckCircle,
   Sparkles,
   Filter,
+  Plus,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditModal } from "./components/edit-modal";
 import axiosSecure from "@/hooks/useAxiosSecure";
 import Link from "next/link";
+import { AddJobModal } from "../../components/AddJobModal";
 
 interface Job {
   uid: string;
@@ -94,6 +96,7 @@ const MyApplicationPage: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletingUid, setDeletingUid] = useState<string | null>(null);
+  const [isAddJobModalOpen, setIsAddJobModalOpen] = useState(false);
   //Delete Job Mutation
   const deleteMutation = useMutation({
     mutationFn: async (uid: string) => {
@@ -155,18 +158,30 @@ const MyApplicationPage: React.FC = () => {
       <Toaster position="top-center" />
       <div className="min-h-screen p-4 sm:p-6 lg:p-8">
         {/* Header Section */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 text-white border border-blue-600 px-4 py-2 rounded-full shadow-lg mb-4">
-            <Sparkles className="h-4 w-4" />
-            <span className="text-sm font-medium uppercase tracking-wide">My Job Applications</span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+          <div className="text-center sm:text-left">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 text-white border border-blue-600 px-4 py-2 rounded-full shadow-lg mb-4">
+              <Sparkles className="h-4 w-4" />
+              <span className="text-sm font-medium uppercase tracking-wide">My Job Applications</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+              Track Your{" "}
+              <span className="text-blue-600 dark:text-blue-400">Job Journey</span>
+            </h1>
+            <p className="text-gray-700 dark:text-gray-300 text-lg">
+              Manage all your job applications in one place with AI-powered tracking and insights
+            </p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
-            Track Your{" "}
-            <span className="text-blue-600 dark:text-blue-400">Job Journey</span>
-          </h1>
-          <p className="text-gray-700 dark:text-gray-300 text-lg max-w-2xl mx-auto">
-            Manage all your job applications in one place with AI-powered tracking and insights
-          </p>
+
+          {/* Add Application Button */}
+          <Button
+            onClick={() => setIsAddJobModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all self-center sm:self-start"
+            size="lg"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Add Application
+          </Button>
         </div>
 
         {/* Search & Filters Card */}
@@ -422,6 +437,15 @@ const MyApplicationPage: React.FC = () => {
           email={email!}
         />
       )}
+
+      {/* Add Job Modal */}
+      <AddJobModal
+        open={isAddJobModalOpen}
+        onOpenChange={setIsAddJobModalOpen}
+        onSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ["userJobs", email] });
+        }}
+      />
     </TooltipProvider>
   );
 };
