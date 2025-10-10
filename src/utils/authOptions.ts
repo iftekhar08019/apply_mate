@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectToDatabase, collectionName } from "@/libs/mongodb";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
 
 const DEFAULT_AVATAR = "https://i.imgur.com/YxEP0Zh.png"; 
 
@@ -49,10 +48,6 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
-    }),
   ],
 
   pages: {
@@ -67,13 +62,14 @@ export const authOptions: NextAuthOptions = {
   async signIn({ user, account }) {
     const { db } = await connectToDatabase();
 
-    // Handle OAuth logins
-    if (account?.provider === "google" || account?.provider === "github") {
+    // Handle Google OAuth login
+    if (account?.provider === "google") {
       const existingUser = await db
         .collection(collectionName.USERS)
         .findOne({ email: user.email });
 
       if (!existingUser) {
+        // ✅ First-time Google user: Create new account automatically
         const insertResult = await db.collection(collectionName.USERS).insertOne({
           name: user.name,
           email: user.email,
@@ -85,7 +81,7 @@ export const authOptions: NextAuthOptions = {
         // ✅ Assign the newly created _id to user.id
         user.id = insertResult.insertedId.toString();
       } else {
-        // ✅ Ensure user.id always exists
+        // ✅ Existing user: Retrieve their data
         user.id = existingUser._id.toString();
       }
     }

@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
@@ -45,27 +44,14 @@ export default function LoginForm() {
 
   // Google Login
   const handleGoogleLogin = async () => {
-    setLoading(true);
-    const res = await signIn("google", { redirect: false });
-    if (res?.error) {
+    try {
+      setLoading(true);
+      await signIn("google", { callbackUrl: "/dashboard" });
+      // Note: If successful, NextAuth will redirect automatically
+      // No need for manual redirect here
+    } catch (error) {
       toast.error("Google login failed");
       setLoading(false);
-    } else {
-      toast.success("Logged in with Google");
-      router.push("/");
-    }
-  };
-
-  // GitHub Login
-  const handleGitHubLogin = async () => {
-    setLoading(true);
-    const res = await signIn("github", { redirect: false });
-    if (res?.error) {
-      toast.error("GitHub login failed");
-      setLoading(false);
-    } else {
-      toast.success("Logged in with GitHub");
-      router.push("/");
     }
   };
 
@@ -163,27 +149,16 @@ export default function LoginForm() {
         <hr className="flex-1 border-gray-300" />
       </div>
 
-      {/* Social Buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleGoogleLogin}
-          type="button"
-          disabled={loading}
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-60"
-        >
-          <FcGoogle />
-          Google
-        </button>
-        <button
-          onClick={handleGitHubLogin}
-          type="button"
-          disabled={loading}
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-60"
-        >
-          <FaGithub />
-          GitHub
-        </button>
-      </div>
+      {/* Social Login Button */}
+      <button
+        onClick={handleGoogleLogin}
+        type="button"
+        disabled={loading}
+        className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-60"
+      >
+        <FcGoogle />
+        Continue with Google
+      </button>
 
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-3">

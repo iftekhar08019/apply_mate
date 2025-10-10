@@ -4,7 +4,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Mail, Lock, User, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -128,17 +127,6 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
       }
     } catch (error) {
       toast.error("Google login failed");
-    }
-  };
-
-  // GitHub Login
-  const handleGitHubLogin = async () => {
-    const res = await signIn("github", { callbackUrl:"/dashboard" });
-    if (res?.error) {
-      toast.error("GitHub login failed");
-    } else {
-      toast.success("Logged in with GitHub");
-      router.push("/");
     }
   };
 
@@ -354,22 +342,13 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
       </div>
 
       {/* Social Signup */}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
-        >
-          <FcGoogle /> Google
-        </button>
-        <button
-          type="button"
-          onClick={handleGitHubLogin}
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
-        >
-          <FaGithub /> GitHub
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={handleGoogleLogin}
+        className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+      >
+        <FcGoogle /> Continue with Google
+      </button>
     </>
   );
 }
