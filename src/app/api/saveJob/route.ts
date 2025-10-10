@@ -4,15 +4,15 @@ import { ObjectId } from 'mongodb';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('=== saveJob API called ===');
+    // console.log('=== saveJob API called ===');
     const body = await request.json();
     const { email, job } = body;
     
-    console.log('Request body:', { email, job });
+    // console.log('Request body:', { email, job });
 
     // Validate required fields
     if (!email || !job) {
-      console.log('Validation failed: missing email or job');
+      // console.log('Validation failed: missing email or job');
       return NextResponse.json(
         { error: 'Email and job data are required' },
         { status: 400 }
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     // Validate job data structure
     if (!job.title || !job.company) {
-      console.log('Validation failed: missing title or company');
+      // console.log('Validation failed: missing title or company');
       return NextResponse.json(
         { error: 'Job title and company are required' },
         { status: 400 }
@@ -29,15 +29,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Connect to database
-    console.log('Connecting to database...');
+    // console.log('Connecting to database...');
     let db;
     try {
       const connection = await connectToDatabase();
       db = connection.db;
-      console.log('Database connected successfully');
-      console.log('Database name:', db.databaseName);
+      // console.log('Database connected successfully');
+      // console.log('Database name:', db.databaseName);
     } catch (dbError) {
-      console.error('Database connection error:', dbError);
+      // console.error('Database connection error:', dbError);
       return NextResponse.json(
         { error: 'Database connection failed' },
         { status: 500 }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       source: 'chrome-extension'
     };
 
-    console.log('Adding job to user document:', jobData);
+    // console.log('Adding job to user document:', jobData);
 
     // Check if user exists and add job to their jobs array
     try {
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         );
 
         if (isDuplicate) {
-          console.log('Duplicate job detected, not saving');
+          // console.log('Duplicate job detected, not saving');
           return NextResponse.json({
             message: 'Job already exists',
             totalJobs: existingUser.jobs?.length || 0,
@@ -95,14 +95,14 @@ export async function POST(request: NextRequest) {
         if (updateResult.modifiedCount > 0) {
           const updatedUser = await db.collection('jobs').findOne({ email: email });
           const totalJobs = updatedUser?.jobs?.length || 0;
-          console.log('Job added to existing user, total jobs:', totalJobs);
+          // console.log('Job added to existing user, total jobs:', totalJobs);
           
           return NextResponse.json({
             message: 'Job saved successfully',
             totalJobs: totalJobs
           });
         } else {
-          console.log('Failed to update existing user');
+          // console.log('Failed to update existing user');
           return NextResponse.json(
             { error: 'Failed to update user' },
             { status: 500 }
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
         };
 
         const insertResult = await db.collection('jobs').insertOne(newUser);
-        console.log('New user created with first job, inserted ID:', insertResult.insertedId);
+        // console.log('New user created with first job, inserted ID:', insertResult.insertedId);
         
         return NextResponse.json({
           message: 'Job saved successfully',
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (dbError) {
-      console.error('Error saving job to user document:', dbError);
+      // console.error('Error saving job to user document:', dbError);
       return NextResponse.json(
         { error: 'Failed to save job' },
         { status: 500 }
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error saving job:', error);
+    // console.error('Error saving job:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

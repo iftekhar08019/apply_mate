@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const pageContent = extractPageContent();
       sendResponse({ success: true, pageContent: pageContent });
     } catch (error) {
-      console.error('Error extracting page content:', error);
+      // console.error('Error extracting page content:', error);
       sendResponse({ success: false, error: error.message });
     }
   }
@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Extract page content for AI processing
 function extractPageContent() {
-  console.log('Extracting page content for AI...');
+  // console.log('Extracting page content for AI...');
   
   // Get basic page metadata
   const pageTitle = document.title;
@@ -61,7 +61,7 @@ function extractPageContent() {
     if (container) {
       mainContent = container.textContent || container.innerText;
       if (mainContent.length > 500) {
-        console.log(`Found main content using selector: ${selector}`);
+        // console.log(`Found main content using selector: ${selector}`);
         break;
       }
     }

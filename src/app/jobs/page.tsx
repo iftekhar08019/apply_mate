@@ -49,7 +49,7 @@ export default function AllJobs() {
 
   // Fetch user-specific jobs
   const { data: jobs = [] } = useUserJobs(email);
-  console.log(jobs);
+  // console.log(jobs);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [jobTypeFilter, setJobTypeFilter] = useState("all");

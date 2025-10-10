@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
         const response = await axiosSecure.get("/gmail/sync");
         setGmailConnected(response.data.gmailConnected || false);
       } catch (error) {
-        console.error("Error checking Gmail status:", error);
+        // console.error("Error checking Gmail status:", error);
       }
     };
 
@@ -90,7 +90,7 @@ export default function Layout({ children }: LayoutProps) {
         }
       }
     } catch (error) {
-      console.error("Error connecting Gmail:", error);
+      // console.error("Error connecting Gmail:", error);
       toast.error("Failed to connect Gmail");
       setConnectingGmail(false);
     }
@@ -113,7 +113,7 @@ export default function Layout({ children }: LayoutProps) {
         }, 2000);
       }
     } catch (error) {
-      console.error("Error syncing Gmail:", error);
+      // console.error("Error syncing Gmail:", error);
       toast.error("Failed to sync Gmail");
     } finally {
       setSyncing(false);

@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error("Error uploading avatar:", error);
+    // console.error("Error uploading avatar:", error);
     return NextResponse.json({ 
       message: "Failed to upload avatar",
       error: error instanceof Error ? error.message : "Unknown error"

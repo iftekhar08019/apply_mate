@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
               });
             }
           } catch (error) {
-            console.error(`Error analyzing email for ${user.email}:`, error);
+            // console.error(`Error analyzing email for ${user.email}:`, error);
             continue;
           }
         }
@@ -141,7 +141,7 @@ export async function GET(request: NextRequest) {
           applicationsUpdated: updatesCount,
         });
       } catch (error) {
-        console.error(`Error syncing for user ${user.email}:`, error);
+        // console.error(`Error syncing for user ${user.email}:`, error);
         results.push({
           userEmail: user.email,
           error: "Failed to sync",
@@ -155,7 +155,7 @@ export async function GET(request: NextRequest) {
       results,
     });
   } catch (error) {
-    console.error("Error in cron job:", error);
+    // console.error("Error in cron job:", error);
     const errorMessage = error instanceof Error ? error.message : "Cron job failed";
     return NextResponse.json(
       { error: errorMessage },
