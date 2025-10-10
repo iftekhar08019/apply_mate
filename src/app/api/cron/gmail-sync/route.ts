@@ -13,10 +13,23 @@ import {
 // This endpoint can be called by Vercel Cron or an external cron service
 export async function GET(request: NextRequest) {
   try {
-    // Optional: Verify cron secret for security
+    // MANDATORY: Verify cron secret for security
+    const cronSecret = process.env.CRON_SECRET;
+    
+    // CRITICAL: Fail if CRON_SECRET is not configured
+    if (!cronSecret) {
+      return NextResponse.json({ 
+        error: "CRON_SECRET not configured - endpoint disabled for security" 
+      }, { status: 500 });
+    }
+
     const authHeader = request.headers.get("authorization");
-    if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    
+    // Validate authorization header
+    if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ 
+        error: "Unauthorized - Invalid or missing authorization token" 
+      }, { status: 401 });
     }
 
     const { db } = await connectToDatabase();
