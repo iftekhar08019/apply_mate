@@ -10,6 +10,7 @@ import {
   LogOut,
   House,
   Star,
+  Mail,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ export default function SidebarMenu({}) {
     { name: "Home", href: "/", icon: House },
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "My Applications", href: "/dashboard/my-applications", icon: FileText },
+    { name: "Gmail Integration", href: "/dashboard/gmail-integration", icon: Mail },
     { name: "Leave a Review", href: "/dashboard/review", icon: Star },
     { name: "My Profile", href: `/dashboard/profile/${userId}`, icon: Settings },
   ];

@@ -173,11 +173,11 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
     <>
       <Card className="border-2 border-blue-100 dark:border-blue-900">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl">
-            <Mail className="w-5 h-5 text-blue-600" />
+          <CardTitle className="flex items-center gap-2 text-xl text-gray-900 dark:text-white">
+            <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             Gmail Integration
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
             Automatically track job application updates from your Gmail inbox using AI
           </CardDescription>
         </CardHeader>
