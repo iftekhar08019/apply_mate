@@ -38,7 +38,7 @@ export async function PATCH(request: NextRequest) {
       { returnDocument: "after" }
     );
 
-    console.log("Update result:", result);
+    // console.log("Update result:", result);
 
     // Check if user was found and updated
     if (!result) {
@@ -62,7 +62,7 @@ export async function PATCH(request: NextRequest) {
     }, { status: 200 });
     
   } catch (error) {
-    console.error("Error updating profile:", error);
+    // console.error("Error updating profile:", error);
     return NextResponse.json({ 
       message: "Internal server error",
       error: error instanceof Error ? error.message : "Unknown error"

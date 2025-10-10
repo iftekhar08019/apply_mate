@@ -150,13 +150,13 @@ export default function SectionReorderer({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    console.log('Drag end:', { active: active.id, over: over?.id });
+    // console.log('Drag end:', { active: active.id, over: over?.id });
 
     if (active.id !== over?.id && over) {
       const oldIndex = sectionOrder.indexOf(active.id);
       const newIndex = sectionOrder.indexOf(over.id);
       
-      console.log('Reordering:', { oldIndex, newIndex });
+      // console.log('Reordering:', { oldIndex, newIndex });
       
       if (oldIndex !== -1 && newIndex !== -1) {
         onReorder(arrayMove(sectionOrder, oldIndex, newIndex));

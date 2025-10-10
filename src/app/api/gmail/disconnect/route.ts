@@ -32,7 +32,7 @@ export async function POST() {
       message: "Gmail disconnected successfully",
     });
   } catch (error) {
-    console.error("Error disconnecting Gmail:", error);
+    // console.error("Error disconnecting Gmail:", error);
     const errorMessage = error instanceof Error ? error.message : "Failed to disconnect Gmail";
     return NextResponse.json(
       { error: errorMessage },

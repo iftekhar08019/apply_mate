@@ -16,7 +16,7 @@ const getLoggedInUser = async (): Promise<User | null> => {
     const res = await axiosSecure.get("/profile/user");
     return res.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return null;
   }
 };
@@ -27,7 +27,7 @@ const getDashboardStats = async () => {
     const res = await axiosSecure.get("/dashboard/stats");
     return res.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return { totalApplications: 0 };
   }
 };
