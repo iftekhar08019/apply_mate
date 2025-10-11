@@ -156,7 +156,7 @@ export default function LoginForm() {
           />
           <span className="select-none">Remember me</span>
         </label>
-        <Link href="/" className="text-blue-600 dark:text-blue-400 hover:underline font-medium transition">
+        <Link href="/forgot-password" className="text-blue-600 dark:text-blue-400 hover:underline font-medium transition">
           Forgot Password?
         </Link>
       </motion.div>
