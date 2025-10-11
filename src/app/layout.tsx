@@ -32,7 +32,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const session = await getServerSession(authOptions)
+  // Handle session errors gracefully to prevent redirect loops on public pages
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch {
+    // Ignore auth errors on public pages - session will be null
+    session = null;
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
