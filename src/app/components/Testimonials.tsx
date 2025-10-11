@@ -30,8 +30,8 @@ export default function TestimonialSlider() {
         if (data.success) {
           setReviews(data.data);
         }
-      } catch (error) {
-        // console.error("Error fetching reviews:", error);
+      } catch {
+        // console.error("Error occurred");
       } finally {
         setLoading(false);
       }

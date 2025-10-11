@@ -7,7 +7,7 @@ import SectionReorderer from "./components/section-reorderer";
 import SectionSidebar from "./components/section-sidebar";
 import SingleSectionForm from "./components/single-section-form";
 import PDFDownload from "./components/pdf-download";
-import { ResumeData, AvailableSection, GenericSection } from "./types/resume-types";
+import { ResumeData, AvailableSection, GenericSection, PersonalInfo, Skills, Experience, Project, Education } from "./types/resume-types";
 
 const STORAGE_KEY = 'resume_builder_data';
 const STORAGE_KEY_VISIBILITY = 'resume_builder_visibility';
@@ -158,8 +158,10 @@ export default function ResumeBuilder() {
     }
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateResumeData = (section: keyof ResumeData, data: any) => {
+  const updateResumeData = (
+    section: keyof ResumeData, 
+    data: PersonalInfo | Skills | Experience[] | Project[] | Education | string | GenericSection[] | string[]
+  ) => {
     setResumeData(prev => ({
       ...prev,
       [section]: data

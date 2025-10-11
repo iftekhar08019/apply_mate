@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Plus, Settings, User, Briefcase, Code, GraduationCap, Globe, FileText } from 'lucide-react';
+import { Plus, Settings, User, Briefcase, Code, GraduationCap, Globe, FileText, LucideIcon } from 'lucide-react';
 import { AvailableSection, GenericSection } from '../types/resume-types';
 
 interface SectionSidebarProps {
@@ -16,7 +16,7 @@ interface SectionSidebarProps {
   onRemoveGenericSection?: (sectionId: string) => void;
 }
 
-const sectionIcons: Record<string, any> = {
+const sectionIcons: Record<string, LucideIcon> = {
   'personal': User,
   'skills': Code,
   'experiences': Briefcase,

@@ -1,57 +1,12 @@
 "use client";
 
 import { useState } from 'react';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay, DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
-import { SectionType, GenericSection } from '../types/resume-types';
-
-interface SectionItemProps {
-  id: string;
-  title: string;
-  isVisible: boolean;
-}
-
-function SectionItem({ id, title, isVisible }: SectionItemProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`flex items-center gap-2 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg min-w-0 ${
-        !isVisible ? 'opacity-50' : ''
-      }`}
-    >
-      <div
-        {...attributes}
-        {...listeners}
-        className="cursor-grab hover:cursor-grabbing text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 flex-shrink-0 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-      >
-        <GripVertical size={14} />
-      </div>
-      <span className="flex-1 text-sm font-medium text-gray-900 dark:text-white truncate min-w-0">
-        {title}
-      </span>
-      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isVisible ? 'bg-blue-500' : 'bg-gray-300'}`} />
-    </div>
-  );
-}
+import { GenericSection } from '../types/resume-types';
 
 interface SortableSectionItemProps {
   id: string;
@@ -143,18 +98,17 @@ export default function SectionReorderer({
     })
   );
 
-  const handleDragStart = (event: any) => {
-    setActiveId(event.active.id);
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     // console.log('Drag end:', { active: active.id, over: over?.id });
 
     if (active.id !== over?.id && over) {
-      const oldIndex = sectionOrder.indexOf(active.id);
-      const newIndex = sectionOrder.indexOf(over.id);
+      const oldIndex = sectionOrder.indexOf(active.id as string);
+      const newIndex = sectionOrder.indexOf(over.id as string);
       
       // console.log('Reordering:', { oldIndex, newIndex });
       

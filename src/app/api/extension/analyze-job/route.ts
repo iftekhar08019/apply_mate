@@ -65,12 +65,12 @@ export async function POST(request: NextRequest) {
       success: true,
       jobData,
     });
-  } catch (error) {
+  } catch {
     // console.error('Error in analyze-job API:', error);
     return NextResponse.json(
       { 
         error: 'Failed to analyze job',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: 'Unknown error'
       },
       { status: 500 }
     );

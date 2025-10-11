@@ -63,7 +63,7 @@ export default function FAQSection() {
             <span className="text-blue-600 dark:text-blue-400">Questions</span>
           </h2>
           <p className="text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-            Find answers to the most common questions about Apply Mate's AI-powered features and how they work.
+            Find answers to the most common questions about Apply Mate&apos;s AI-powered features and how they work.
           </p>
         </motion.div>
 

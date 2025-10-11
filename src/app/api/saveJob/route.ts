@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       db = connection.db;
       // console.log('Database connected successfully');
       // console.log('Database name:', db.databaseName);
-    } catch (dbError) {
+    } catch {
       // console.error('Database connection error:', dbError);
       return NextResponse.json(
         { error: 'Database connection failed' },
@@ -117,8 +117,8 @@ export async function POST(request: NextRequest) {
           updatedAt: new Date()
         };
 
-        const insertResult = await db.collection('jobs').insertOne(newUser);
-        // console.log('New user created with first job, inserted ID:', insertResult.insertedId);
+        await db.collection('jobs').insertOne(newUser);
+        // console.log('New user created with first job');
         
         return NextResponse.json({
           message: 'Job saved successfully',
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
           totalJobs: 1
         });
       }
-    } catch (dbError) {
+    } catch {
       // console.error('Error saving job to user document:', dbError);
       return NextResponse.json(
         { error: 'Failed to save job' },
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-  } catch (error) {
+  } catch {
     // console.error('Error saving job:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

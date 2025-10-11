@@ -61,11 +61,11 @@ export async function PATCH(request: NextRequest) {
       user: userWithoutPassword,
     }, { status: 200 });
     
-  } catch (error) {
-    // console.error("Error updating profile:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json({ 
       message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error"
+      error: "Unknown error"
     }, { status: 500 });
   }
 }

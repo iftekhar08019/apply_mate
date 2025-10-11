@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
-import { AvailableSection, SectionType } from '../types/resume-types';
+import { AvailableSection } from '../types/resume-types';
 
 interface SectionSelectorProps {
   availableSections: AvailableSection[];

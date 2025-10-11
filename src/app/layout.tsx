@@ -43,7 +43,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar session={session} />
+          <Navbar />
           <Toaster richColors position="top-center" />
           {children}
           <Footer />
