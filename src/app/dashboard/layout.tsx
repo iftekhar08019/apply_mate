@@ -34,6 +34,7 @@ export default function Layout({ children }: LayoutProps) {
   const [gmailConnected, setGmailConnected] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [connectingGmail, setConnectingGmail] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Check Gmail connection status on mount
   useEffect(() => {
@@ -128,7 +129,7 @@ export default function Layout({ children }: LayoutProps) {
           {/* Left */}
           <div className="flex items-center gap-4">
             {/* Mobile Sidebar */}
-            <Sheet>
+            <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
                   <Menu className="h-6 w-6 text-gray-700 dark:text-gray-200" />
@@ -138,7 +139,7 @@ export default function Layout({ children }: LayoutProps) {
                 <VisuallyHidden>
                   <SheetTitle>Sidebar Menu</SheetTitle>
                 </VisuallyHidden>
-                <SidebarMenu />
+                <SidebarMenu onLinkClick={() => setIsSidebarOpen(false)} />
               </SheetContent>
             </Sheet>
 
