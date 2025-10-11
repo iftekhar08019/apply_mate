@@ -9,7 +9,8 @@ import img from "../../public/assets/Error.png";
 
 export default function NotFound() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-center px-6 py-16">
+    <div className="fixed inset-0 z-[9999] overflow-auto">
+      <section className="relative min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-center px-6 py-16">
       {/* Main Container */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -72,5 +73,6 @@ export default function NotFound() {
         ></motion.div>
       </div>
     </section>
+    </div>
   );
 }
