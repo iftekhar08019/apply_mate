@@ -14,8 +14,8 @@ const useSignup = () => {
       const res = await axiosSecure.post("/auth/signup", data);
       return res.data;
     },
-    onSuccess: (data) => {
-      // console.log(data.message);
+    onSuccess: () => {
+      // console.log('Signup successful');
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
