@@ -67,8 +67,8 @@ export async function fetchRecentEmails(
         date,
         body: body.substring(0, 2000), // Limit body length
       });
-    } catch (error) {
-      // console.error(`Error fetching message ${message.id}:`, error);
+    } catch {
+      // console.error(`Error fetching message ${message.id}`);
     }
   }
 
@@ -192,8 +192,8 @@ JSON:`;
 
     // console.log("✅ [AI] Valid job application detected:", parsed);
     return parsed as ApplicationUpdate;
-  } catch (error) {
-    // console.error("❌ [AI] Error analyzing email with AI:", error);
+  } catch {
+    // console.error("❌ [AI] Error analyzing email with AI");
     return null;
   }
 }
