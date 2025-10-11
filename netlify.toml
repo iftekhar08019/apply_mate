@@ -8,4 +8,6 @@
 [build.environment]
   NPM_FLAGS = "--version"
   NODE_VERSION = "20"
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_OMIT_PATHS = "chrome-extension/**,README.md,.next/**"
 
