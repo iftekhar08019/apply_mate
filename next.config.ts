@@ -6,13 +6,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "i.ibb.co",
-        port: "",
         pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "flowbite.s3.amazonaws.com",
-        port: "",
         pathname: "/**",
       },
       {
