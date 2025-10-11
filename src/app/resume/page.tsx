@@ -82,8 +82,8 @@ export default function ResumeBuilder() {
         if (storedSection) {
           setSelectedSection(storedSection);
         }
-      } catch (error) {
-        // console.error('Error loading data from localStorage:', error);
+      } catch {
+        // console.error('Error loading data from localStorage');
       }
       
       setIsHydrated(true);
@@ -96,8 +96,8 @@ export default function ResumeBuilder() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
         // Changes are saved automatically without toast notification
-      } catch (error) {
-        // console.error('Error saving resume data to localStorage:', error);
+      } catch {
+        // console.error('Error saving resume data to localStorage');
         toast.error('Failed to save changes');
       }
     }
@@ -108,8 +108,8 @@ export default function ResumeBuilder() {
     if (isHydrated && typeof window !== 'undefined') {
       try {
         localStorage.setItem(STORAGE_KEY_VISIBILITY, JSON.stringify(sectionVisibility));
-      } catch (error) {
-        // console.error('Error saving visibility data to localStorage:', error);
+      } catch {
+        // console.error('Error saving visibility data to localStorage');
       }
     }
   }, [sectionVisibility, isHydrated]);
@@ -119,8 +119,8 @@ export default function ResumeBuilder() {
     if (isHydrated && typeof window !== 'undefined' && selectedSection) {
       try {
         localStorage.setItem(STORAGE_KEY_SELECTED_SECTION, selectedSection);
-      } catch (error) {
-        // console.error('Error saving selected section to localStorage:', error);
+      } catch {
+        // console.error('Error saving selected section to localStorage');
       }
     }
   }, [selectedSection, isHydrated]);
@@ -275,8 +275,8 @@ export default function ResumeBuilder() {
                   localStorage.removeItem(STORAGE_KEY);
                   localStorage.removeItem(STORAGE_KEY_VISIBILITY);
                   localStorage.removeItem(STORAGE_KEY_SELECTED_SECTION);
-                } catch (error) {
-                  // console.error('Error clearing localStorage:', error);
+                } catch {
+                  // console.error('Error clearing localStorage');
                   toast.error('Failed to clear data');
                   toast.dismiss(t.id);
                   return;
