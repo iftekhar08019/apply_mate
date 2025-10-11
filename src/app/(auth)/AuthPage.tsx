@@ -3,11 +3,15 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "./login/components/login-form";
 import SignUpForm from "./signup/components/signup-form";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export default function AuthPage() {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
+  
   useEffect(() => {
     if (pathname.includes('signup')){
       setIsLogin(false)
@@ -16,57 +20,149 @@ export default function AuthPage() {
     }
   },[pathname])
 
+  const handleToggle = (toLogin: boolean) => {
+    setIsLogin(toLogin);
+    router.push(toLogin ? '/login' : '/signup');
+  };
+
   return (
-    <section className="flex flex-col items-center gap-4">
+    <section className="flex flex-col items-center gap-4 w-full relative z-10">
       <AnimatePresence mode="wait">
         {isLogin ? (
           <motion.div
             key="login"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
             className="w-full"
           >
-            <div className="text-center mb-4">
-              <h1 className="text-3xl font-bold">Welcome Back !</h1>
-              <p className="text-gray-300 mt-2">Please enter your details</p>
+            {/* Header */}
+            <div className="text-center mb-6">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full mb-4">
+                  <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                    AI-Powered Job Tracking
+                  </span>
+                </div>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Welcome Back!
+              </motion.h1>
+              <motion.p 
+                className="text-gray-600 dark:text-gray-300"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                Sign in to continue your job search journey
+              </motion.p>
             </div>
 
             <LoginForm />
 
-            <p className="text-sm text-center mt-4">
-              Don’t have an account?{" "}
+            <motion.p 
+              className="text-sm text-center mt-6 text-gray-600 dark:text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              Don&apos;t have an account?{" "}
               <button
-                onClick={() => setIsLogin(false)}
-                className="text-blue-600 font-medium hover:underline"
+                onClick={() => handleToggle(false)}
+                className="text-blue-600 dark:text-blue-400 font-semibold hover:underline transition"
               >
-                Sign Up
+                Create Account
               </button>
-            </p>
+            </motion.p>
           </motion.div>
         ) : (
           <motion.div
             key="signup"
-             initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="w-full"
           >
+            {/* Header */}
+            <div className="text-center mb-6">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full mb-4">
+                  <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                    Start Your Journey
+                  </span>
+                </div>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Create an Account
+              </motion.h1>
+              <motion.p 
+                className="text-gray-600 dark:text-gray-300"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                Join thousands tracking their job applications with AI
+              </motion.p>
+            </div>
+
             <SignUpForm />
 
-            <p className="text-sm text-center mt-4">
+            <motion.p 
+              className="text-sm text-center mt-6 text-gray-600 dark:text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
               Already have an account?{" "}
               <button
-                onClick={() => setIsLogin(true)}
-                className="text-blue-600 font-medium hover:underline"
+                onClick={() => handleToggle(true)}
+                className="text-blue-600 dark:text-blue-400 font-semibold hover:underline transition"
               >
-                Log In
+                Sign In
               </button>
-            </p>
+            </motion.p>
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Back to Home Link */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="mt-6"
+      >
+        <Link 
+          href="/" 
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition inline-flex items-center gap-1"
+        >
+          ← Back to Home
+        </Link>
+      </motion.div>
     </section>
   );
 }

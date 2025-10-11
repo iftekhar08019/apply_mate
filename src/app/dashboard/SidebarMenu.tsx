@@ -17,13 +17,18 @@ import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 
-export default function SidebarMenu({}) {
+interface SidebarMenuProps {
+  onLinkClick?: () => void;
+}
+
+export default function SidebarMenu({ onLinkClick }: SidebarMenuProps) {
   const pathname = usePathname();
   const {data: session} = useSession();
   const userId = session?.user?.id;
    const handleLogOutButton = () => {
       signOut({ callbackUrl: "/" });
       toast.success("LogOut successfully.!!");
+      onLinkClick?.();
     };
 
   const menuItems = [
@@ -47,6 +52,7 @@ export default function SidebarMenu({}) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    onClick={onLinkClick}
                     className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors
                       ${
                         pathname === item.href

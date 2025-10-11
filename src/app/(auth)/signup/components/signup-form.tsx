@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Mail, Lock, User, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useSignup from "@/hooks/useSignup";
+import Link from "next/link";
 
 type FormValues = {
   name: string;
@@ -121,52 +121,29 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
   //  Google Login
   const handleGoogleLogin = async () => {
     try {
-      const result = await signIn("google", { callbackUrl:"/dashboard" })
-      if (result?.ok) {
-        toast.success("Sign in Success");
-        router.push("/");
-      }
-    } catch (error) {
+      await signIn("google", { callbackUrl: "/dashboard" });
+      // Note: If successful, NextAuth will redirect automatically
+    } catch {
       toast.error("Google login failed");
     }
   };
 
-  // GitHub Login
-  const handleGitHubLogin = async () => {
-    const res = await signIn("github", { callbackUrl:"/dashboard" });
-    if (res?.error) {
-      toast.error("GitHub login failed");
-    } else {
-      toast.success("Logged in with GitHub");
-      router.push("/");
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 },
-    },
-  };
-
   return (
     <>
-      <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold">Create an Account</h1>
-        <p className="mt-2">Start your journey with us today.</p>
-      </div>
-
       <motion.form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        className="space-y-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
       >
         {/* Name */}
-        <motion.div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
             Full Name
           </label>
           <div className="relative">
@@ -176,23 +153,28 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
               type="text"
               {...register("name", { required: "Full name is required" })}
               placeholder="John Doe"
-              className={`w-full pl-10 pr-3 py-2.5 bg-white/5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+              className={`w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-800/50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.name
-                  ? "border-red-500/50 focus:ring-red-500"
-                  : " focus:ring-blue-500"
+                  ? "border-red-500 focus:ring-red-500/50"
+                  : "border-gray-300 dark:border-gray-600 focus:ring-blue-500/50 focus:border-blue-500"
               }`}
             />
           </div>
           {errors.name && (
-            <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-              <AlertCircle size={14} /> {errors.name.message}
+            <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+              {errors.name.message}
             </p>
           )}
         </motion.div>
 
         {/* Email */}
-        <motion.div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
             Email Address
           </label>
           <div className="relative">
@@ -208,23 +190,28 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
                 },
               })}
               placeholder="you@example.com"
-              className={`w-full pl-10 pr-3 py-2.5 bg-white/5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+              className={`w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-800/50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.email
-                  ? "border-red-500/50 focus:ring-red-500"
-                  : "focus:ring-blue-500"
+                  ? "border-red-500 focus:ring-red-500/50"
+                  : "border-gray-300 dark:border-gray-600 focus:ring-blue-500/50 focus:border-blue-500"
               }`}
             />
           </div>
           {errors.email && (
-            <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-              <AlertCircle size={14} /> {errors.email.message}
+            <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+              {errors.email.message}
             </p>
           )}
         </motion.div>
 
         {/* Password */}
-        <motion.div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+        >
+          <label htmlFor="password" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
             Password
           </label>
           <div className="relative">
@@ -240,38 +227,43 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
                 },
               })}
               placeholder="••••••••"
-              className={`w-full pl-10 pr-3 py-2.5 bg-white/5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+              className={`w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-800/50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.password
-                  ? "border-red-500/50 focus:ring-red-500"
-                  : "focus:ring-blue-500"
+                  ? "border-red-500 focus:ring-red-500/50"
+                  : "border-gray-300 dark:border-gray-600 focus:ring-blue-500/50 focus:border-blue-500"
               }`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
             >
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </button>
           </div>
-          <div className="mt-2 h-1.5 w-full bg-gray-600 rounded-full overflow-hidden">
+          <div className="mt-2 h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-300 ${passwordStrength.color}`}
               style={{ width: passwordStrength.width }}
             ></div>
           </div>
           {errors.password && (
-            <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-              <AlertCircle size={14} /> {errors.password.message}
+            <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+              {errors.password.message}
             </p>
           )}
         </motion.div>
 
         {/* Confirm Password */}
-        <motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium mb-1"
+            className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
           >
             Confirm Password
           </label>
@@ -286,51 +278,56 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
                   value === password || "Passwords do not match",
               })}
               placeholder="••••••••"
-              className={`w-full pl-10 pr-3 py-2.5 bg-white/5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+              className={`w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-800/50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.confirmPassword
-                  ? "border-red-500/50 focus:ring-red-500"
-                  : " focus:ring-blue-500"
+                  ? "border-red-500 focus:ring-red-500/50"
+                  : "border-gray-300 dark:border-gray-600 focus:ring-blue-500/50 focus:border-blue-500"
               }`}
             />
             <button
               type="button"
               onClick={() => setConfirmPassword(!confirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
             >
               {confirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-              <AlertCircle size={14} /> {errors.confirmPassword.message}
+            <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+              {errors.confirmPassword.message}
             </p>
           )}
         </motion.div>
 
         {/* Terms Agreement */}
-        <motion.div>
-          <div className="flex items-start gap-3">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.9 }}
+        >
+          <div className="flex items-start gap-3 p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-200/50 dark:border-blue-700/30">
             <input
               id="terms"
               type="checkbox"
               {...register("terms", { required: "You must accept the terms" })}
-              className="h-4 w-4 mt-0.5 rounded bg-white/10 border-white/30 text-blue-500 focus:ring-blue-600 accent-blue-500"
+              className="w-4 h-4 mt-0.5 rounded accent-blue-600 cursor-pointer"
             />
-            <label htmlFor="terms" className="text-sm">
+            <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
               I agree to the{" "}
-              <a href="#" className="font-medium text-blue-400 hover:underline">
+              <Link href="/terms" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="#" className="font-medium text-blue-400 hover:underline">
+              <Link href="/terms" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
                 Privacy Policy
-              </a>
-              .
+              </Link>
             </label>
           </div>
           {errors.terms && (
-            <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-              <AlertCircle size={14} /> {errors.terms.message}
+            <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+              {errors.terms.message}
             </p>
           )}
         </motion.div>
@@ -338,38 +335,57 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
         {/* Submit Button */}
         <motion.button
           whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: isPending ? 1 : 1.02 }}
           type="submit"
           disabled={isPending}
-          className="w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-2.5 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]"
+          className={`w-full bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3.5 rounded-xl font-semibold transition-all duration-300 hover:from-[#0051ff] hover:to-[#0439e6] shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 ${
+            isPending ? "opacity-70 cursor-not-allowed" : ""
+          }`}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
         >
-          {isPending ? "Creating Account..." : "Sign Up"}
+          {isPending ? (
+            <span className="flex items-center justify-center gap-2">
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+              />
+              Creating Account...
+            </span>
+          ) : (
+            "Create Account"
+          )}
         </motion.button>
       </motion.form>
 
       {/* Divider */}
-      <div className="my-6 flex items-center gap-3">
-        <hr className="w-full border-t-2 border-gray-800" />
-        <span className="text-sm">OR</span>
-        <hr className="w-full border-t-2 border-gray-800" />
-      </div>
+      <motion.div 
+        className="my-6 flex items-center gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 1.1 }}
+      >
+        <hr className="w-full border-gray-300 dark:border-gray-600" />
+        <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">OR</span>
+        <hr className="w-full border-gray-300 dark:border-gray-600" />
+      </motion.div>
 
       {/* Social Signup */}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
-        >
-          <FcGoogle /> Google
-        </button>
-        <button
-          type="button"
-          onClick={handleGitHubLogin}
-          className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
-        >
-          <FaGithub /> GitHub
-        </button>
-      </div>
+      <motion.button
+        type="button"
+        onClick={handleGoogleLogin}
+        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.02 }}
+        className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl py-3.5 font-semibold text-gray-700 dark:text-gray-200 transition-all duration-300 shadow-sm hover:shadow-md"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1.2 }}
+      >
+        <FcGoogle size={24} />
+        Continue with Google
+      </motion.button>
     </>
   );
 }
