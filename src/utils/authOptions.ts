@@ -91,11 +91,38 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
+      // Prevent infinite redirect loops
+      if (url === baseUrl || url === `${baseUrl}/` || url === `${baseUrl}/login`) {
+        return `${baseUrl}/dashboard`;
+      }
+      
       // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith("/")) {
+        // Prevent /login redirecting to itself
+        if (url === "/login" || url.startsWith("/login?")) {
+          return "/dashboard";
+        }
+        return `${baseUrl}${url}`;
+      }
+      
       // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+      try {
+        const urlObj = new URL(url);
+        const baseUrlObj = new URL(baseUrl);
+        
+        if (urlObj.origin === baseUrlObj.origin) {
+          // Prevent login page redirects
+          if (urlObj.pathname === "/login") {
+            return `${baseUrl}/dashboard`;
+          }
+          return url;
+        }
+      } catch {
+        // Invalid URL, return dashboard
+        return `${baseUrl}/dashboard`;
+      }
+      
+      return `${baseUrl}/dashboard`;
     },
 
     async jwt({ token, user }) {
