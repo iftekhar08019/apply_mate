@@ -2,8 +2,8 @@
 
 // ⚠️ IMPORTANT: Update this URL for production deployment!
 // Development: 'http://localhost:3000'
-// Production: 'https://your-actual-domain.com' (NO trailing slash)
-const API_BASE_URL = 'http://localhost:3000';
+// Production: 'https://apply-mate-m1m6.vercel.app' (NO trailing slash)
+const API_BASE_URL = 'https://apply-mate-m1m6.vercel.app';
 
 document.addEventListener('DOMContentLoaded', function() {
   const emailInput = document.getElementById('email');
