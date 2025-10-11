@@ -7,7 +7,7 @@ const getBaseURL = () => {
     return '/api';
   }
   // Server-side: use full URL
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://apply-mate-m1m6.vercel.app';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://apply-mate-ai.netlify.app';
   return `${baseUrl.replace(/\/$/, '')}/api`;
 };
 
