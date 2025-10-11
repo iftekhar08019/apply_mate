@@ -5,8 +5,6 @@ import { ThemeProvider } from "./components/theme-provider";
 import Navbar from "./components/shared/Navbar";
 import { Toaster } from "sonner";
 import Footer from "./components/shared/Footer";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions";
 import SessionProvider from "@/providers/NextAuthSessionProvider";
 
 const inter = Inter({
@@ -32,19 +30,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  // Handle session errors gracefully to prevent redirect loops on public pages
-  let session = null;
-  try {
-    session = await getServerSession(authOptions);
-  } catch {
-    // Ignore auth errors on public pages - session will be null
-    session = null;
-  }
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
-        <SessionProvider session={session}>
+        <SessionProvider>
             <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -52,7 +52,6 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/login",
-    error: "/login", // Redirect errors to login instead of default error page
   },
 
   session: {
@@ -99,6 +98,26 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
+      // Aggressive loop detection - check URL length
+      if (url.length > 500) {
+        // URL is too long - likely a redirect loop
+        console.error("Redirect loop detected - URL too long");
+        return `${baseUrl}/`;
+      }
+      
+      // Count how many times callbackUrl appears (indicates nesting)
+      const callbackCount = (url.match(/callbackUrl/g) || []).length;
+      if (callbackCount > 2) {
+        console.error("Redirect loop detected - too many callbackUrls");
+        return `${baseUrl}/`;
+      }
+      
+      // Detect /login redirecting to /login
+      if (url.includes("/login") && url.includes("%2Flogin")) {
+        console.error("Redirect loop detected - login to login");
+        return `${baseUrl}/`;
+      }
+      
       // Handle relative URLs
       if (url.startsWith("/")) {
         return `${baseUrl}${url}`;
@@ -109,7 +128,7 @@ export const authOptions: NextAuthOptions = {
         return url;
       }
       
-      // Default: redirect to base URL
+      // Default: redirect to home, not dashboard
       return baseUrl;
     },
 
