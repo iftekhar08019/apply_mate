@@ -9,7 +9,6 @@ interface ExperienceFormProps {
 }
 
 export default function ExperienceForm({ data, updateData }: ExperienceFormProps) {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [newExperience, setNewExperience] = useState<Experience>({
     id: '',
     jobTitle: '',
@@ -39,7 +38,7 @@ export default function ExperienceForm({ data, updateData }: ExperienceFormProps
     }
   };
 
-  const updateExperience = (index: number, field: keyof Experience, value: any) => {
+  const updateExperience = (index: number, field: keyof Experience, value: string | string[]) => {
     const updated = [...data];
     updated[index] = { ...updated[index], [field]: value };
     updateData(updated);

@@ -38,8 +38,8 @@ export async function GET() {
       message: 'This endpoint is deprecated. Use /api/extension/analyze-job instead.'
     });
 
-  } catch (error) {
-    // console.error('Error fetching Groq API key:', error);
+  } catch {
+    // console.error('Error fetching Groq API key');
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

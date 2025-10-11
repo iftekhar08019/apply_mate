@@ -1,12 +1,12 @@
 // GET route: /api/profile/me.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { collectionName, connectToDatabase } from "@/libs/mongodb";
 import { ObjectId } from "mongodb";
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
 
   if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, ...rest } = user;
   return NextResponse.json(rest);
 }

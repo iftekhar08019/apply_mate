@@ -2,7 +2,7 @@
 
 import { GenericSection, GenericSectionEntry } from "../types/resume-types";
 import { useState } from "react";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 interface GenericSectionFormProps {
   section: GenericSection;
@@ -45,7 +45,7 @@ export default function GenericSectionForm({ section, updateSection, onRemove }:
     });
   };
 
-  const handleUpdateEntry = (entryId: string, field: keyof GenericSectionEntry, value: any) => {
+  const handleUpdateEntry = (entryId: string, field: keyof GenericSectionEntry, value: string | string[]) => {
     updateSection({
       ...section,
       entries: section.entries.map(entry =>

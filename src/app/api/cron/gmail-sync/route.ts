@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
                 date: email.date,
               });
             }
-          } catch (error) {
+          } catch {
             // console.error(`Error analyzing email for ${user.email}:`, error);
             continue;
           }
@@ -153,7 +153,7 @@ export async function GET(request: NextRequest) {
           emailsProcessed: emails.length,
           applicationsUpdated: updatesCount,
         });
-      } catch (error) {
+      } catch {
         // console.error(`Error syncing for user ${user.email}:`, error);
         results.push({
           userEmail: user.email,
@@ -167,11 +167,10 @@ export async function GET(request: NextRequest) {
       usersProcessed: usersWithGmail.length,
       results,
     });
-  } catch (error) {
-    // console.error("Error in cron job:", error);
-    const errorMessage = error instanceof Error ? error.message : "Cron job failed";
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
-      { error: errorMessage },
+      { error: "Cron job failed" },
       { status: 500 }
     );
   }

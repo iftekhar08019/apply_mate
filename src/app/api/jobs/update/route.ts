@@ -22,8 +22,8 @@ export async function PUT(req: Request) {
     }
 
     return NextResponse.json({ message: "Job updated successfully" }, { status: 200 });
-  } catch (error) {
-    // console.error("Error updating job:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

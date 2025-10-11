@@ -1,6 +1,6 @@
 "use client";
 
-import { ResumeData } from "../types/resume-types";
+import { ResumeData, GenericSection, PersonalInfo, Skills, Experience, Project, Education } from "../types/resume-types";
 import PersonalInfoForm from "./personal-info-form";
 import SkillsForm from "./skills-form";
 import ExperienceForm from "./experience-form";
@@ -11,8 +11,11 @@ import GenericSectionForm from "./generic-section-form";
 
 interface ResumeFormProps {
   resumeData: ResumeData;
-  updateResumeData: (section: keyof ResumeData, data: any) => void;
-  updateGenericSection?: (section: any) => void;
+  updateResumeData: (
+    section: keyof ResumeData, 
+    data: PersonalInfo | Skills | Experience[] | Project[] | Education | string | GenericSection[] | string[]
+  ) => void;
+  updateGenericSection?: (section: GenericSection) => void;
   removeGenericSection?: (sectionId: string) => void;
 }
 

@@ -26,8 +26,8 @@ export async function GET() {
     }));
 
     return NextResponse.json({ success: true, data: transformedReviews });
-  } catch (error) {
-    // console.error("Error fetching reviews:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
@@ -106,8 +106,8 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    // console.error("Error creating review:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

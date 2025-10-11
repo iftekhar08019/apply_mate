@@ -31,11 +31,10 @@ export async function POST() {
       success: true,
       message: "Gmail disconnected successfully",
     });
-  } catch (error) {
-    // console.error("Error disconnecting Gmail:", error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to disconnect Gmail";
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
-      { error: errorMessage },
+      { error: "Failed to disconnect Gmail" },
       { status: 500 }
     );
   }

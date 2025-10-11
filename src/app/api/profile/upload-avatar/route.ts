@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { v2 as cloudinary } from "cloudinary";
-import { connectToDatabase, collectionName } from "@/libs/mongodb";
-import { ObjectId } from "mongodb";
 import { authOptions } from "@/utils/authOptions";
 
 cloudinary.config({
@@ -73,11 +71,11 @@ export async function POST(request: NextRequest) {
       avatarUrl: secure_url,
     }, { status: 200 });
 
-  } catch (error) {
-    // console.error("Error uploading avatar:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json({ 
       message: "Failed to upload avatar",
-      error: error instanceof Error ? error.message : "Unknown error"
+      error: "Unknown error"
     }, { status: 500 });
   }
 }
