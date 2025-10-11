@@ -56,55 +56,64 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 
- callbacks: {
-  async signIn({ user, account }) {
-    const { db } = await connectToDatabase();
+  callbacks: {
+    async signIn({ user, account }) {
+      const { db } = await connectToDatabase();
 
-    // Handle Google OAuth login
-    if (account?.provider === "google") {
-      const existingUser = await db
-        .collection(collectionName.USERS)
-        .findOne({ email: user.email });
+      // Handle Google OAuth login
+      if (account?.provider === "google") {
+        const existingUser = await db
+          .collection(collectionName.USERS)
+          .findOne({ email: user.email });
 
-      if (!existingUser) {
-        // ✅ First-time Google user: Create new account automatically
-        const insertResult = await db.collection(collectionName.USERS).insertOne({
-          name: user.name,
-          email: user.email,
-          image: user.image || DEFAULT_AVATAR,
-          provider: account.provider,
-          createdAt: new Date(),
-        });
+        if (!existingUser) {
+          // ✅ First-time Google user: Create new account automatically
+          const insertResult = await db.collection(collectionName.USERS).insertOne({
+            name: user.name,
+            email: user.email,
+            image: user.image || DEFAULT_AVATAR,
+            provider: account.provider,
+            createdAt: new Date(),
+          });
 
-        // ✅ Assign the newly created _id to user.id
-        user.id = insertResult.insertedId.toString();
-      } else {
-        // ✅ Existing user: Retrieve their data
-        user.id = existingUser._id.toString();
+          // ✅ Assign the newly created _id to user.id
+          user.id = insertResult.insertedId.toString();
+        } else {
+          // ✅ Existing user: Retrieve their data
+          user.id = existingUser._id.toString();
+        }
       }
-    }
 
-    return true;
-  },
+      return true;
+    },
 
-  async jwt({ token, user }) {
-    if (user) {
-      token.id = (user as AuthUser).id || token.id;
-      token.image = user.image || token.image;
-    }
-    return token;
-  },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
 
-  async session({ session, token }) {
-    if (session.user) {
-      session.user.id = token.id as string;
-      session.user.image = token.image as string;
-    }
-    return session;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = (user as AuthUser).id || token.id;
+        token.image = user.image || token.image;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.image = token.image as string;
+      }
+      return session;
+    },
   },
-},
 
 
   secret: process.env.NEXTAUTH_SECRET,
