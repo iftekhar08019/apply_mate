@@ -52,6 +52,7 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/login",
+    error: "/login", // Redirect errors to login instead of default error page
   },
 
   session: {
@@ -98,38 +99,18 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
-      // Prevent infinite redirect loops
-      if (url === baseUrl || url === `${baseUrl}/` || url === `${baseUrl}/login`) {
-        return `${baseUrl}/dashboard`;
-      }
-      
-      // Allows relative callback URLs
+      // Handle relative URLs
       if (url.startsWith("/")) {
-        // Prevent /login redirecting to itself
-        if (url === "/login" || url.startsWith("/login?")) {
-          return "/dashboard";
-        }
         return `${baseUrl}${url}`;
       }
       
-      // Allows callback URLs on the same origin
-      try {
-        const urlObj = new URL(url);
-        const baseUrlObj = new URL(baseUrl);
-        
-        if (urlObj.origin === baseUrlObj.origin) {
-          // Prevent login page redirects
-          if (urlObj.pathname === "/login") {
-            return `${baseUrl}/dashboard`;
-          }
-          return url;
-        }
-      } catch {
-        // Invalid URL, return dashboard
-        return `${baseUrl}/dashboard`;
+      // Handle same-origin URLs
+      if (url.startsWith(baseUrl)) {
+        return url;
       }
       
-      return `${baseUrl}/dashboard`;
+      // Default: redirect to base URL
+      return baseUrl;
     },
 
     async jwt({ token, user }) {
