@@ -159,7 +159,7 @@ interface JobApplication {
    
    # Authentication
    NEXTAUTH_SECRET=your_nextauth_secret
-   NEXTAUTH_URL=https://apply-mate-m1m6.vercel.app
+   NEXTAUTH_URL=https://apply-mate-ai.netlify.app
    
    # Google OAuth
    GOOGLE_CLIENT_ID=your_google_client_id
@@ -176,7 +176,7 @@ interface JobApplication {
    ```
 
 5. **Open your browser**
-   Navigate to [https://apply-mate-m1m6.vercel.app](https://apply-mate-m1m6.vercel.app)
+   Navigate to [https://apply-mate-ai.netlify.app](https://apply-mate-ai.netlify.app)
 
 ## 🏗️ Development Phases
 
