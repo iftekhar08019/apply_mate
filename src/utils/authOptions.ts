@@ -61,33 +61,40 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      const { db } = await connectToDatabase();
+      try {
+        const { db } = await connectToDatabase();
 
-      // Handle Google OAuth login
-      if (account?.provider === "google") {
-        const existingUser = await db
-          .collection(collectionName.USERS)
-          .findOne({ email: user.email });
+        // Handle Google OAuth login
+        if (account?.provider === "google") {
+          const existingUser = await db
+            .collection(collectionName.USERS)
+            .findOne({ email: user.email });
 
-        if (!existingUser) {
-          // ✅ First-time Google user: Create new account automatically
-          const insertResult = await db.collection(collectionName.USERS).insertOne({
-            name: user.name,
-            email: user.email,
-            image: user.image || DEFAULT_AVATAR,
-            provider: account.provider,
-            createdAt: new Date(),
-          });
+          if (!existingUser) {
+            // ✅ First-time Google user: Create new account automatically
+            const insertResult = await db.collection(collectionName.USERS).insertOne({
+              name: user.name,
+              email: user.email,
+              image: user.image || DEFAULT_AVATAR,
+              provider: account.provider,
+              createdAt: new Date(),
+            });
 
-          // ✅ Assign the newly created _id to user.id
-          user.id = insertResult.insertedId.toString();
-        } else {
-          // ✅ Existing user: Retrieve their data
-          user.id = existingUser._id.toString();
+            // ✅ Assign the newly created _id to user.id
+            user.id = insertResult.insertedId.toString();
+          } else {
+            // ✅ Existing user: Retrieve their data
+            user.id = existingUser._id.toString();
+          }
         }
-      }
 
-      return true;
+        return true;
+      } catch (error) {
+        console.error("SignIn callback error:", error);
+        // Allow sign in to proceed even if DB fails (for credentials provider)
+        // Google OAuth users won't be able to sign in if DB is down
+        return account?.provider === "credentials";
+      }
     },
 
     async redirect({ url, baseUrl }) {
