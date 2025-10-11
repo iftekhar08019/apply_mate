@@ -65,8 +65,8 @@ function ResetPasswordForm() {
       } else {
         toast.error(result.message || "Failed to reset password");
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch {
+      console.error("Error resetting password");
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

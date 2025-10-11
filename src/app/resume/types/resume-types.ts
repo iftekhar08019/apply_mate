@@ -77,6 +77,11 @@ export interface ResumeData {
 
 export type SectionType = 'skills' | 'experiences' | 'projects' | 'education' | 'languages' | 'generic';
 
+export interface SectionItem {
+  id: string;
+  [key: string]: string | string[] | undefined;
+}
+
 export interface AvailableSection {
   id: string;
   title: string;

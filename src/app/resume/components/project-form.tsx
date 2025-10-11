@@ -42,7 +42,7 @@ export default function ProjectForm({ data, updateData }: ProjectFormProps) {
     }
   };
 
-  const updateProject = (index: number, field: keyof Project, value: any) => {
+  const updateProject = (index: number, field: keyof Project, value: string | string[]) => {
     const updated = [...data];
     updated[index] = { ...updated[index], [field]: value };
     updateData(updated);

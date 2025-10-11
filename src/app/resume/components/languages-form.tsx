@@ -24,7 +24,7 @@ export default function LanguagesForm({ data, updateData }: LanguagesFormProps) 
           placeholder="Bangla: Native | English: Fluent (C1 equivalent) | German: Intermediate (B1 equivalent)"
         />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          Separate languages with " | " (e.g., "English: Fluent | Spanish: Intermediate")
+          Separate languages with &quot; | &quot; (e.g., &quot;English: Fluent | Spanish: Intermediate&quot;)
         </p>
       </div>
     </div>

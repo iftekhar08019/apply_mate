@@ -36,8 +36,8 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
         const response = await axiosSecure.get("/gmail/sync");
         setGmailConnected(response.data.gmailConnected || false);
         setLastSync(response.data.lastSync || null);
-      } catch (error) {
-        // console.error("Error checking Gmail status:", error);
+      } catch {
+        // console.error("Error occurred");
       }
     };
 
@@ -101,8 +101,8 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
           }
         }, 1000);
       }
-    } catch (error) {
-      // console.error("Error connecting Gmail:", error);
+    } catch {
+      // console.error("Error occurred");
       toast.error("Failed to connect Gmail");
       setConnectingGmail(false);
     }
@@ -161,8 +161,8 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
       setLastSync(null);
       toast.success("Gmail disconnected successfully");
       setShowDisconnectDialog(false);
-    } catch (error) {
-      // console.error("Error disconnecting Gmail:", error);
+    } catch {
+      // console.error("Error occurred");
       toast.error("Failed to disconnect Gmail");
     } finally {
       setDisconnecting(false);

@@ -61,7 +61,7 @@ export const EditProfileForm: React.FC<Props> = ({ user, onUpdateSuccess }) => {
 
       toast.success("Profile updated successfully!");
       onUpdateSuccess();
-    } catch (error) {
+    } catch {
       // console.error(error);
       toast.dismiss();
       toast.error("Failed to update profile. Please try again.");

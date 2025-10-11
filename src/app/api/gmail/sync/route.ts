@@ -116,7 +116,7 @@ export async function POST() {
         } else {
           // console.log(`⚪ [EMAIL ${i + 1}] Not a job email or low confidence`);
         }
-      } catch (error) {
+      } catch {
         // Continue processing other emails even if one fails
         // console.error(`❌ [EMAIL ${i + 1}] Failed to analyze email "${email.subject}":`, error);
         continue;
@@ -256,14 +256,11 @@ export async function POST() {
       updates,
       message: `Processed ${emails.length} emails, found ${processed.length} job-related emails, merged to ${mergedApplications.length} unique jobs, updated ${updates.length} existing applications`,
     });
-  } catch (error) {
-    // console.error("Error syncing Gmail:", error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to sync Gmail";
-    const errorStack = error instanceof Error ? error.stack : undefined;
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
       { 
-        error: errorMessage,
-        details: errorStack,
+        error: "Failed to sync Gmail",
         success: false 
       },
       { status: 500 }
@@ -288,8 +285,8 @@ export async function GET() {
       gmailConnected: user?.gmailConnected || false,
       lastSync: user?.lastGmailSync || null,
     });
-  } catch (error) {
-    // console.error("Error checking sync status:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
       { error: "Failed to check sync status" },
       { status: 500 }

@@ -117,8 +117,8 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({
       } else {
         toast.error(data.error || "Failed to save job");
       }
-    } catch (error) {
-      // console.error("Error saving job:", error);
+    } catch {
+      // console.error("Error occurred");
       toast.error("An error occurred while saving the job");
     } finally {
       setLoading(false);

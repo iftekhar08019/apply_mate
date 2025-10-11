@@ -84,8 +84,8 @@ export async function GET() {
       responseRate
     });
 
-  } catch (error) {
-    // console.error("Error fetching dashboard stats:", error);
+  } catch {
+    // console.error("Error occurred");
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

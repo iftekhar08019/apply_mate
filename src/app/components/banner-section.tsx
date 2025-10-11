@@ -92,7 +92,7 @@ export default function BannerSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              {["AI Job Scraping", "Auto Email Sync", "Smart Analytics"].map((feature, index) => (
+              {["AI Job Scraping", "Auto Email Sync", "Smart Analytics"].map((feature) => (
                 <div
                   key={feature}
                   className="flex items-center gap-2 bg-white/80 dark:bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-200/50 dark:border-blue-700/50"
