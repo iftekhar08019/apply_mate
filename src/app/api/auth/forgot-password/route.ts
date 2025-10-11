@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     );
 
     // Create reset URL
-    const resetUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+    const resetUrl = `${process.env.NEXTAUTH_URL || "https://apply-mate-m1m6.vercel.app"}/reset-password?token=${resetToken}`;
 
     // Send email using Resend
     try {
