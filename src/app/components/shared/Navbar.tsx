@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../../../public/assets/Logo.png";
 
 import { Menu } from "lucide-react";
@@ -30,6 +30,7 @@ import {
 const Navbar = () => {
   const { data: session } = useSession();
   const pathName = usePathname();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const menus = [
     { label: "Home", path: "/", icon: Home },
@@ -44,6 +45,11 @@ const Navbar = () => {
   const handleLogOutButton = () => {
     signOut({ callbackUrl: "/" });
     toast.success("Logged out successfully!");
+    setIsSheetOpen(false);
+  };
+
+  const handleLinkClick = () => {
+    setIsSheetOpen(false);
   };
 
   // Hide Navbar in dashboard routes
@@ -256,7 +262,7 @@ const Navbar = () => {
             <div className="md:hidden">
               <ModeToggle />
             </div>
-            <Sheet>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger asChild>
                 <button
                   aria-label="Open mobile menu"
@@ -291,6 +297,7 @@ const Navbar = () => {
                       <Link
                         key={idx}
                         href={menu.path}
+                        onClick={handleLinkClick}
                         className={`text-base sm:text-lg font-semibold ${
                           isActive
                             ? "text-blue-600"
@@ -306,6 +313,7 @@ const Navbar = () => {
                   {session?.user && (
                     <Link
                       href="/dashboard"
+                      onClick={handleLinkClick}
                       className={`text-base sm:text-lg font-semibold ${
                         pathName === "/dashboard"
                           ? "text-blue-600"
@@ -332,11 +340,12 @@ const Navbar = () => {
                     <>
                       <Link
                         href="/login"
+                        onClick={handleLinkClick}
                         className="text-sm xl:text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition border-blue-600 px-6 py-2.5 hover:bg-blue-600 rounded-lg border-2"
                       >
                         Log in
                       </Link>
-                      <Link href="/signup">
+                      <Link href="/signup" onClick={handleLinkClick}>
                         <button className="bg-gradient-to-r from-[#0439e6] to-[#0051ff] text-white px-6 py-3 rounded-sm font-medium transition duration-300 hover:from-[#0051ff] hover:to-[#0439e6]">
                           Sign Up
                         </button>
