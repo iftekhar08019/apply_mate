@@ -154,20 +154,7 @@ interface JobApplication {
 3. **Environment Setup**
    Create a `.env.local` file in the root directory:
    ```env
-   # Database
-   MONGODB_URI=your_mongodb_atlas_connection_string
-   
-   # Authentication
-   NEXTAUTH_SECRET=your_nextauth_secret
-   NEXTAUTH_URL=https://apply-mate-ai.netlify.app
-   
-   # Google OAuth
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
-   
-   # Gmail API
-   GMAIL_CLIENT_ID=your_gmail_client_id
-   GMAIL_CLIENT_SECRET=your_gmail_client_secret
+
    ```
 
 4. **Run the development server**
