@@ -173,7 +173,7 @@ export default function ReviewForm() {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience with Apply Mate... (minimum 10 characters)"
-              className="min-h-[120px] bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+              className="min-h-[120px] bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 dark:text-white"
               disabled={loading}
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">

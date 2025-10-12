@@ -33,9 +33,10 @@ export default function TermsAndConditionsPage() {
             Welcome to{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
               Application Tracker
-            </span>.
-            By using our website, Chrome Extension, or related services (including
-            Gmail integration), you agree to these Terms & Conditions.
+            </span>
+            . By using our website, Chrome Extension, or related services
+            (including Gmail integration), you agree to these Terms &
+            Conditions.
           </p>
         </div>
       ),
@@ -81,8 +82,9 @@ export default function TermsAndConditionsPage() {
         <div className="space-y-4">
           <p className="text-gray-700 dark:text-gray-300">
             If you connect your Gmail account, we use OAuth 2.0 with limited,
-            read-only scopes to detect job-related messages. We do not share your
-            email content with third parties and only store minimal metadata.
+            read-only scopes to detect job-related messages. We do not share
+            your email content with third parties and only store minimal
+            metadata.
           </p>
           <div className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <Info className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-500" />
@@ -172,7 +174,8 @@ export default function TermsAndConditionsPage() {
       content: (
         <div className="space-y-4">
           <p className="text-gray-700 dark:text-gray-300">
-            These Terms are governed by the laws of the country where you reside.
+            These Terms are governed by the laws of the country where you
+            reside.
           </p>
         </div>
       ),
@@ -182,14 +185,16 @@ export default function TermsAndConditionsPage() {
       title: "Contact Information",
       content: (
         <div className="space-y-4">
-          <p className="text-gray-700 dark:text-gray-300">For questions, contact us at:</p>
+          <p className="text-gray-700 dark:text-gray-300">
+            For questions, contact us at:
+          </p>
           <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <a
               href="mailto:apply.mate04@gmail.com"
               className="text-gray-900 dark:text-white font-medium hover:underline inline-flex items-center gap-2"
             >
               <Mail className="w-4 h-4" />
-              apply.mate04@gmail.com  
+              apply.mate04@gmail.com
             </a>
           </div>
         </div>
@@ -217,36 +222,35 @@ export default function TermsAndConditionsPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      {/* Header */}
+      {/* Header (Centered) */}
       <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="max-w-3xl">
-            <Badge
-              variant="outline"
-              className="mb-4 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-700"
-            >
-              <FileText className="w-3 h-3 mr-1" />
-              Legal Document
-            </Badge>
-            <h1 className="text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-white">
-              Terms & Conditions
-            </h1>
-            <p className="text-gray-700 dark:text-gray-300">
-              Last updated:{" "}
-              {new Date().toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+          <Badge
+            variant="outline"
+            className="mb-4 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-700 mx-auto"
+          >
+            <FileText className="w-3 h-3 mr-1" />
+            Legal Document
+          </Badge>
+          <h1 className="text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-white">
+            Terms & Conditions
+          </h1>
+          <p className="text-gray-700 dark:text-gray-300">
+            Last updated:{" "}
+            {new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
         </div>
       </div>
 
+      {/* Content Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Sidebar */}
-          <aside className="lg:col-span-3">
+          <aside className="lg:col-span-3 hidden lg:block">
             <div className="sticky top-[120px]">
               <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                 <CardHeader>
@@ -276,9 +280,9 @@ export default function TermsAndConditionsPage() {
           </aside>
 
           {/* Main Content */}
-          <main className="lg:col-span-9">
+          <main className="lg:col-span-9 col-span-12">
             <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <CardContent className="p-8 lg:p-12">
+              <CardContent className="p-6 sm:p-8 lg:p-12">
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                   <div className="space-y-16">
                     {termsSections.map((section, index) => (
