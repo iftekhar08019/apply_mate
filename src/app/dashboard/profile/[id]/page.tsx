@@ -128,7 +128,7 @@ export default function ProfilePage() {
               {/* Cancel Button */}
               <button
                 onClick={() => setIsEditing(false)}
-                className="mt-6 w-full text-center py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="mt-6 w-full text-center py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors border"
               >
                 Cancel and Go Back
               </button>
