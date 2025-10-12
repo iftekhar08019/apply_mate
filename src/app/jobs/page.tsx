@@ -114,7 +114,7 @@ export default function AllJobs() {
     <TooltipProvider>
       <div
         className="relative flex flex-col justify-center items-center text-center py-24 md:py-32 bg-cover bg-center"
-        style={{ backgroundImage: "url('/bannerapplication.jpg')" }}
+        style={{ backgroundImage: "url('/bannerApplication.jpg')" }}
       >
         <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full text-white">
           <Briefcase className="h-4 w-4" />

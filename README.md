@@ -163,7 +163,7 @@ interface JobApplication {
    ```
 
 5. **Open your browser**
-   Navigate to [https://apply-mate-ai.netlify.app](https://apply-mate-ai.netlify.app)
+   Navigate to [https://apply-mate-two.vercel.app](https://apply-mate-two.vercel.app)
 
 ## 🏗️ Development Phases
 

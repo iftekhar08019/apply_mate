@@ -14,7 +14,7 @@ const Footer = () => {
 
   const menus = [
     { label: "Home", path: "/" },
-    { label: "Job Details", path: "/jobs" },
+    { label: "My Jobs", path: "/jobs" },
     { label: "Resume Builder", path: "/resume" },
     { label: "About Us", path: "/about" },
   ];
