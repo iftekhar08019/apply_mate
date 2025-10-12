@@ -2,8 +2,8 @@
 
 // ⚠️ IMPORTANT: Update this URL for production deployment!
 // Development: 'http://localhost:3000'
-// Production: 'https://apply-mate-ai.netlify.app' (NO trailing slash)
-const API_BASE_URL = 'https://apply-mate-ai.netlify.app';
+// Production: 'https://apply-mate-two.vercel.app' (NO trailing slash)
+const API_BASE_URL = 'https://apply-mate-two.vercel.app';
 
 document.addEventListener('DOMContentLoaded', function() {
   const emailInput = document.getElementById('email');
