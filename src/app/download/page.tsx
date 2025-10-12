@@ -198,7 +198,7 @@ export default function DownloadPage() {
               <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                 <iframe
                   className="absolute top-0 left-0 w-full h-full rounded-lg"
-                  src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                  src="https://www.youtube.com/embed/JyO0KHKvJFE"
                   title="Apply Mate Extension Installation Tutorial"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
