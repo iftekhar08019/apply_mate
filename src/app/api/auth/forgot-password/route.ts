@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     );
 
     // Create reset URL
-    const resetUrl = `${process.env.NEXTAUTH_URL || "https://apply-mate-ai.netlify.app"}/reset-password?token=${resetToken}`;
+    const resetUrl = `${process.env.NEXTAUTH_URL || "https://apply-mate-two.vercel.app"}/reset-password?token=${resetToken}`;
 
     // Send email using Resend
     try {

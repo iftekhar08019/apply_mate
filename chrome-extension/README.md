@@ -57,12 +57,12 @@ chrome-extension/
 
 ### Configure API Endpoint
 
-The extension sends data to `https://apply-mate-ai.netlify.app/api/saveJob` by default.
+The extension sends data to `https://apply-mate-two.vercel.app/api/saveJob` by default.
 
 To change this for production:
 1. Edit `popup.js` (line 350)
 2. Update the `apiUrl` variable in the `sendJobToAPI` function
-3. Replace `https://apply-mate-ai.netlify.app` with your production URL (if different)
+3. Replace `https://apply-mate-two.vercel.app` with your production URL (if different)
 
 ## Usage
 
