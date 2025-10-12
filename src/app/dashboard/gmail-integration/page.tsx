@@ -4,7 +4,7 @@ import React from "react";
 import { GmailIntegration } from "../(user)/my-applications/components/GmailIntegration";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Mail, Sparkles } from "lucide-react";
+import { Mail, Sparkles, AlertCircle } from "lucide-react";
 
 export default function GmailIntegrationPage() {
   const { data: session } = useSession();
@@ -32,11 +32,42 @@ export default function GmailIntegrationPage() {
         </p>
       </motion.div>
 
-      {/* Gmail Integration Card */}
+      {/* Beta Notice */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
+        className="max-w-4xl mx-auto mb-6"
+      >
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-400/50 dark:border-amber-600/50 rounded-2xl shadow-lg p-6 sm:p-8">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 bg-amber-500 dark:bg-amber-600 rounded-lg flex items-center justify-center">
+              <AlertCircle className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-amber-900 dark:text-amber-100 mb-2">
+                🚀 Beta Feature - Request Access
+              </h3>
+              <p className="text-amber-800 dark:text-amber-200 mb-4 leading-relaxed">
+                Gmail sync is currently in beta version and not available to all users. To request access to this feature, please contact us via email.
+              </p>
+              <a
+                href="mailto:apply.mate04@gmail.com?subject=Gmail%20Sync%20Access%20Request"
+                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg"
+              >
+                <Mail className="w-5 h-5" />
+                Contact ApplyMate for Access
+              </a>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Gmail Integration Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
         className="max-w-4xl mx-auto"
       >
         <GmailIntegration userEmail={email} />
@@ -46,7 +77,7 @@ export default function GmailIntegrationPage() {
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
         className="max-w-4xl mx-auto mt-8"
       >
         <div className="bg-gradient-to-br from-blue-50/80 to-cyan-50/60 dark:from-blue-900/30 dark:to-cyan-900/20 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-md rounded-2xl shadow-lg p-6 sm:p-8">
