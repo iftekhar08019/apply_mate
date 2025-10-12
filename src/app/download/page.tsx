@@ -9,7 +9,8 @@ import {
   Sparkles, 
   CheckCircle,
   AlertTriangle,
-  PlayCircle
+  PlayCircle,
+  LockIcon
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -279,8 +280,9 @@ export default function DownloadPage() {
                     <p>
                       This is completely normal and safe. The extension only accesses job listing pages to extract information and save it to your Apply Mate dashboard.
                     </p>
-                    <p className="font-semibold text-yellow-900 dark:text-yellow-200">
-                      🔒 Your data is secure, encrypted, and never shared with third parties.
+                    <p className="font-semibold text-yellow-900 dark:text-yellow-200 flex items-center">
+                      <LockIcon className="mr-3 w-10 lg:w-5" />
+                       Your data is secure, encrypted, and never shared with third parties.
                     </p>
                   </div>
                 </div>
@@ -303,7 +305,7 @@ export default function DownloadPage() {
             <Button 
               variant="outline" 
               asChild
-              className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500"
+              className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white"
             >
               <a href="/about">
                 Learn More About Apply Mate
@@ -312,7 +314,7 @@ export default function DownloadPage() {
             <Button 
               variant="outline" 
               asChild
-              className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500"
+              className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white"
             >
               <a href="/about#contact">
                 Contact Support
