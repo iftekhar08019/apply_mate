@@ -70,6 +70,12 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
             if (event.data.success) {
               setGmailConnected(true);
               toast.success("Gmail connected successfully!");
+              
+              // Notify parent layout to update navbar
+              window.dispatchEvent(new CustomEvent("gmailStatusChanged", { 
+                detail: { connected: true } 
+              }));
+              
               // Check status again to get last sync time
               setTimeout(async () => {
                 const statusResponse = await axiosSecure.get("/gmail/sync");
@@ -161,6 +167,11 @@ export const GmailIntegration: React.FC<GmailIntegrationProps> = ({ userEmail })
       setLastSync(null);
       toast.success("Gmail disconnected successfully");
       setShowDisconnectDialog(false);
+      
+      // Notify parent layout to update navbar
+      window.dispatchEvent(new CustomEvent("gmailStatusChanged", { 
+        detail: { connected: false } 
+      }));
     } catch {
       // console.error("Error occurred");
       toast.error("Failed to disconnect Gmail");
