@@ -63,9 +63,9 @@ export default function AboutPage() {
       description: "Developed the interactive FAQ section on the landing page with smooth animations and user-friendly design.",
       img: mafikulImg,
       links: [
-        { icon: Github, href: "https://github.com", label: "GitHub" },
-        { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-        { icon: Globe, href: "https://portfolio.com", label: "Portfolio" },
+        { icon: Github, href: "https://github.com/Mafikul5320", label: "GitHub" },
+        { icon: Linkedin, href: "https://www.linkedin.com/in/mafikulislam/", label: "LinkedIn" },
+        { icon: Globe, href: "https://portfolio-blush-seven-29.vercel.app/", label: "Portfolio" },
       ],
     },
   ];

@@ -3,13 +3,15 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "./login/components/login-form";
 import SignUpForm from "./signup/components/signup-form";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function AuthPage() {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
   
   useEffect(() => {
@@ -19,6 +21,39 @@ export default function AuthPage() {
       setIsLogin(true)
     }
   },[pathname])
+
+  // Handle NextAuth errors from URL query parameters
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error) {
+      console.error("NextAuth error:", error);
+      
+      // Map NextAuth error codes to user-friendly messages
+      const errorMessages: Record<string, string> = {
+        'Configuration': 'There is a problem with the server configuration. Please contact support.',
+        'AccessDenied': 'Access denied. You do not have permission to sign in.',
+        'Verification': 'The verification link is invalid or has expired.',
+        'OAuthSignin': 'Error starting Google sign-in. Please try again.',
+        'OAuthCallback': 'Error during Google authentication. Please check your settings and try again.',
+        'OAuthCreateAccount': 'Could not create your account with Google. Please try again or use email/password.',
+        'EmailCreateAccount': 'Could not create your account. Please try again.',
+        'Callback': 'Authentication callback error. Please try again.',
+        'OAuthAccountNotLinked': 'This email is already registered with a different sign-in method. Please use your original sign-in method.',
+        'EmailSignin': 'Error sending verification email.',
+        'CredentialsSignin': 'Invalid email or password.',
+        'SessionRequired': 'Please sign in to access this page.',
+        'Default': 'An unexpected error occurred during authentication. Please try again.'
+      };
+      
+      const message = errorMessages[error] || errorMessages['Default'];
+      toast.error(message);
+      
+      // Clean up URL by removing error parameter
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('error');
+      router.replace(newUrl.pathname + newUrl.search);
+    }
+  }, [searchParams, router])
 
   const handleToggle = (toLogin: boolean) => {
     setIsLogin(toLogin);

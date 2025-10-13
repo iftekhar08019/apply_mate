@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Play, Sparkles } from "lucide-react";
 import Image from "next/image";
 
-const YOUTUBE_VIDEO_ID = "O8ivm7403rk";
+const YOUTUBE_VIDEO_ID = "rET8OQ2tT6E";
 
 export default function DemoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
