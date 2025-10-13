@@ -20,7 +20,7 @@ import Image from "next/image";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ModeToggle } from "../components/mode-toggle";
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { toast } from "sonner";
 import axiosSecure from "@/hooks/useAxiosSecure";
 
@@ -121,6 +121,11 @@ export default function Layout({ children }: LayoutProps) {
     }
   };
 
+  const handleLogout = () => {
+    signOut({ callbackUrl: "/" });
+    toast.success("Logged out successfully!");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
       {/* Header */}
@@ -189,7 +194,10 @@ export default function Layout({ children }: LayoutProps) {
                     Settings
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem 
+                  className="text-red-600 cursor-pointer"
+                  onClick={handleLogout}
+                >
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

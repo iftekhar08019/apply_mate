@@ -47,11 +47,23 @@ export default function LoginForm() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await signIn("google", { callbackUrl: "/dashboard" });
-      // Note: If successful, NextAuth will redirect automatically
-      // No need for manual redirect here
-    } catch {
-      toast.error("Google login failed");
+      toast.info("Redirecting to Google...");
+      
+      // signIn with Google will redirect immediately
+      const result = await signIn("google", { 
+        callbackUrl: "/dashboard",
+        redirect: true 
+      });
+      
+      // This code won't execute if redirect is successful
+      // But it's here for error handling
+      if (result?.error) {
+        toast.error(`Google sign-in failed: ${result.error}`);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Google OAuth error:", error);
+      toast.error("Failed to initiate Google sign-in. Please try again.");
       setLoading(false);
     }
   };

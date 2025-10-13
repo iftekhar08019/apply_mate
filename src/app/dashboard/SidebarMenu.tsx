@@ -76,8 +76,9 @@ export default function SidebarMenu({ onLinkClick }: SidebarMenuProps) {
         <Button
           variant="destructive"
           className="w-full flex items-center gap-2"
+          onClick={handleLogOutButton}
         >
-          <LogOut onClick={handleLogOutButton} className="h-4 w-4" />
+          <LogOut className="h-4 w-4" />
           Logout
         </Button>
       </div>
