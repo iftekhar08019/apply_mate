@@ -50,6 +50,17 @@ export default function Layout({ children }: LayoutProps) {
     if (email) {
       checkGmailStatus();
     }
+
+    // Listen for Gmail status changes from child components
+    const handleGmailStatusChange = (event: CustomEvent) => {
+      setGmailConnected(event.detail.connected);
+    };
+
+    window.addEventListener("gmailStatusChanged", handleGmailStatusChange as EventListener);
+
+    return () => {
+      window.removeEventListener("gmailStatusChanged", handleGmailStatusChange as EventListener);
+    };
   }, [email]);
 
   const handleGmailConnect = async () => {
@@ -74,6 +85,11 @@ export default function Layout({ children }: LayoutProps) {
             if (event.data.success) {
               setGmailConnected(true);
               toast.success("Gmail connected successfully!");
+              
+              // Notify other components about Gmail connection
+              window.dispatchEvent(new CustomEvent("gmailStatusChanged", { 
+                detail: { connected: true } 
+              }));
             } else {
               toast.error(event.data.error || "Failed to connect Gmail");
             }
