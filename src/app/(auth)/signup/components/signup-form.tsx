@@ -118,13 +118,25 @@ const onSubmit: SubmitHandler<FormValues> = async (data) => {
 };
 
 
-  //  Google Login
+  //  Google Login/Signup
   const handleGoogleLogin = async () => {
     try {
-      await signIn("google", { callbackUrl: "/dashboard" });
-      // Note: If successful, NextAuth will redirect automatically
-    } catch {
-      toast.error("Google login failed");
+      toast.info("Redirecting to Google...");
+      
+      // signIn with Google will redirect immediately
+      const result = await signIn("google", { 
+        callbackUrl: "/dashboard",
+        redirect: true 
+      });
+      
+      // This code won't execute if redirect is successful
+      // But it's here for error handling
+      if (result?.error) {
+        toast.error(`Google sign-in failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Google OAuth error:", error);
+      toast.error("Failed to initiate Google sign-in. Please try again.");
     }
   };
 

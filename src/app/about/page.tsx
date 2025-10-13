@@ -17,7 +17,7 @@ import Image from "next/image";
 import rimiImg from "../../../public/Team-assets/rimi.png";
 import MohammadImg from "../../../public/Team-assets/Mohammad.png";
 import joyImg from "../../../public/Team-assets/joy.png";
-import mafikulImg from "../../../public/Team-assets/Mafikul.png";
+import mafikulImg from "../../../public/Team-assets/mafikul.png";
 
 export default function AboutPage() {
   const teamMembers = [

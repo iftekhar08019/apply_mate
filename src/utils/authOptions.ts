@@ -47,11 +47,19 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
   ],
 
   pages: {
     signIn: "/login",
+    error: "/login", // Redirect to login page on error
   },
 
   session: {
@@ -62,74 +70,119 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       try {
-        const { db } = await connectToDatabase();
-
-        // Handle Google OAuth login
+        // Only handle Google OAuth - credentials are handled by authorize()
         if (account?.provider === "google") {
+          console.log("🔵 Google OAuth sign-in attempt for:", user.email);
+          
+          const { db } = await connectToDatabase();
+          
           const existingUser = await db
             .collection(collectionName.USERS)
             .findOne({ email: user.email });
 
           if (!existingUser) {
             // ✅ First-time Google user: Create new account automatically
+            console.log("✅ Creating new Google user:", user.email);
+            
             const insertResult = await db.collection(collectionName.USERS).insertOne({
-              name: user.name,
+              name: user.name || "Google User",
               email: user.email,
               image: user.image || DEFAULT_AVATAR,
               provider: account.provider,
               createdAt: new Date(),
+              updatedAt: new Date(),
             });
 
             // ✅ Assign the newly created _id to user.id
             user.id = insertResult.insertedId.toString();
+            console.log("✅ New Google user created with ID:", user.id);
           } else {
-            // ✅ Existing user: Retrieve their data
+            // ✅ Existing user: Retrieve their data and update image if from Google
             user.id = existingUser._id.toString();
+            user.name = existingUser.name || user.name;
+            
+            // Update image if signing in with Google and image changed
+            if (user.image && user.image !== existingUser.image) {
+              await db.collection(collectionName.USERS).updateOne(
+                { _id: existingUser._id },
+                { 
+                  $set: { 
+                    image: user.image,
+                    updatedAt: new Date() 
+                  } 
+                }
+              );
+            }
+            
+            console.log("✅ Existing Google user found:", user.id);
           }
         }
 
         return true;
       } catch (error) {
-        console.error("SignIn callback error:", error);
-        // Allow sign in to proceed even if DB fails (for credentials provider)
-        // Google OAuth users won't be able to sign in if DB is down
-        return account?.provider === "credentials";
+        console.error("❌ SignIn callback error:", error);
+        console.error("Error details:", {
+          provider: account?.provider,
+          userEmail: user?.email,
+          userName: user?.name,
+          errorMessage: error instanceof Error ? error.message : 'Unknown error',
+          errorStack: error instanceof Error ? error.stack : undefined
+        });
+        
+        // ⚠️ For Google OAuth errors, we still allow sign-in but log the error
+        // This prevents user lockout due to temporary database issues
+        // The user will be created in JWT but may need to be synced to DB later
+        if (account?.provider === "google") {
+          console.warn("⚠️ Allowing Google sign-in despite error - user data may need manual sync");
+          // Assign a temporary ID if none exists
+          if (!user.id) {
+            user.id = `temp_${Date.now()}`;
+          }
+        }
+        
+        // Allow sign-in to proceed
+        return true;
       }
     },
 
     async redirect({ url, baseUrl }) {
+      console.log("🔄 NextAuth redirect:", { url, baseUrl });
+      
       // Aggressive loop detection - check URL length
       if (url.length > 500) {
-        // URL is too long - likely a redirect loop
-        console.error("Redirect loop detected - URL too long");
-        return `${baseUrl}/`;
+        console.error("❌ Redirect loop detected - URL too long");
+        return `${baseUrl}/dashboard`;
       }
       
       // Count how many times callbackUrl appears (indicates nesting)
       const callbackCount = (url.match(/callbackUrl/g) || []).length;
       if (callbackCount > 2) {
-        console.error("Redirect loop detected - too many callbackUrls");
-        return `${baseUrl}/`;
+        console.error("❌ Redirect loop detected - too many callbackUrls");
+        return `${baseUrl}/dashboard`;
       }
       
       // Detect /login redirecting to /login
       if (url.includes("/login") && url.includes("%2Flogin")) {
-        console.error("Redirect loop detected - login to login");
-        return `${baseUrl}/`;
+        console.error("❌ Redirect loop detected - login to login");
+        return `${baseUrl}/dashboard`;
       }
       
       // Handle relative URLs
       if (url.startsWith("/")) {
-        return `${baseUrl}${url}`;
+        const fullUrl = `${baseUrl}${url}`;
+        console.log("✅ Redirecting to relative URL:", fullUrl);
+        return fullUrl;
       }
       
       // Handle same-origin URLs
       if (url.startsWith(baseUrl)) {
+        console.log("✅ Redirecting to same-origin URL:", url);
         return url;
       }
       
-      // Default: redirect to home, not dashboard
-      return baseUrl;
+      // Default: redirect to dashboard after successful login
+      console.log("✅ Default redirect to dashboard");
+      return `${baseUrl}/dashboard`;
     },
 
     async jwt({ token, user }) {
