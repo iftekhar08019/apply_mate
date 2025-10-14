@@ -17,7 +17,6 @@ import Image from "next/image";
 import rimiImg from "../../../public/Team-assets/rimi.png";
 import MohammadImg from "../../../public/Team-assets/Mohammad.png";
 import joyImg from "../../../public/Team-assets/joy.png";
-import mafikulImg from "../../../public/Team-assets/mafikul.png";
 
 export default function AboutPage() {
   const teamMembers = [
@@ -55,17 +54,6 @@ export default function AboutPage() {
         { icon: Github, href: "https://github.com/Mohammad7558/", label: "GitHub" },
         { icon: Linkedin, href: "https://www.linkedin.com/in/mohammod-bin-amin-b051a0244/", label: "LinkedIn" },
         { icon: Globe, href: "https://iam-mohammad.vercel.app/", label: "Portfolio" },
-      ],
-    },
-    {
-      name: "Mafikul Islam",
-      role: "Frontend Developer",
-      description: "Developed the interactive FAQ section on the landing page with smooth animations and user-friendly design.",
-      img: mafikulImg,
-      links: [
-        { icon: Github, href: "https://github.com/Mafikul5320", label: "GitHub" },
-        { icon: Linkedin, href: "https://www.linkedin.com/in/mafikulislam/", label: "LinkedIn" },
-        { icon: Globe, href: "https://portfolio-blush-seven-29.vercel.app/", label: "Portfolio" },
       ],
     },
   ];
