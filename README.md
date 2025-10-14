@@ -520,8 +520,6 @@ Meet the talented team behind ApplyMate:
       <br/>
       <sub>Develops Chrome extensions & integrates AI APIs</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <img src="./public/Team-assets/Mohammad.png" width="150px" alt="Mohammad"/><br/>
       <b>Mohammad</b><br/>
@@ -531,16 +529,6 @@ Meet the talented team behind ApplyMate:
       <a href="https://iam-mohammad.vercel.app/">Portfolio</a>
       <br/>
       <sub>Crafts beautiful, responsive UIs with Next.js & TypeScript</sub>
-    </td>
-    <td align="center">
-      <img src="./public/Team-assets/mafikul.png" width="150px" alt="Mafikul Islam"/><br/>
-      <b>Mafikul Islam</b><br/>
-      <sub>Frontend Developer</sub><br/>
-      <a href="https://github.com/Mafikul5320">GitHub</a> •
-      <a href="https://www.linkedin.com/in/mafikulislam/">LinkedIn</a> •
-      <a href="https://portfolio-blush-seven-29.vercel.app/">Portfolio</a>
-      <br/>
-      <sub>Developed interactive FAQ section with smooth animations</sub>
     </td>
   </tr>
 </table>
