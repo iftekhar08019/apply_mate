@@ -13,11 +13,23 @@ import {
   LockIcon
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { toast, Toaster } from "sonner";
 
 export default function DownloadPage() {
+  const { data: session } = useSession();
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = () => {
+    // Check if user is logged in
+    if (!session?.user) {
+      toast.error("Please login first to download the extension.", {
+        icon: "🔒",
+        duration: 4000,
+      });
+      return;
+    }
+
     setIsDownloading(true);
     
     // Direct download from public folder
@@ -27,6 +39,11 @@ export default function DownloadPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    toast.success("Extension download started!", {
+      icon: "✅",
+      duration: 3000,
+    });
     
     setTimeout(() => setIsDownloading(false), 1000);
   };
@@ -70,6 +87,8 @@ export default function DownloadPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 relative overflow-hidden">
+      <Toaster position="top-center" richColors />
+      
       {/* Background Decorations */}
       <div className="fixed -z-10 top-20 left-10 h-96 w-96 rounded-full bg-blue-400/10 blur-3xl" />
       <div className="fixed -z-10 top-1/3 right-10 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
