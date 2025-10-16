@@ -88,94 +88,131 @@ document.addEventListener('DOMContentLoaded', function() {
       // Get current active tab
       chrome.tabs.query({ active: true, currentWindow: true }, async function(tabs) {
         if (tabs[0]) {
-          // Ask if user actually applied to the job
-          const appliedToJob = confirm(
-            '📝 Job Application Confirmation\n\n' +
-            'Have you actually applied to this job?\n\n' +
-            'This extension is designed to track jobs you have already applied to.\n\n' +
-            'Click OK only if you have submitted an application for this position.'
-          );
-          if (!appliedToJob) {
+          // Show job application confirmation in extension
+          showStatus('📝 Please confirm: Have you actually applied to this job? This extension tracks jobs you have already applied to.', 'warning');
+          
+          // Add confirmation buttons
+          const confirmSection = document.createElement('div');
+          confirmSection.id = 'jobConfirmation';
+          confirmSection.innerHTML = `
+            <div style="margin-top: 10px; display: flex; gap: 10px;">
+              <button id="confirmApplied" style="flex: 1; padding: 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Yes, I Applied</button>
+              <button id="cancelApplied" style="flex: 1; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">No, I Haven't</button>
+            </div>
+          `;
+          statusDiv.appendChild(confirmSection);
+          
+          // Wait for user confirmation
+          document.getElementById('confirmApplied').addEventListener('click', async () => {
+            confirmSection.remove();
+            await proceedWithScraping(tabs[0], email, now);
+          });
+          
+          document.getElementById('cancelApplied').addEventListener('click', () => {
+            confirmSection.remove();
             showStatus('Please apply to the job first, then use this extension to track it.', 'warning');
-            return;
-          }
-
-          // Add LinkedIn warning
-          if (isLinkedInPage(tabs[0].url)) {
-            const confirmed = confirm(
-              '⚠️ WARNING: Scraping LinkedIn may result in account restrictions.\n\n' +
-              'LinkedIn actively monitors for automated scraping and may suspend accounts.\n\n' +
-              'For best results, navigate to a specific job posting page (not the job search results).\n\n' +
-              'Do you want to continue?'
-            );
-            if (!confirmed) {
-              return;
-            }
-          }
-
-          // Set rate limit timestamp
-          localStorage.setItem('lastScrapeTime', now.toString());
-
-          scrapeJobBtn.disabled = true;
-          scrapeJobBtn.textContent = 'Waiting for page...';
-          
-          // Dynamic delay based on site type
-          const baseDelay = isLinkedInPage(tabs[0].url) ? 3000 : 1500;
-          const randomDelay = getRandomDelay(baseDelay, baseDelay + 2000);
-          await new Promise(resolve => setTimeout(resolve, randomDelay));
-          
-          scrapeJobBtn.textContent = 'Extracting content...';
-          
-          // Send message to content script to extract page content
-          chrome.tabs.sendMessage(tabs[0].id, { action: 'scrapeJob' }, async function(response) {
-            if (chrome.runtime.lastError) {
-              scrapeJobBtn.disabled = false;
-              scrapeJobBtn.textContent = 'Track Applied Job';
-              showStatus('Error: Could not access page. Make sure you\'re on a job listing page.', 'error');
-              return;
-            }
-            
-            if (response && response.success && response.pageContent) {
-              // Send to backend for AI processing
-              scrapeJobBtn.textContent = 'Processing with AI...';
-              
-              try {
-                const result = await processWithBackendAI(email, response.pageContent);
-                
-                scrapeJobBtn.disabled = false;
-                scrapeJobBtn.textContent = 'Track Applied Job';
-                
-                // Check if it's not a job page
-                if (result.isJobPage === false) {
-                  showStatus(result.message, 'warning');
-                  return;
-                }
-                
-                // If it is a job page, send data to Next.js API
-                await sendJobToAPI(email, result);
-                
-                // Increment daily counter
-                const currentCount = parseInt(localStorage.getItem('dailyScrapeCount') || '0');
-                localStorage.setItem('dailyScrapeCount', (currentCount + 1).toString());
-                
-                showStatus(`Job saved successfully!`, 'success');
-              } catch (error) {
-                scrapeJobBtn.disabled = false;
-                scrapeJobBtn.textContent = 'Track Applied Job';
-                
-                // console.error('AI processing error:', error);
-                showStatus(`Error: ${error.message}. Try again.`, 'error');
-              }
-            } else {
-              scrapeJobBtn.disabled = false;
-              scrapeJobBtn.textContent = 'Track Applied Job';
-              showStatus(response ? response.error : 'Failed to extract page content', 'error');
-            }
+            scrapeJobBtn.disabled = false;
+            scrapeJobBtn.textContent = 'Track Applied Job';
           });
         }
       });
     });
   });
+
+  // Helper function to proceed with scraping after confirmation
+  async function proceedWithScraping(tab, email, now) {
+    // Add LinkedIn warning if applicable
+    if (isLinkedInPage(tab.url)) {
+      showStatus('⚠️ WARNING: LinkedIn may restrict accounts for automated scraping. For best results, use specific job posting pages.', 'warning');
+      
+      const linkedinSection = document.createElement('div');
+      linkedinSection.id = 'linkedinWarning';
+      linkedinSection.innerHTML = `
+        <div style="margin-top: 10px; display: flex; gap: 10px;">
+          <button id="proceedLinkedIn" style="flex: 1; padding: 8px; background: #ffc107; color: black; border: none; border-radius: 4px; cursor: pointer;">Proceed Anyway</button>
+          <button id="cancelLinkedIn" style="flex: 1; padding: 8px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+        </div>
+      `;
+      statusDiv.appendChild(linkedinSection);
+      
+      document.getElementById('proceedLinkedIn').addEventListener('click', async () => {
+        linkedinSection.remove();
+        await startScrapingProcess(tab, email, now);
+      });
+      
+      document.getElementById('cancelLinkedIn').addEventListener('click', () => {
+        linkedinSection.remove();
+        showStatus('Scraping cancelled for safety.', 'warning');
+        scrapeJobBtn.disabled = false;
+        scrapeJobBtn.textContent = 'Track Applied Job';
+      });
+    } else {
+      await startScrapingProcess(tab, email, now);
+    }
+  }
+
+  // Helper function to start the actual scraping process
+  async function startScrapingProcess(tab, email, now) {
+    // Set rate limit timestamp
+    localStorage.setItem('lastScrapeTime', now.toString());
+
+    scrapeJobBtn.disabled = true;
+    scrapeJobBtn.textContent = 'Waiting for page...';
+    
+    // Dynamic delay based on site type
+    const baseDelay = isLinkedInPage(tab.url) ? 3000 : 1500;
+    const randomDelay = getRandomDelay(baseDelay, baseDelay + 2000);
+    await new Promise(resolve => setTimeout(resolve, randomDelay));
+    
+    scrapeJobBtn.textContent = 'Extracting content...';
+    
+    // Send message to content script to extract page content
+    chrome.tabs.sendMessage(tab.id, { action: 'scrapeJob' }, async function(response) {
+      if (chrome.runtime.lastError) {
+        scrapeJobBtn.disabled = false;
+        scrapeJobBtn.textContent = 'Track Applied Job';
+        showStatus('Error: Could not access page. Make sure you\'re on a job listing page.', 'error');
+        return;
+      }
+      
+      if (response && response.success && response.pageContent) {
+        // Send to backend for AI processing
+        scrapeJobBtn.textContent = 'Processing with AI...';
+        
+        try {
+          const result = await processWithBackendAI(email, response.pageContent);
+          
+          scrapeJobBtn.disabled = false;
+          scrapeJobBtn.textContent = 'Track Applied Job';
+          
+          // Check if it's not a job page
+          if (result.isJobPage === false) {
+            showStatus(result.message, 'warning');
+            return;
+          }
+          
+          // If it is a job page, send data to Next.js API
+          await sendJobToAPI(email, result);
+          
+          // Increment daily counter
+          const currentCount = parseInt(localStorage.getItem('dailyScrapeCount') || '0');
+          localStorage.setItem('dailyScrapeCount', (currentCount + 1).toString());
+          
+          showStatus(`Job saved successfully!`, 'success');
+        } catch (error) {
+          scrapeJobBtn.disabled = false;
+          scrapeJobBtn.textContent = 'Track Applied Job';
+          
+          console.error('AI processing error:', error);
+          showStatus(`Error: ${error.message}. Try again.`, 'error');
+        }
+      } else {
+        scrapeJobBtn.disabled = false;
+        scrapeJobBtn.textContent = 'Track Applied Job';
+        showStatus(response ? response.error : 'Failed to extract page content', 'error');
+      }
+    });
+  }
 
   // Helper function to validate email
   function isValidEmail(email) {
