@@ -88,32 +88,37 @@ document.addEventListener('DOMContentLoaded', function() {
       // Get current active tab
       chrome.tabs.query({ active: true, currentWindow: true }, async function(tabs) {
         if (tabs[0]) {
-          // Show job application confirmation in extension
-          showStatus('📝 Please confirm: Have you actually applied to this job? This extension tracks jobs you have already applied to.', 'warning');
+          // Clear any existing status and show job application confirmation
+          clearStatus();
+          statusDiv.className = 'status warning';
+          statusDiv.style.display = 'block';
+          statusDiv.innerHTML = '📝 Please confirm: Have you actually applied to this job? This extension tracks jobs you have already applied to.';
           
-          // Add confirmation buttons
-          const confirmSection = document.createElement('div');
-          confirmSection.id = 'jobConfirmation';
-          confirmSection.innerHTML = `
-            <div style="margin-top: 10px; display: flex; gap: 10px;">
-              <button id="confirmApplied" style="flex: 1; padding: 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Yes, I Applied</button>
-              <button id="cancelApplied" style="flex: 1; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">No, I Haven't</button>
-            </div>
-          `;
-          statusDiv.appendChild(confirmSection);
-          
-          // Wait for user confirmation
-          document.getElementById('confirmApplied').addEventListener('click', async () => {
-            confirmSection.remove();
-            await proceedWithScraping(tabs[0], email, now);
-          });
-          
-          document.getElementById('cancelApplied').addEventListener('click', () => {
-            confirmSection.remove();
-            showStatus('Please apply to the job first, then use this extension to track it.', 'warning');
-            scrapeJobBtn.disabled = false;
-            scrapeJobBtn.textContent = 'Track Applied Job';
-          });
+          // Add confirmation buttons with a small delay to ensure they're visible
+          setTimeout(() => {
+            const confirmSection = document.createElement('div');
+            confirmSection.id = 'jobConfirmation';
+            confirmSection.innerHTML = `
+              <div style="margin-top: 10px; display: flex; gap: 10px;">
+                <button id="confirmApplied" style="flex: 1; padding: 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Yes, I Applied</button>
+                <button id="cancelApplied" style="flex: 1; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">No, I Haven't</button>
+              </div>
+            `;
+            statusDiv.appendChild(confirmSection);
+            
+            // Add event listeners after the element is added to DOM
+            document.getElementById('confirmApplied').addEventListener('click', async () => {
+              confirmSection.remove();
+              await proceedWithScraping(tabs[0], email, now);
+            });
+            
+            document.getElementById('cancelApplied').addEventListener('click', () => {
+              confirmSection.remove();
+              showStatus('Please apply to the job first, then use this extension to track it.', 'warning');
+              scrapeJobBtn.disabled = false;
+              scrapeJobBtn.textContent = 'Track Applied Job';
+            });
+          }, 100);
         }
       });
     });
@@ -123,29 +128,37 @@ document.addEventListener('DOMContentLoaded', function() {
   async function proceedWithScraping(tab, email, now) {
     // Add LinkedIn warning if applicable
     if (isLinkedInPage(tab.url)) {
-      showStatus('⚠️ WARNING: LinkedIn may restrict accounts for automated scraping. For best results, use specific job posting pages.', 'warning');
+      // Clear any existing status and show LinkedIn warning
+      clearStatus();
+      statusDiv.className = 'status warning';
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = '⚠️ WARNING: LinkedIn may restrict accounts for automated scraping. For best results, use specific job posting pages.';
       
-      const linkedinSection = document.createElement('div');
-      linkedinSection.id = 'linkedinWarning';
-      linkedinSection.innerHTML = `
-        <div style="margin-top: 10px; display: flex; gap: 10px;">
-          <button id="proceedLinkedIn" style="flex: 1; padding: 8px; background: #ffc107; color: black; border: none; border-radius: 4px; cursor: pointer;">Proceed Anyway</button>
-          <button id="cancelLinkedIn" style="flex: 1; padding: 8px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
-        </div>
-      `;
-      statusDiv.appendChild(linkedinSection);
-      
-      document.getElementById('proceedLinkedIn').addEventListener('click', async () => {
-        linkedinSection.remove();
-        await startScrapingProcess(tab, email, now);
-      });
-      
-      document.getElementById('cancelLinkedIn').addEventListener('click', () => {
-        linkedinSection.remove();
-        showStatus('Scraping cancelled for safety.', 'warning');
-        scrapeJobBtn.disabled = false;
-        scrapeJobBtn.textContent = 'Track Applied Job';
-      });
+      // Add LinkedIn warning buttons with a small delay
+      setTimeout(() => {
+        const linkedinSection = document.createElement('div');
+        linkedinSection.id = 'linkedinWarning';
+        linkedinSection.innerHTML = `
+          <div style="margin-top: 10px; display: flex; gap: 10px;">
+            <button id="proceedLinkedIn" style="flex: 1; padding: 8px; background: #ffc107; color: black; border: none; border-radius: 4px; cursor: pointer;">Proceed Anyway</button>
+            <button id="cancelLinkedIn" style="flex: 1; padding: 8px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+          </div>
+        `;
+        statusDiv.appendChild(linkedinSection);
+        
+        // Add event listeners after the element is added to DOM
+        document.getElementById('proceedLinkedIn').addEventListener('click', async () => {
+          linkedinSection.remove();
+          await startScrapingProcess(tab, email, now);
+        });
+        
+        document.getElementById('cancelLinkedIn').addEventListener('click', () => {
+          linkedinSection.remove();
+          showStatus('Scraping cancelled for safety.', 'warning');
+          scrapeJobBtn.disabled = false;
+          scrapeJobBtn.textContent = 'Track Applied Job';
+        });
+      }, 100);
     } else {
       await startScrapingProcess(tab, email, now);
     }
@@ -245,18 +258,29 @@ document.addEventListener('DOMContentLoaded', function() {
     return dailyCount < DAILY_SCRAPE_LIMIT;
   }
 
+  // Helper function to clear status area
+  function clearStatus() {
+    statusDiv.innerHTML = '';
+    statusDiv.className = '';
+    statusDiv.style.display = 'none';
+  }
+
   // Helper function to show status messages
   function showStatus(message, type) {
+    // Clear any existing content first
+    clearStatus();
+    
     statusDiv.textContent = message;
     statusDiv.className = `status ${type}`;
     statusDiv.style.display = 'block';
     
-    // Hide status after 3 seconds for success and warning messages
-    if (type === 'success' || type === 'warning') {
+    // Only hide success messages after 3 seconds, keep warnings visible until user action
+    if (type === 'success') {
       setTimeout(() => {
         statusDiv.style.display = 'none';
       }, 3000);
     }
+    // Warning messages stay visible until user interacts with buttons
   }
 
   // Helper function to show email setup form
