@@ -88,6 +88,18 @@ document.addEventListener('DOMContentLoaded', function() {
       // Get current active tab
       chrome.tabs.query({ active: true, currentWindow: true }, async function(tabs) {
         if (tabs[0]) {
+          // Ask if user actually applied to the job
+          const appliedToJob = confirm(
+            '📝 Job Application Confirmation\n\n' +
+            'Have you actually applied to this job?\n\n' +
+            'This extension is designed to track jobs you have already applied to.\n\n' +
+            'Click OK only if you have submitted an application for this position.'
+          );
+          if (!appliedToJob) {
+            showStatus('Please apply to the job first, then use this extension to track it.', 'warning');
+            return;
+          }
+
           // Add LinkedIn warning
           if (isLinkedInPage(tabs[0].url)) {
             const confirmed = confirm(
@@ -118,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
           chrome.tabs.sendMessage(tabs[0].id, { action: 'scrapeJob' }, async function(response) {
             if (chrome.runtime.lastError) {
               scrapeJobBtn.disabled = false;
-              scrapeJobBtn.textContent = 'Scrape Current Job';
+              scrapeJobBtn.textContent = 'Track Applied Job';
               showStatus('Error: Could not access page. Make sure you\'re on a job listing page.', 'error');
               return;
             }
@@ -131,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await processWithBackendAI(email, response.pageContent);
                 
                 scrapeJobBtn.disabled = false;
-                scrapeJobBtn.textContent = 'Scrape Current Job';
+                scrapeJobBtn.textContent = 'Track Applied Job';
                 
                 // Check if it's not a job page
                 if (result.isJobPage === false) {
@@ -149,14 +161,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 showStatus(`Job saved successfully!`, 'success');
               } catch (error) {
                 scrapeJobBtn.disabled = false;
-                scrapeJobBtn.textContent = 'Scrape Current Job';
+                scrapeJobBtn.textContent = 'Track Applied Job';
                 
                 // console.error('AI processing error:', error);
                 showStatus(`Error: ${error.message}. Try again.`, 'error');
               }
             } else {
               scrapeJobBtn.disabled = false;
-              scrapeJobBtn.textContent = 'Scrape Current Job';
+              scrapeJobBtn.textContent = 'Track Applied Job';
               showStatus(response ? response.error : 'Failed to extract page content', 'error');
             }
           });
