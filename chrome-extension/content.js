@@ -23,6 +23,7 @@ function extractPageContent() {
   // Get basic page metadata
   const pageTitle = document.title;
   const pageUrl = window.location.href;
+  const isLinkedIn = pageUrl.includes('linkedin.com/jobs');
   
   // Get meta tags for additional context
   const metaDescription = document.querySelector('meta[name="description"]')?.content || '';
@@ -88,7 +89,9 @@ function extractPageContent() {
   });
   
   // Clean and limit content to avoid token limits
-  const cleanedContent = cleanText(mainContent).substring(0, 10000);
+  // Reduce content extraction on LinkedIn to minimize detection risk
+  const maxLength = isLinkedIn ? 5000 : 10000;
+  const cleanedContent = cleanText(mainContent).substring(0, maxLength);
   
   return {
     url: pageUrl,

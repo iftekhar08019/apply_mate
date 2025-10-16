@@ -5,6 +5,10 @@
 // Production: 'https://apply-mate-two.vercel.app' (NO trailing slash)
 const API_BASE_URL = 'https://apply-mate-two.vercel.app';
 
+// Rate limiting and safety constants
+const RATE_LIMIT_COOLDOWN = 30000; // 30 seconds between scrapes
+const DAILY_SCRAPE_LIMIT = 10; // Max 10 scrapes per day
+
 document.addEventListener('DOMContentLoaded', function() {
   const emailInput = document.getElementById('email');
   const saveEmailBtn = document.getElementById('saveEmail');
@@ -57,6 +61,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Scrape job button handler
   scrapeJobBtn.addEventListener('click', async function() {
+    // Check rate limiting
+    const lastScrapeTime = localStorage.getItem('lastScrapeTime');
+    const now = Date.now();
+    
+    if (lastScrapeTime && (now - parseInt(lastScrapeTime)) < RATE_LIMIT_COOLDOWN) {
+      const remainingTime = Math.ceil((RATE_LIMIT_COOLDOWN - (now - parseInt(lastScrapeTime))) / 1000);
+      showStatus(`Please wait ${remainingTime} seconds before scraping again`, 'warning');
+      return;
+    }
+
+    // Check daily limit
+    if (!checkDailyLimit()) {
+      showStatus(`Daily limit reached (${DAILY_SCRAPE_LIMIT} scrapes). Try again tomorrow.`, 'warning');
+      return;
+    }
+
     chrome.storage.local.get(['userEmail'], async function(result) {
       const email = result.userEmail;
       
@@ -68,11 +88,29 @@ document.addEventListener('DOMContentLoaded', function() {
       // Get current active tab
       chrome.tabs.query({ active: true, currentWindow: true }, async function(tabs) {
         if (tabs[0]) {
+          // Add LinkedIn warning
+          if (isLinkedInPage(tabs[0].url)) {
+            const confirmed = confirm(
+              '⚠️ WARNING: Scraping LinkedIn may result in account restrictions.\n\n' +
+              'LinkedIn actively monitors for automated scraping and may suspend accounts.\n\n' +
+              'For best results, navigate to a specific job posting page (not the job search results).\n\n' +
+              'Do you want to continue?'
+            );
+            if (!confirmed) {
+              return;
+            }
+          }
+
+          // Set rate limit timestamp
+          localStorage.setItem('lastScrapeTime', now.toString());
+
           scrapeJobBtn.disabled = true;
           scrapeJobBtn.textContent = 'Waiting for page...';
           
-          // Small delay to let dynamic content load (especially for SPAs like LinkedIn)
-          await new Promise(resolve => setTimeout(resolve, 1500));
+          // Dynamic delay based on site type
+          const baseDelay = isLinkedInPage(tabs[0].url) ? 3000 : 1500;
+          const randomDelay = getRandomDelay(baseDelay, baseDelay + 2000);
+          await new Promise(resolve => setTimeout(resolve, randomDelay));
           
           scrapeJobBtn.textContent = 'Extracting content...';
           
@@ -103,6 +141,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // If it is a job page, send data to Next.js API
                 await sendJobToAPI(email, result);
+                
+                // Increment daily counter
+                const currentCount = parseInt(localStorage.getItem('dailyScrapeCount') || '0');
+                localStorage.setItem('dailyScrapeCount', (currentCount + 1).toString());
+                
                 showStatus(`Job saved successfully!`, 'success');
               } catch (error) {
                 scrapeJobBtn.disabled = false;
@@ -126,6 +169,31 @@ document.addEventListener('DOMContentLoaded', function() {
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  }
+
+  // Helper function to check if current page is LinkedIn
+  function isLinkedInPage(url) {
+    return url.includes('linkedin.com/jobs');
+  }
+
+  // Helper function to get random delay
+  function getRandomDelay(min = 1000, max = 3000) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Helper function to check daily scrape limit
+  function checkDailyLimit() {
+    const today = new Date().toDateString();
+    const lastScrapeDate = localStorage.getItem('lastScrapeDate');
+    const dailyCount = parseInt(localStorage.getItem('dailyScrapeCount') || '0');
+    
+    if (lastScrapeDate !== today) {
+      localStorage.setItem('lastScrapeDate', today);
+      localStorage.setItem('dailyScrapeCount', '0');
+      return true;
+    }
+    
+    return dailyCount < DAILY_SCRAPE_LIMIT;
   }
 
   // Helper function to show status messages
@@ -221,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showStatus(`Failed to save job: ${errorData.message || 'Server error'}`, 'error');
       }
     } catch (error) {
-      // console.error('Error sending job to API:', error);
+      console.error('Error sending job to API:', error);
       showStatus('Network error: Could not connect to ApplyMate server', 'error');
     }
   }
