@@ -382,6 +382,7 @@ const MyApplicationPage: React.FC = () => {
                   <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium hidden sm:table-cell">Company</th>
                   <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium hidden md:table-cell">Location</th>
                   <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium hidden lg:table-cell">Type</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium">Status</th>
                   <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium">Date</th>
                   <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-center">Actions</th>
                 </tr>
@@ -401,6 +402,9 @@ const MyApplicationPage: React.FC = () => {
                     <td className="px-2 sm:px-4 py-2 sm:py-3 hidden sm:table-cell">{job.company}</td>
                     <td className="px-2 sm:px-4 py-2 sm:py-3 hidden md:table-cell">{job.location}</td>
                     <td className="px-2 sm:px-4 py-2 sm:py-3 hidden lg:table-cell capitalize">{job.type}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3">
+                      {getStatusBadge(job.status)}
+                    </td>
                     <td className="px-2 sm:px-4 py-2 sm:py-3">
                       <div className="space-y-1">
                         <div className="text-xs sm:text-sm">{new Date(job.date).toLocaleDateString()}</div>
