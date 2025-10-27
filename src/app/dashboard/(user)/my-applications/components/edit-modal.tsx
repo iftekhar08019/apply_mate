@@ -55,7 +55,7 @@ export const EditModal: React.FC<EditModalProps> = ({
     type: job?.type || "",
     description: job?.description || "",
     url: job?.url || "",
-    status: job?.status || "",
+    status: job?.status || "Applied",
   });
 
   // Update form data when job changes
@@ -67,7 +67,7 @@ export const EditModal: React.FC<EditModalProps> = ({
       type: job?.type || "",
       description: job?.description || "",
       url: job?.url || "",
-      status: job?.status || "",
+      status: job?.status || "Applied",
     });
   }, [job]);
 
@@ -182,7 +182,6 @@ export const EditModal: React.FC<EditModalProps> = ({
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Not Updated</SelectItem>
                 <SelectItem value="Applied">Applied</SelectItem>
                 <SelectItem value="Interview">Interview</SelectItem>
                 <SelectItem value="Selected">Selected</SelectItem>
