@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ApplyMate Job Scraper",
-  "version": "2.0",
-  "description": "AI-first job scraper using DeepSeek-R1 - works on any job site without site-specific code",
+  "name": "ApplyMate Job Tracker",
+  "version": "2.1",
+  "description": "AI-powered job application tracker - safely track jobs you've applied to with built-in safety features and rate limiting",
   "permissions": [
     "activeTab",
     "storage",
@@ -15,7 +15,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "ApplyMate Job Scraper"
+    "default_title": "ApplyMate Job Tracker"
   },
   "background": {
     "service_worker": "background.js"

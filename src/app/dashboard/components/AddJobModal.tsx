@@ -225,6 +225,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({
                 <SelectContent className="bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-700">
                   <SelectItem value="Applied">Applied</SelectItem>
                   <SelectItem value="Interview">Interview</SelectItem>
+                  <SelectItem value="Selected">Selected</SelectItem>
                   <SelectItem value="Offer">Offer</SelectItem>
                   <SelectItem value="Rejected">Rejected</SelectItem>
                 </SelectContent>

@@ -51,7 +51,9 @@ export default function DownloadPage() {
   const features = [
     "Works on LinkedIn, Indeed, and all job websites",
     "AI-powered automatic job data extraction",
-    "One-click job saving to your dashboard",
+    "Built-in safety features and rate limiting",
+    "Job application confirmation before tracking",
+    "LinkedIn account protection warnings",
     "Secure & private - your data stays safe",
     "Real-time sync with Apply Mate dashboard",
     "No manual data entry required"
@@ -117,7 +119,7 @@ export default function DownloadPage() {
             <span className="text-blue-600 dark:text-blue-400">Extension</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-            Install our powerful Chrome extension to automatically extract and save job listings with AI-powered precision
+            Install our powerful Chrome extension to safely track job applications with AI-powered precision and built-in safety features
           </p>
         </motion.div>
 
@@ -142,7 +144,7 @@ export default function DownloadPage() {
                         Apply Mate Extension
                       </h2>
                       <p className="text-blue-600 dark:text-blue-400 font-medium">
-                        Version 2.0 • Latest Release
+                        Version 2.1 • Latest Release
                       </p>
                     </div>
                   </div>
@@ -297,7 +299,7 @@ export default function DownloadPage() {
                       <strong>This extension is not yet published on the Chrome Web Store.</strong> When installing manually, Chrome may display a warning about developer mode extensions.
                     </p>
                     <p>
-                      This is completely normal and safe. The extension only accesses job listing pages to extract information and save it to your Apply Mate dashboard.
+                      This is completely normal and safe. The extension includes built-in safety features like rate limiting, job application confirmation, and LinkedIn account protection warnings to ensure responsible usage.
                     </p>
                     <p className="font-semibold text-yellow-900 dark:text-yellow-200 flex items-center">
                       <LockIcon className="mr-3 w-10 lg:w-5" />
