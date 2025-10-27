@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axiosSecure from "@/hooks/useAxiosSecure";
@@ -23,6 +30,7 @@ interface Job {
   description: string;
   url: string;
   date: string;
+  status?: string;
 }
 
 interface EditModalProps {
@@ -47,7 +55,21 @@ export const EditModal: React.FC<EditModalProps> = ({
     type: job?.type || "",
     description: job?.description || "",
     url: job?.url || "",
+    status: job?.status || "",
   });
+
+  // Update form data when job changes
+  useEffect(() => {
+    setFormData({
+      title: job?.title || "",
+      company: job?.company || "",
+      location: job?.location || "",
+      type: job?.type || "",
+      description: job?.description || "",
+      url: job?.url || "",
+      status: job?.status || "",
+    });
+  }, [job]);
 
   // Update Mutation
   const updateMutation = useMutation({
@@ -148,6 +170,26 @@ export const EditModal: React.FC<EditModalProps> = ({
               className="w-full border rounded-md p-2 text-sm"
               rows={3}
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Status</label>
+            <Select
+              value={formData.status}
+              onValueChange={(value) => setFormData({ ...formData, status: value })}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Not Updated</SelectItem>
+                <SelectItem value="Applied">Applied</SelectItem>
+                <SelectItem value="Interview">Interview</SelectItem>
+                <SelectItem value="Selected">Selected</SelectItem>
+                <SelectItem value="Offer">Offer</SelectItem>
+                <SelectItem value="Rejected">Rejected</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <DialogFooter className="flex justify-end gap-2">
